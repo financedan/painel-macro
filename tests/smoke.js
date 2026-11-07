@@ -90,13 +90,23 @@ const checar = (cond, msg) => { console.log((cond ? '  ok   ' : '  FALHOU ') + m
   checar((await p.textContent('#t-calc >> xpath=ancestor::article')).includes('R$ 5.'), 'calculadora recalcula com o valor digitado');
 
   // navegação por endereço e botão Voltar
+  // toda informação tem fonte: cada card de dados precisa de uma linha "Fonte:" com link
+  const SEM_DADOS = ['t-cal', 't-ciclo', 't-src', 't-diff', 't-glo', 't-sobre', 't-refs'];
+  const semFonte = async () => p.$$eval('main article[aria-labelledby]', (arts, excecoes) => arts
+    .filter((a) => !excecoes.includes(a.getAttribute('aria-labelledby')) && !a.querySelector('.pm-fonte a[href]'))
+    .map((a) => a.getAttribute('aria-labelledby')), SEM_DADOS);
+  let faltando = await semFonte();
+  checar(faltando.length === 0, 'todo card da visão geral tem fonte com link' + (faltando.length ? ': falta em ' + faltando.join(', ') : ''));
   for (const v of ['expectativas', 'economia', 'agenda', 'metodologia']) {
     await p.click('nav.pm-topnav a[href="#' + v + '"]');
     await p.waitForTimeout(300);
     checar(p.url().endsWith('#' + v), 'endereço muda para #' + v);
     const txt = await p.textContent('main');
     checar(!/NaN|undefined|null/.test(txt), 'nenhum NaN/undefined/null em #' + v);
+    faltando = await semFonte();
+    checar(faltando.length === 0, 'todo card de #' + v + ' tem fonte com link' + (faltando.length ? ': falta em ' + faltando.join(', ') : ''));
   }
+  checar(!/yahoo|yfinance/i.test(await p.content()), 'nenhuma referência ao Yahoo no site');
   await p.goBack(); await p.waitForTimeout(300);
   checar(await p.isVisible('#t-agenda'), 'Voltar do navegador volta para a aba anterior');
 

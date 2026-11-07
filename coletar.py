@@ -2,13 +2,14 @@
 coletar.py — busca os dados do Painel Macro Brasil e salva em site/dados.json
 
 Fontes (todas gratuitas, sem chave):
-  - Banco Central, SGS ......... Selic (432), IPCA 12m (13522), IPCA do mês (433), núcleos do IPCA,
+  - Banco Central, SGS ......... Selic (432), IPCA 12m (13522), IPCA do mês (433), núcleos do IPCA (EX0, EX3, MS, DP, P55),
                                  CDI (12), dólar (1), TR (7811), IBC-Br (24364), desemprego (24369),
                                  dívida bruta (13762), IGP-M (189)
   - Banco Central, Olinda ...... Boletim Focus (anuais, inflação 12 meses e Selic por reunião)
   - IBGE, SIDRA ................ IPCA por grupo (tabela 7060)
   - Tesouro Transparente ....... taxas do Tesouro Direto (juro real de mercado e inflação implícita)
-  - yfinance ................... Ibovespa (^BVSP), Treasury 10 anos (^TNX), T-bill 3 meses (^IRX), Brent (BZ=F)
+  - B3 ......................... Ibovespa (estatísticas oficiais do índice)
+  - FRED (Fed de St. Louis) .... Fed funds, Treasuries de 3 meses e 10 anos, Brent (EIA), inflação dos EUA (BLS)
 
 Também gera: site/leituras.json (a partir de leituras/*.md), site/resumos.json, site/feed.xml,
 site/img/og.png (prévia de link com os números do dia) e as meta tags do site/index.html.
@@ -18,6 +19,7 @@ Como rodar (com o .venv ativado):
   python coletar.py --so-leituras   só monta o leituras.json (usado na publicação do site)
 """
 
+import base64
 import csv
 import io
 import json
@@ -164,7 +166,9 @@ def coletar_selic_e_ipca():
     }
 
 
-NUCLEOS = {4466: "MS", 16122: "DP", 27838: "EX2", 27839: "EX3", 28751: "P55"}
+# a mesma média que o BC usa: "A média considera os núcleos EX0, EX3, MS, DP e P55" (RPM set/2026, p. 36);
+# códigos do SGS conferidos na Tabela 11 da Nota Técnica BCB nº 57 (dez/2025)
+NUCLEOS = {11427: "EX0", 27839: "EX3", 4466: "MS", 16122: "DP", 28750: "P55"}
 
 
 def coletar_inflacao_mensal():
@@ -347,14 +351,38 @@ def coletar_focus():
     return {"focus": focus}
 
 
-# ---------------------------------------------------------------- Ibovespa e mercados (yfinance)
-def historico_yf(ticker, periodo):
-    import yfinance as yf
+# ---------------------------------------------------------------- Ibovespa (fonte oficial: B3)
+B3_INDICE = "https://sistemaswebb3-listados.b3.com.br/indexStatisticsProxy/IndexCall/GetPortfolioDay/"
+_CACHE_B3 = {}
 
-    serie = yf.Ticker(ticker).history(period=periodo, auto_adjust=False)["Close"].dropna()
-    if serie.empty:
-        raise RuntimeError(f"O yfinance não devolveu dados de {ticker}.")
-    return [(d.date(), float(v)) for d, v in zip(serie.index, serie.values)]
+
+def numero_br(texto):
+    return float(texto.replace(".", "").replace(",", "."))
+
+
+def ibovespa_b3(ano_inicial=1995):
+    """
+    Fechamentos diários do Ibovespa direto da B3 (estatísticas do índice, um ano por consulta).
+    Devolve lista de (date, valor) em ordem. Guarda em memória para não baixar duas vezes.
+    """
+    if ano_inicial in _CACHE_B3:
+        return _CACHE_B3[ano_inicial]
+    pares = []
+    for ano in range(ano_inicial, hoje_br().year + 1):
+        param = base64.b64encode(json.dumps({"index": "IBOV", "language": "pt-br", "year": str(ano)}).encode()).decode()
+        for linha in baixar(B3_INDICE + param).get("results", []):
+            for mes in range(1, 13):
+                v = linha.get(f"rateValue{mes}")
+                if not v:
+                    continue
+                try:
+                    pares.append((date(ano, mes, int(linha["day"])), numero_br(v)))
+                except ValueError:
+                    continue
+    if not pares:
+        raise RuntimeError("A B3 não devolveu dados do Ibovespa.")
+    _CACHE_B3[ano_inicial] = sorted(pares)
+    return _CACHE_B3[ano_inicial]
 
 
 def sem_pregao_em_andamento(pares, agora=None):
@@ -375,9 +403,27 @@ def volatilidade(fechamentos, janela=21):
     return math.sqrt(var) * math.sqrt(252) * 100
 
 
+def serie_volatilidade(fechamentos, janela=21):
+    """Volatilidade de cada pregão (janela móvel), calculada de forma incremental."""
+    rets = [math.log(b / a) for a, b in zip(fechamentos, fechamentos[1:])]
+    saida = [None] * len(fechamentos)
+    for i in range(janela, len(rets) + 1):
+        bloco = rets[i - janela:i]
+        media = sum(bloco) / janela
+        saida[i] = math.sqrt(sum((r - media) ** 2 for r in bloco) / (janela - 1)) * math.sqrt(252) * 100
+    return saida
+
+
+def percentil(valores, p):
+    ordem = sorted(valores)
+    k = (len(ordem) - 1) * p / 100
+    a, b = math.floor(k), math.ceil(k)
+    return ordem[a] + (ordem[b] - ordem[a]) * (k - a)
+
+
 def coletar_ibovespa():
-    print("Ibovespa (yfinance)...")
-    pares = sem_pregao_em_andamento(historico_yf("^BVSP", "max"))
+    print("Ibovespa (B3)...")
+    pares = sem_pregao_em_andamento(ibovespa_b3())
     datas = [d for d, _ in pares]
     fechamentos = [v for _, v in pares]
 
@@ -398,22 +444,29 @@ def coletar_ibovespa():
     data_max, valor_max = max(ultimo_ano, key=lambda par: par[1])
     data_max_h, valor_max_h = max(pares, key=lambda par: par[1])
 
-    vols = []
-    for i in range(len(fechamentos) - 120, len(fechamentos)):
-        v = volatilidade(fechamentos[:i + 1])
-        if v is not None:
-            vols.append({"data": datas[i].isoformat(), "valor": arredondar(v)})
+    # volatilidade: as faixas comparam o valor de hoje com o próprio histórico do Ibovespa desde 2000
+    vols = serie_volatilidade(fechamentos)
+    desde_2000 = [v for d, v in zip(datas, vols) if v is not None and d.year >= 2000]
+    atual = vols[-1]
+    recentes = [{"data": d.isoformat(), "valor": arredondar(v)} for d, v in zip(datas[-120:], vols[-120:]) if v is not None]
 
     return {
         "ibovespa": {
+            "fonte": "B3",
             "fechamento": arredondar(ultimo),
             "data": data_ultimo.isoformat(),
             "var_ano": arredondar((ultimo / fim_ano_passado - 1) * 100) if fim_ano_passado else None,
             "maxima_12m": {"valor": arredondar(valor_max), "data": data_max.isoformat()},
-            "maxima_historica": {"valor": arredondar(valor_max_h), "data": data_max_h.isoformat()},
+            "maxima_historica": {"valor": arredondar(valor_max_h), "data": data_max_h.isoformat(), "desde": datas[0].year},
             "por_ano": por_ano,
             "ultimos_dias": [{"data": d.isoformat(), "valor": arredondar(v)} for d, v in ultimo_ano[-30:]],
-            "volatilidade": {"janela": 21, "atual": vols[-1]["valor"] if vols else None, "historico": vols},
+            "volatilidade": {
+                "janela": 21, "atual": arredondar(atual), "historico": recentes,
+                "mediana_desde_2000": arredondar(percentil(desde_2000, 50)),
+                "p90_desde_2000": arredondar(percentil(desde_2000, 90)),
+                "percentil_atual": arredondar(sum(v <= atual for v in desde_2000) / len(desde_2000) * 100, 0),
+                "maxima_desde_2000": arredondar(max(desde_2000)),
+            },
         }
     }
 
@@ -426,13 +479,13 @@ def fim_de_mes(pares):
 
 
 def coletar_comparacao():
-    """Ibovespa x CDI em 10 anos (base 100), e o Ibovespa em dólar e descontada a inflação."""
-    print("Bolsa x renda fixa (Banco Central + yfinance)...")
+    """Ibovespa (B3) x CDI (BC) em 10 anos (base 100), e o Ibovespa em dólar e descontada a inflação."""
+    print("Bolsa x renda fixa (B3 + Banco Central)...")
     inicio = inicio_10_anos()
     cdi = serie_sgs(12, inicio)  # % ao dia
     dolar = fim_de_mes(serie_sgs(1, inicio))
     ipca = {mes_txt(d): v for d, v in serie_sgs(433, inicio)}
-    ibov = fim_de_mes(sem_pregao_em_andamento(historico_yf("^BVSP", "11y")))
+    ibov = fim_de_mes(sem_pregao_em_andamento(ibovespa_b3()))
 
     indice_cdi, fator = {}, 1.0
     for d, v in cdi:
@@ -493,12 +546,39 @@ def coletar_economia():
     }
 
 
+# ---------------------------------------------------------------- EUA e petróleo (fonte: FRED, Federal Reserve de St. Louis)
+FRED_CSV = "https://fred.stlouisfed.org/graph/fredgraph.csv"
+SERIES_FRED = {
+    "fed_funds": ("DFF", "Fed funds efetiva (Federal Reserve)"),
+    "tbill3m": ("DGS3MO", "Título do Tesouro americano de 3 meses (U.S. Treasury)"),
+    "treasury10": ("DGS10", "Título do Tesouro americano de 10 anos (U.S. Treasury)"),
+    "brent": ("DCOILBRENTEU", "Petróleo Brent, preço à vista (EIA)"),
+}
+
+
+def serie_fred(codigo, inicio):
+    texto = baixar(FRED_CSV, {"id": codigo, "cosd": inicio.isoformat()}, como="texto")
+    pares = []
+    for linha in texto.strip().splitlines()[1:]:
+        dia, _, valor = linha.partition(",")
+        if valor and valor != ".":
+            pares.append((date.fromisoformat(dia), float(valor)))
+    if not pares:
+        raise RuntimeError(f"O FRED não devolveu dados de {codigo}.")
+    return pares
+
+
 def coletar_mundo():
-    print("Mundo (yfinance)...")
+    print("EUA e petróleo (FRED)...")
+    hoje = hoje_br()
     saida = {}
-    for chave, ticker in (("treasury10", "^TNX"), ("tbill3m", "^IRX"), ("brent", "BZ=F")):
-        d, v = historico_yf(ticker, "10d")[-1]
-        saida[chave] = {"valor": arredondar(v), "data": d.isoformat(), "ticker": ticker}
+    for chave, (codigo, nome) in SERIES_FRED.items():
+        d, v = serie_fred(codigo, hoje - timedelta(days=30))[-1]
+        saida[chave] = {"valor": arredondar(v), "data": d.isoformat(), "serie": codigo, "nome": nome}
+    cpi = serie_fred("CPIAUCSL", hoje - timedelta(days=500))
+    (d_ant, v_ant), (d_cpi, v_cpi) = cpi[-13], cpi[-1]
+    saida["inflacao_eua"] = {"valor": arredondar((v_cpi / v_ant - 1) * 100), "mes": mes_txt(d_cpi), "serie": "CPIAUCSL",
+                             "nome": "Inflação ao consumidor dos EUA em 12 meses (CPI, BLS)"}
     return {"mundo": saida}
 
 
@@ -569,6 +649,7 @@ def validar(dados):
     checar("comparacao", lambda: len(dados["comparacao"]["serie"]) >= 24, "Comparação curta")
     checar("tesouro", lambda: 0 < dados["tesouro"]["atual"]["real"] < 20, "Taxa real fora de 0–20%")
     checar("economia", lambda: 1 < dados["economia"]["dolar"]["valor"] < 20, "Dólar fora de R$ 1–20")
+    checar("mundo", lambda: 0 <= dados["mundo"]["fed_funds"]["valor"] < 20, "Fed funds fora de 0–20%")
     return problemas
 
 

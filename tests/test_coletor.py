@@ -83,6 +83,34 @@ def test_montar_leituras(tmp_path, monkeypatch):
     assert leituras == [{"data": "2026-11-09", "titulo": "Título", "texto": "Texto **forte**."}]
 
 
+# ---------------------------------------------------------------- fontes
+def test_nucleos_sao_os_da_media_do_bc():
+    # RPM set/2026, p. 36: "A média considera os núcleos EX0, EX3, MS, DP e P55";
+    # códigos da Tabela 11 da Nota Técnica BCB nº 57
+    assert coletar.NUCLEOS == {11427: "EX0", 27839: "EX3", 4466: "MS", 16122: "DP", 28750: "P55"}
+
+
+def test_coletor_nao_usa_fontes_nao_oficiais():
+    codigo = (RAIZ / "coletar.py").read_text(encoding="utf-8")
+    assert "yfinance" not in codigo and "yahoo" not in codigo.lower()
+
+
+def test_serie_fred_le_csv(monkeypatch):
+    monkeypatch.setattr(coletar, "baixar", lambda *a, **k: "observation_date,DFF\n2026-11-04,3.88\n2026-11-05,.\n")
+    assert coletar.serie_fred("DFF", date(2026, 11, 1)) == [(date(2026, 11, 4), 3.88)]
+
+
+def test_ibovespa_b3_le_tabela(monkeypatch):
+    resposta = {"results": [{"day": 5, "rateValue1": "160.000,50", "rateValue2": None, "rateValue11": "166.192,10"},
+                            {"day": 31, "rateValue2": "1,00"}]}  # 31/02 não existe e é ignorado
+    monkeypatch.setattr(coletar, "baixar", lambda *a, **k: resposta)
+    monkeypatch.setattr(coletar, "hoje_br", lambda: date(2026, 11, 7))
+    coletar._CACHE_B3.clear()
+    pares = coletar.ibovespa_b3(2026)
+    assert pares == [(date(2026, 1, 5), 160000.5), (date(2026, 11, 5), 166192.1)]
+    coletar._CACHE_B3.clear()
+
+
 # ---------------------------------------------------------------- manual.json
 MANUAL = json.loads((RAIZ / "site" / "manual.json").read_text(encoding="utf-8"))
 
@@ -96,10 +124,24 @@ def test_copom_decide_na_quarta(reuniao):
 
 def test_datas_do_manual_sao_validas():
     for f in MANUAL["feriados"]:
-        date.fromisoformat(f[0])
-    for v in MANUAL["vix"]["leituras"]:
-        date.fromisoformat(v[0])
+        date.fromisoformat(f["data"])
     assert 0 < MANUAL["neutro"]["valor"] < 15
+    date.fromisoformat(MANUAL["ranking_mundo"]["publicado_em"])
+
+
+def test_todo_dado_manual_tem_fonte_com_link():
+    fontes = [MANUAL["copom_fonte"], MANUAL["feriados_fonte"], MANUAL["neutro"]["fonte"], MANUAL["ranking_mundo"]["fonte"]]
+    for f in fontes:
+        assert f["texto"] and f["url"].startswith("https://"), f
+        date.fromisoformat(f["conferido_em"])
+    for ev in MANUAL["eventos"]:
+        assert ev.get("fonte", "").startswith("https://"), f"evento sem fonte: {ev}"
+
+
+def test_feriados_de_ano_sem_calendario_oficial_estao_marcados_como_previstos():
+    for f in MANUAL["feriados"]:
+        if f["data"] >= "2027-01-01":
+            assert f.get("previsto"), f"{f['data']} precisa de \"previsto\": true até a B3 publicar o calendário"
 
 
 def test_calendario_do_copom_nao_esta_acabando():

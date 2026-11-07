@@ -29,7 +29,7 @@ site/manual.json (você edita) ────────────────�
 leituras/AAAA-MM-DD.md (você escreve) → site/leituras.json ───┘
 ```
 
-- `coletar.py` busca os dados no Banco Central (SGS e Focus), IBGE (SIDRA), Tesouro Transparente e Yahoo Finance.
+- `coletar.py` busca os dados só em fontes oficiais: Banco Central (SGS e Focus), IBGE (SIDRA), B3 (Ibovespa), Tesouro Transparente e FRED, do Federal Reserve de St. Louis (EUA e petróleo).
   Se uma fonte falhar, mantém o último dado bom dela, e o site avisa o visitante que aquele dado pode estar defasado.
   Antes de salvar, confere se os números fazem sentido (ex.: Selic entre 0 e 40%).
 - O robô também gera a imagem de prévia do link (`site/img/og.png`, com os números do dia), o `feed.xml` e as meta tags.
@@ -59,20 +59,40 @@ cd site && python -m http.server 8000
 
 Depois abra http://localhost:8000. Abrir o `index.html` com dois cliques não funciona: o navegador bloqueia a leitura dos dados fora de um servidor.
 
+## Fontes
+
+**Toda informação do painel tem fonte com link**: cada bloco mostra a linha "Fonte:" e a aba Metodologia lista
+todas as referências. Os testes falham se um bloco ficar sem fonte ou se um dado manual não tiver link.
+
+| Informação | Fonte |
+|---|---|
+| Selic, IPCA, núcleos, CDI, dólar, TR, IBC-Br, desocupação, dívida, IGP-M | Banco Central, SGS (IBGE e FGV via BC) |
+| Expectativas | Banco Central, Boletim Focus (API Olinda) |
+| IPCA por grupo | IBGE, SIDRA tabela 7060 |
+| Ibovespa | B3 (estatísticas oficiais do índice) |
+| Juro real de mercado e inflação implícita | Tesouro Nacional, Tesouro Transparente |
+| Juros dos EUA, inflação dos EUA, Brent | FRED (Federal Reserve, U.S. Treasury, BLS, EIA) |
+| Juro neutro de 5,00% e definição de Selic real ex-ante | BC, Relatório de Política Monetária, set/2026, p. 80 |
+| Média dos núcleos (EX0, EX3, MS, DP, P55) | BC, RPM set/2026, p. 36, e Nota Técnica nº 57 |
+| Meta e meta contínua | BC (histórico das metas) e Decreto nº 12.079/2024 |
+| Poupança, IR e custódia | Lei nº 12.703/2012, Lei nº 11.033/2004 e B3 (tarifação do Tesouro Direto) |
+| Calendário do Copom e feriados | BC (calendário do Copom) e B3 (calendário de negociação) |
+| Ranking mundial de juro real | Moneyou, via Agência Brasil |
+
 ## O que você atualiza à mão
 
-Tudo fica em **`site/manual.json`** (dá para editar direto no GitHub, no botão de lápis):
+Tudo fica em **`site/manual.json`** (dá para editar direto no GitHub, no botão de lápis). **Todo dado manual precisa de
+fonte com link e data de conferência**; o teste automático falha se faltar.
 
 | Campo | Quando atualizar |
 |---|---|
-| `copom` | Quando o BC divulgar o calendário do ano seguinte. Use o número da reunião (`R1/2027`, `R2/2027`...) para o painel cruzar com o Focus. **Hoje o calendário termina em 09/12/2026.** |
-| `feriados` | Uma vez por ano (2026 e 2027 já estão cadastrados). |
-| `eventos` | Opcional: outros eventos da agenda, ex.: `{"data": "2027-01-10", "titulo": "IPCA de dezembro", "tipo": "IBGE"}`. |
-| `neutro` | Quando o BC revisar a estimativa de juro neutro. |
-| `ranking_mundo` | Quando sair um ranking novo de juro real. |
-| `vix` | Opcional: leituras do S&P/B3 Ibovespa VIX citadas pela imprensa (o painel já calcula a volatilidade sozinho). |
+| `copom` | Quando o BC divulgar o calendário do ano seguinte (até junho). Use o número da reunião (`R1/2028`...). Já cadastrado até dez/2027. |
+| `feriados` | Quando a B3 publicar o calendário do ano. Datas de anos sem calendário oficial levam `"previsto": true`. |
+| `eventos` | Opcional: outros eventos da agenda, sempre com fonte: `{"data": "2027-01-10", "titulo": "...", "tipo": "IBGE", "fonte": "https://..."}`. |
+| `neutro` | Quando o BC revisar a taxa neutra no Relatório de Política Monetária. |
+| `ranking_mundo` | Quando sair um ranking novo, com o link da matéria ou do relatório. |
 
-O teste automático avisa se uma decisão do Copom não cair numa quarta-feira ou se o calendário estiver acabando.
+O teste também avisa se uma decisão do Copom não cair numa quarta-feira.
 
 ### Leitura da semana
 

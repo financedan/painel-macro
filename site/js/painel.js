@@ -32,24 +32,25 @@
   // ---------- agenda: Copom, feriados e eventos do manual.json + Focus toda segunda
   function montarEventos(M, hoje) {
     const fechado = {};
-    M.feriados.forEach((f) => { fechado[f[0]] = f; });
+    M.feriados.forEach((f) => { fechado[f.data] = f; });
     const diaUtil = (d) => d.getDay() % 6 !== 0 && !fechado[P.chave(d)];
+    const proximoUtil = (d) => { while (!diaUtil(d)) d = P.somaDias(d, 1); return d; };
     const lista = [];
-    M.feriados.forEach((f) => lista.push({ data: P.dia(f[0]), tipo: 'Feriado', titulo: f[1], desc: f[2] }));
+    M.feriados.forEach((f) => lista.push({ data: P.dia(f.data), tipo: 'Feriado', titulo: f.nome, desc: f.desc + (f.previsto ? ' (previsto: a B3 ainda não publicou o calendário deste ano)' : ''), previsto: !!f.previsto }));
     M.copom.forEach((c) => {
       const decisao = P.dia(c.decisao);
-      lista.push({ data: P.dia(c.inicio), tipo: 'Copom', titulo: 'Copom: 1º dia de reunião', desc: 'Diretoria analisa o cenário', primeiroDia: true });
-      lista.push({ data: decisao, tipo: 'Copom', titulo: 'Decisão do Copom', desc: c.nota ? P.maiuscula(c.nota) + ' · Selic anunciada à noite' : 'Selic anunciada à noite', decisao: true });
-      lista.push({ data: P.somaDias(decisao, 6), tipo: 'Ata', titulo: 'Ata do Copom', desc: 'Publicada às 8h' });
+      lista.push({ data: P.dia(c.inicio), tipo: 'Copom', titulo: 'Copom: 1º dia de reunião', desc: c.reuniao ? 'Reunião ' + c.reuniao : '', primeiroDia: true });
+      lista.push({ data: decisao, tipo: 'Copom', titulo: 'Decisão do Copom', desc: (c.nota ? P.maiuscula(c.nota) + ' · ' : '') + 'decisão divulgada no 2º dia', decisao: true });
+      // a ata sai na terça seguinte; se for feriado, no próximo dia útil (ex.: Finados de 2027)
+      lista.push({ data: proximoUtil(P.somaDias(decisao, 6)), tipo: 'Ata', titulo: 'Ata do Copom', desc: 'Ata da reunião ' + (c.reuniao || '') });
     });
     (M.eventos || []).forEach((ev) => lista.push({ data: P.dia(ev.data), tipo: ev.tipo || 'Outro', titulo: ev.titulo, desc: ev.desc || '' }));
     const fim = new Date(hoje.getFullYear(), hoje.getMonth() + 13, 0);
     for (let d = new Date(hoje.getFullYear(), hoje.getMonth() - 3, 1); d <= fim; d = P.somaDias(d, 1)) {
       if (d.getDay() !== 1) continue;
-      if (diaUtil(d)) { lista.push({ data: d, tipo: 'Focus', titulo: 'Boletim Focus', desc: 'Segunda de manhã' }); continue; }
-      let util = P.somaDias(d, 1);
-      while (!diaUtil(util)) util = P.somaDias(util, 1);
-      lista.push({ data: util, tipo: 'Focus', titulo: 'Boletim Focus', desc: 'Sai na ' + P.SEMANA[util.getDay()] + ' por causa do feriado' });
+      if (diaUtil(d)) { lista.push({ data: d, tipo: 'Focus', titulo: 'Boletim Focus', desc: 'Publicado às segundas-feiras' }); continue; }
+      const util = proximoUtil(P.somaDias(d, 1));
+      lista.push({ data: util, tipo: 'Focus', titulo: 'Boletim Focus', desc: 'Previsto para o próximo dia útil por causa do feriado' });
     }
     const ordem = { Feriado: 0, Focus: 1, Copom: 2, Ata: 3 };
     return lista.sort((a, b) => (a.data - b.data) || ((ordem[a.tipo] ?? 4) - (ordem[b.tipo] ?? 4)));
@@ -190,7 +191,7 @@
       Object.keys(P.glossario).forEach((id) => {
         const aberto = !!s.ajuda[id];
         ajuda[id] = {
-          on: s.explica || aberto, aberto: aberto, txt: P.glossario[id],
+          on: s.explica || aberto, aberto: aberto, txt: P.glossario[id].texto, fontes: P.glossario[id].fontes,
           toggle: () => this.setState({ ajuda: Object.assign({}, s.ajuda, { [id]: !aberto }) }),
           cls: aberto ? 'pm-help pm-help-on' : 'pm-help',
         };

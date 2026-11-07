@@ -1,5 +1,5 @@
 {
-  "atualizado_em": "2026-11-07T13:46-03:00",
+  "atualizado_em": "2026-11-07T14:23-03:00",
   "selic": {
     "valor": 13.75,
     "data": "2026-11-07",
@@ -1468,47 +1468,47 @@
   },
   "nucleos": {
     "nomes": [
+      "EX0",
+      "EX3",
       "MS",
       "DP",
-      "EX2",
-      "EX3",
       "P55"
     ],
     "codigos": [
+      11427,
+      27839,
       4466,
       16122,
-      27838,
-      27839,
-      28751
+      28750
     ],
     "historico": [
       {
         "mes": "2023-10",
-        "valor": 4.87
-      },
-      {
-        "mes": "2023-11",
         "valor": 4.71
       },
       {
+        "mes": "2023-11",
+        "valor": 4.56
+      },
+      {
         "mes": "2023-12",
-        "valor": 4.38
+        "valor": 4.34
       },
       {
         "mes": "2024-01",
-        "valor": 4.38
+        "valor": 4.25
       },
       {
         "mes": "2024-02",
-        "valor": 4.1
+        "valor": 4.01
       },
       {
         "mes": "2024-03",
-        "valor": 3.91
+        "valor": 3.79
       },
       {
         "mes": "2024-04",
-        "valor": 3.63
+        "valor": 3.54
       },
       {
         "mes": "2024-05",
@@ -1516,115 +1516,115 @@
       },
       {
         "mes": "2024-06",
-        "valor": 3.51
+        "valor": 3.57
       },
       {
         "mes": "2024-07",
-        "valor": 3.77
+        "valor": 3.83
       },
       {
         "mes": "2024-08",
-        "valor": 3.74
+        "valor": 3.8
       },
       {
         "mes": "2024-09",
-        "valor": 3.74
+        "valor": 3.81
       },
       {
         "mes": "2024-10",
-        "valor": 3.98
+        "valor": 3.99
       },
       {
         "mes": "2024-11",
-        "valor": 4.25
-      },
-      {
-        "mes": "2024-12",
-        "valor": 4.39
-      },
-      {
-        "mes": "2025-01",
-        "valor": 4.57
-      },
-      {
-        "mes": "2025-02",
-        "valor": 4.73
-      },
-      {
-        "mes": "2025-03",
-        "valor": 5.09
-      },
-      {
-        "mes": "2025-04",
-        "valor": 5.39
-      },
-      {
-        "mes": "2025-05",
-        "valor": 5.35
-      },
-      {
-        "mes": "2025-06",
-        "valor": 5.42
-      },
-      {
-        "mes": "2025-07",
-        "valor": 5.3
-      },
-      {
-        "mes": "2025-08",
-        "valor": 5.38
-      },
-      {
-        "mes": "2025-09",
-        "valor": 5.31
-      },
-      {
-        "mes": "2025-10",
-        "valor": 5.06
-      },
-      {
-        "mes": "2025-11",
-        "valor": 4.84
-      },
-      {
-        "mes": "2025-12",
-        "valor": 4.72
-      },
-      {
-        "mes": "2026-01",
-        "valor": 4.53
-      },
-      {
-        "mes": "2026-02",
-        "valor": 4.54
-      },
-      {
-        "mes": "2026-03",
-        "valor": 4.42
-      },
-      {
-        "mes": "2026-04",
-        "valor": 4.34
-      },
-      {
-        "mes": "2026-05",
-        "valor": 4.48
-      },
-      {
-        "mes": "2026-06",
-        "valor": 4.38
-      },
-      {
-        "mes": "2026-07",
-        "valor": 4.3
-      },
-      {
-        "mes": "2026-08",
         "valor": 4.21
       },
       {
-        "mes": "2026-09",
+        "mes": "2024-12",
+        "valor": 4.34
+      },
+      {
+        "mes": "2025-01",
+        "valor": 4.54
+      },
+      {
+        "mes": "2025-02",
+        "valor": 4.65
+      },
+      {
+        "mes": "2025-03",
+        "valor": 5.02
+      },
+      {
+        "mes": "2025-04",
+        "valor": 5.27
+      },
+      {
+        "mes": "2025-05",
+        "valor": 5.18
+      },
+      {
+        "mes": "2025-06",
+        "valor": 5.25
+      },
+      {
+        "mes": "2025-07",
+        "valor": 5.08
+      },
+      {
+        "mes": "2025-08",
+        "valor": 5.14
+      },
+      {
+        "mes": "2025-09",
+        "valor": 5.1
+      },
+      {
+        "mes": "2025-10",
+        "valor": 4.9
+      },
+      {
+        "mes": "2025-11",
+        "valor": 4.74
+      },
+      {
+        "mes": "2025-12",
+        "valor": 4.61
+      },
+      {
+        "mes": "2026-01",
+        "valor": 4.44
+      },
+      {
+        "mes": "2026-02",
+        "valor": 4.47
+      },
+      {
+        "mes": "2026-03",
         "valor": 4.39
+      },
+      {
+        "mes": "2026-04",
+        "valor": 4.38
+      },
+      {
+        "mes": "2026-05",
+        "valor": 4.52
+      },
+      {
+        "mes": "2026-06",
+        "valor": 4.44
+      },
+      {
+        "mes": "2026-07",
+        "valor": 4.43
+      },
+      {
+        "mes": "2026-08",
+        "valor": 4.36
+      },
+      {
+        "mes": "2026-09",
+        "valor": 4.53
       }
     ]
   },
@@ -4536,204 +4536,206 @@
     ]
   },
   "ibovespa": {
-    "fechamento": 168499.0,
+    "fonte": "B3",
+    "fechamento": 168498.45,
     "data": "2026-11-06",
     "var_ano": 4.58,
     "maxima_12m": {
-      "valor": 209067.0,
+      "valor": 209066.9,
       "data": "2026-10-09"
     },
     "maxima_historica": {
-      "valor": 209067.0,
-      "data": "2026-10-09"
+      "valor": 209066.9,
+      "data": "2026-10-09",
+      "desde": 1995
     },
     "por_ano": [
       {
         "ano": 2014,
-        "fechamento": 50007.0,
+        "fechamento": 50007.41,
         "retorno": -2.91
       },
       {
         "ano": 2015,
-        "fechamento": 43350.0,
+        "fechamento": 43349.96,
         "retorno": -13.31
       },
       {
         "ano": 2016,
-        "fechamento": 60227.0,
+        "fechamento": 60227.28,
         "retorno": 38.93
       },
       {
         "ano": 2017,
-        "fechamento": 76402.0,
+        "fechamento": 76402.08,
         "retorno": 26.86
       },
       {
         "ano": 2018,
-        "fechamento": 87887.0,
+        "fechamento": 87887.27,
         "retorno": 15.03
       },
       {
         "ano": 2019,
-        "fechamento": 115964.0,
-        "retorno": 31.95
+        "fechamento": 115645.34,
+        "retorno": 31.58
       },
       {
         "ano": 2020,
-        "fechamento": 119306.0,
-        "retorno": 2.88
+        "fechamento": 119017.24,
+        "retorno": 2.92
       },
       {
         "ano": 2021,
-        "fechamento": 104822.0,
-        "retorno": -12.14
+        "fechamento": 104822.44,
+        "retorno": -11.93
       },
       {
         "ano": 2022,
-        "fechamento": 110031.0,
-        "retorno": 4.97
+        "fechamento": 109734.6,
+        "retorno": 4.69
       },
       {
         "ano": 2023,
-        "fechamento": 134185.0,
-        "retorno": 21.95
+        "fechamento": 134185.24,
+        "retorno": 22.28
       },
       {
         "ano": 2024,
-        "fechamento": 120283.0,
+        "fechamento": 120283.4,
         "retorno": -10.36
       },
       {
         "ano": 2025,
-        "fechamento": 161125.0,
+        "fechamento": 161125.37,
         "retorno": 33.95
       },
       {
         "ano": 2026,
-        "fechamento": 168499.0,
+        "fechamento": 168498.45,
         "retorno": 4.58
       }
     ],
     "ultimos_dias": [
       {
         "data": "2026-09-24",
-        "valor": 183966.0
+        "valor": 183965.91
       },
       {
         "data": "2026-09-25",
-        "valor": 183477.0
+        "valor": 183476.86
       },
       {
         "data": "2026-09-28",
-        "valor": 182991.0
+        "valor": 182991.13
       },
       {
         "data": "2026-09-29",
-        "valor": 183828.0
+        "valor": 183827.59
       },
       {
         "data": "2026-09-30",
-        "valor": 186340.0
+        "valor": 186340.46
       },
       {
         "data": "2026-10-01",
-        "valor": 187198.0
+        "valor": 187197.46
       },
       {
         "data": "2026-10-02",
-        "valor": 192115.0
+        "valor": 192114.55
       },
       {
         "data": "2026-10-05",
-        "valor": 206912.0
+        "valor": 206911.89
       },
       {
         "data": "2026-10-06",
-        "valor": 205835.0
+        "valor": 205835.29
       },
       {
         "data": "2026-10-07",
-        "valor": 204302.0
+        "valor": 204302.33
       },
       {
         "data": "2026-10-08",
-        "valor": 206220.0
+        "valor": 206220.24
       },
       {
         "data": "2026-10-09",
-        "valor": 209067.0
+        "valor": 209066.9
       },
       {
         "data": "2026-10-13",
-        "valor": 206888.0
+        "valor": 206887.52
       },
       {
         "data": "2026-10-14",
-        "valor": 206506.0
+        "valor": 206505.98
       },
       {
         "data": "2026-10-15",
-        "valor": 204324.0
+        "valor": 204324.26
       },
       {
         "data": "2026-10-16",
-        "valor": 205430.0
+        "valor": 205430.33
       },
       {
         "data": "2026-10-19",
-        "valor": 205079.0
+        "valor": 205079.25
       },
       {
         "data": "2026-10-20",
-        "valor": 208296.0
+        "valor": 208295.98
       },
       {
         "data": "2026-10-21",
-        "valor": 206495.0
+        "valor": 206495.23
       },
       {
         "data": "2026-10-22",
-        "valor": 204120.0
+        "valor": 204120.12
       },
       {
         "data": "2026-10-23",
-        "valor": 205083.0
+        "valor": 205082.56
       },
       {
         "data": "2026-10-26",
-        "valor": 176608.0
+        "valor": 176608.23
       },
       {
         "data": "2026-10-27",
-        "valor": 175710.0
+        "valor": 175710.05
       },
       {
         "data": "2026-10-28",
-        "valor": 171006.0
+        "valor": 171006.1
       },
       {
         "data": "2026-10-29",
-        "valor": 169186.0
+        "valor": 169186.42
       },
       {
         "data": "2026-10-30",
-        "valor": 167922.0
+        "valor": 167921.8
       },
       {
         "data": "2026-11-03",
-        "valor": 165529.0
+        "valor": 165528.92
       },
       {
         "data": "2026-11-04",
-        "valor": 167564.0
+        "valor": 167563.47
       },
       {
         "data": "2026-11-05",
-        "valor": 166192.0
+        "valor": 166191.45
       },
       {
         "data": "2026-11-06",
-        "valor": 168499.0
+        "valor": 168498.45
       }
     ],
     "volatilidade": {
@@ -4754,207 +4756,207 @@
         },
         {
           "data": "2026-05-22",
-          "valor": 17.29
+          "valor": 17.28
         },
         {
           "data": "2026-05-25",
-          "valor": 17.63
+          "valor": 17.83
         },
         {
           "data": "2026-05-26",
-          "valor": 17.63
+          "valor": 17.87
         },
         {
           "data": "2026-05-27",
-          "valor": 17.61
+          "valor": 17.85
         },
         {
           "data": "2026-05-28",
-          "valor": 17.6
+          "valor": 17.85
         },
         {
           "data": "2026-05-29",
-          "valor": 16.53
+          "valor": 16.79
         },
         {
           "data": "2026-06-01",
-          "valor": 15.49
+          "valor": 15.77
         },
         {
           "data": "2026-06-02",
-          "valor": 16.26
+          "valor": 16.53
         },
         {
           "data": "2026-06-03",
-          "valor": 17.22
+          "valor": 17.47
         },
         {
           "data": "2026-06-05",
-          "valor": 16.9
+          "valor": 17.16
         },
         {
           "data": "2026-06-08",
-          "valor": 15.42
+          "valor": 15.7
         },
         {
           "data": "2026-06-09",
-          "valor": 15.57
+          "valor": 15.85
         },
         {
           "data": "2026-06-10",
-          "valor": 15.33
+          "valor": 15.62
         },
         {
           "data": "2026-06-11",
-          "valor": 16.77
+          "valor": 17.03
         },
         {
           "data": "2026-06-12",
-          "valor": 15.76
+          "valor": 16.03
         },
         {
           "data": "2026-06-15",
-          "valor": 15.45
+          "valor": 15.73
         },
         {
           "data": "2026-06-16",
-          "valor": 15.41
+          "valor": 15.69
         },
         {
           "data": "2026-06-17",
-          "valor": 15.51
+          "valor": 15.78
         },
         {
           "data": "2026-06-18",
-          "valor": 14.77
+          "valor": 15.06
         },
         {
           "data": "2026-06-19",
-          "valor": 13.11
+          "valor": 13.39
         },
         {
           "data": "2026-06-22",
-          "valor": 13.8
+          "valor": 14.25
         },
         {
           "data": "2026-06-23",
-          "valor": 13.83
+          "valor": 14.27
         },
         {
           "data": "2026-06-24",
-          "valor": 13.56
+          "valor": 13.78
         },
         {
           "data": "2026-06-25",
-          "valor": 14.0
+          "valor": 14.14
         },
         {
           "data": "2026-06-26",
-          "valor": 14.26
+          "valor": 14.39
         },
         {
           "data": "2026-06-29",
-          "valor": 14.21
+          "valor": 14.34
         },
         {
           "data": "2026-06-30",
-          "valor": 14.19
+          "valor": 14.32
         },
         {
           "data": "2026-07-01",
-          "valor": 13.84
+          "valor": 13.98
         },
         {
           "data": "2026-07-02",
-          "valor": 13.4
+          "valor": 13.54
         },
         {
           "data": "2026-07-03",
-          "valor": 11.07
+          "valor": 11.15
         },
         {
           "data": "2026-07-06",
-          "valor": 11.38
+          "valor": 11.33
         },
         {
           "data": "2026-07-07",
-          "valor": 11.4
+          "valor": 11.34
         },
         {
           "data": "2026-07-08",
-          "valor": 11.59
+          "valor": 11.53
         },
         {
           "data": "2026-07-09",
-          "valor": 11.97
+          "valor": 11.92
         },
         {
           "data": "2026-07-10",
-          "valor": 14.51
+          "valor": 14.46
         },
         {
           "data": "2026-07-13",
-          "valor": 15.23
+          "valor": 15.18
         },
         {
           "data": "2026-07-14",
-          "valor": 15.15
-        },
-        {
-          "data": "2026-07-15",
           "valor": 15.1
         },
         {
+          "data": "2026-07-15",
+          "valor": 15.06
+        },
+        {
           "data": "2026-07-16",
-          "valor": 15.61
+          "valor": 15.57
         },
         {
           "data": "2026-07-17",
-          "valor": 15.6
+          "valor": 15.56
         },
         {
           "data": "2026-07-20",
-          "valor": 15.65
+          "valor": 15.6
         },
         {
           "data": "2026-07-21",
-          "valor": 15.29
+          "valor": 15.12
         },
         {
           "data": "2026-07-22",
-          "valor": 17.24
+          "valor": 17.1
         },
         {
           "data": "2026-07-23",
-          "valor": 17.25
+          "valor": 17.11
         },
         {
           "data": "2026-07-24",
-          "valor": 18.01
+          "valor": 17.87
         },
         {
           "data": "2026-07-27",
-          "valor": 18.01
+          "valor": 17.87
         },
         {
           "data": "2026-07-28",
-          "valor": 18.14
+          "valor": 18.0
         },
         {
           "data": "2026-07-29",
-          "valor": 18.82
+          "valor": 18.68
         },
         {
           "data": "2026-07-30",
-          "valor": 19.81
+          "valor": 19.68
         },
         {
           "data": "2026-07-31",
-          "valor": 19.76
+          "valor": 19.63
         },
         {
           "data": "2026-08-03",
-          "valor": 19.6
+          "valor": 19.52
         },
         {
           "data": "2026-08-04",
@@ -4970,7 +4972,7 @@
         },
         {
           "data": "2026-08-07",
-          "valor": 20.08
+          "valor": 20.07
         },
         {
           "data": "2026-08-10",
@@ -4982,7 +4984,7 @@
         },
         {
           "data": "2026-08-12",
-          "valor": 18.41
+          "valor": 18.4
         },
         {
           "data": "2026-08-13",
@@ -5050,7 +5052,7 @@
         },
         {
           "data": "2026-09-04",
-          "valor": 18.44
+          "valor": 18.45
         },
         {
           "data": "2026-09-08",
@@ -5146,7 +5148,7 @@
         },
         {
           "data": "2026-10-09",
-          "valor": 29.04
+          "valor": 29.05
         },
         {
           "data": "2026-10-13",
@@ -5154,7 +5156,7 @@
         },
         {
           "data": "2026-10-14",
-          "valor": 28.98
+          "valor": 28.99
         },
         {
           "data": "2026-10-15",
@@ -5220,7 +5222,11 @@
           "data": "2026-11-06",
           "valor": 53.89
         }
-      ]
+      ],
+      "mediana_desde_2000": 21.86,
+      "p90_desde_2000": 36.47,
+      "percentil_atual": 98.0,
+      "maxima_desde_2000": 129.3
     }
   },
   "comparacao": {
@@ -5319,10 +5325,10 @@
       },
       {
         "mes": "2018-02",
-        "ibov": 132.2,
+        "ibov": 132.0,
         "cdi": 109.9,
-        "ibov_real": 128.1,
-        "ibov_dolar": 127.4
+        "ibov_real": 127.9,
+        "ibov_dolar": 127.2
       },
       {
         "mes": "2018-03",
@@ -5473,10 +5479,10 @@
       },
       {
         "mes": "2019-12",
-        "ibov": 179.3,
+        "ibov": 178.8,
         "cdi": 122.6,
-        "ibov_real": 161.6,
-        "ibov_dolar": 139.1
+        "ibov_real": 161.1,
+        "ibov_dolar": 138.7
       },
       {
         "mes": "2020-01",
@@ -5553,21 +5559,21 @@
         "ibov": 168.4,
         "cdi": 125.8,
         "ibov_real": 147.1,
-        "ibov_dolar": 98.7
+        "ibov_dolar": 98.8
       },
       {
         "mes": "2020-12",
-        "ibov": 184.5,
+        "ibov": 184.0,
         "cdi": 126.0,
-        "ibov_real": 159.0,
-        "ibov_dolar": 111.0
+        "ibov_real": 158.7,
+        "ibov_dolar": 110.7
       },
       {
         "mes": "2021-01",
-        "ibov": 179.4,
+        "ibov": 177.9,
         "cdi": 126.2,
-        "ibov_real": 154.3,
-        "ibov_dolar": 102.4
+        "ibov_real": 153.0,
+        "ibov_dolar": 101.6
       },
       {
         "mes": "2021-02",
@@ -5648,10 +5654,10 @@
       },
       {
         "mes": "2022-01",
-        "ibov": 173.8,
+        "ibov": 173.4,
         "cdi": 132.5,
-        "ibov_real": 135.4,
-        "ibov_dolar": 101.4
+        "ibov_real": 135.1,
+        "ibov_dolar": 101.2
       },
       {
         "mes": "2022-02",
@@ -5725,17 +5731,17 @@
       },
       {
         "mes": "2022-12",
-        "ibov": 170.1,
+        "ibov": 169.7,
         "cdi": 147.9,
-        "ibov_real": 126.0,
-        "ibov_dolar": 102.0
+        "ibov_real": 125.6,
+        "ibov_dolar": 101.7
       },
       {
         "mes": "2023-01",
-        "ibov": 175.6,
+        "ibov": 175.4,
         "cdi": 149.5,
-        "ibov_real": 129.3,
-        "ibov_dolar": 107.7
+        "ibov_real": 129.2,
+        "ibov_dolar": 107.6
       },
       {
         "mes": "2023-02",
@@ -6577,20 +6583,35 @@
     }
   },
   "mundo": {
-    "treasury10": {
-      "valor": 4.86,
-      "data": "2026-11-06",
-      "ticker": "^TNX"
+    "fed_funds": {
+      "valor": 3.88,
+      "data": "2026-11-05",
+      "serie": "DFF",
+      "nome": "Fed funds efetiva (Federal Reserve)"
     },
     "tbill3m": {
-      "valor": 4.0,
-      "data": "2026-11-06",
-      "ticker": "^IRX"
+      "valor": 4.17,
+      "data": "2026-11-05",
+      "serie": "DGS3MO",
+      "nome": "Título do Tesouro americano de 3 meses (U.S. Treasury)"
+    },
+    "treasury10": {
+      "valor": 4.84,
+      "data": "2026-11-05",
+      "serie": "DGS10",
+      "nome": "Título do Tesouro americano de 10 anos (U.S. Treasury)"
     },
     "brent": {
-      "valor": 98.32,
-      "data": "2026-11-06",
-      "ticker": "BZ=F"
+      "valor": 107.03,
+      "data": "2026-11-03",
+      "serie": "DCOILBRENTEU",
+      "nome": "Petróleo Brent, preço à vista (EIA)"
+    },
+    "inflacao_eua": {
+      "valor": 4.02,
+      "mes": "2026-09",
+      "serie": "CPIAUCSL",
+      "nome": "Inflação ao consumidor dos EUA em 12 meses (CPI, BLS)"
     }
   },
   "tesouro": {
@@ -7397,39 +7418,39 @@
   "fontes": {
     "selic_e_ipca": {
       "ok": true,
-      "atualizado_em": "2026-11-07T13:46-03:00"
+      "atualizado_em": "2026-11-07T14:23-03:00"
     },
     "inflacao_mensal": {
       "ok": true,
-      "atualizado_em": "2026-11-07T13:46-03:00"
+      "atualizado_em": "2026-11-07T14:23-03:00"
     },
     "grupos_ipca": {
       "ok": true,
-      "atualizado_em": "2026-11-07T13:46-03:00"
+      "atualizado_em": "2026-11-07T14:23-03:00"
     },
     "focus": {
       "ok": true,
-      "atualizado_em": "2026-11-07T13:46-03:00"
+      "atualizado_em": "2026-11-07T14:23-03:00"
     },
     "ibovespa": {
       "ok": true,
-      "atualizado_em": "2026-11-07T13:46-03:00"
+      "atualizado_em": "2026-11-07T14:23-03:00"
     },
     "comparacao": {
       "ok": true,
-      "atualizado_em": "2026-11-07T13:46-03:00"
+      "atualizado_em": "2026-11-07T14:23-03:00"
     },
     "economia": {
       "ok": true,
-      "atualizado_em": "2026-11-07T13:46-03:00"
+      "atualizado_em": "2026-11-07T14:23-03:00"
     },
     "mundo": {
       "ok": true,
-      "atualizado_em": "2026-11-07T13:46-03:00"
+      "atualizado_em": "2026-11-07T14:23-03:00"
     },
     "tesouro": {
       "ok": true,
-      "atualizado_em": "2026-11-07T13:46-03:00"
+      "atualizado_em": "2026-11-07T14:23-03:00"
     }
   },
   "erros": []

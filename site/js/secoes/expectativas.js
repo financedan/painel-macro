@@ -137,7 +137,7 @@
       tes: g,
       tesReal: P.pct(a.real), tesImplicita: P.pct(a.implicita), tesVenc: String(venc), tesData: P.ddmm(P.dia(a.data)),
       tesCaption: 'Tesouro IPCA+ ' + venc + ' paga IPCA + ' + P.pct(a.real) + ' ao ano; o Prefixado ' + P.dia(a.venc_pre).getFullYear() + ', ' + P.pct(a.prefixado) + '. A diferença dá a inflação implícita de '
-        + P.pct(a.implicita) + ' ao ano, ' + (dif > 0 ? P.pp(dif) + ' acima' : P.pp(dif) + ' abaixo') + ' do Focus para ' + c.anos[2] + ' (' + fx + '). Parte da diferença é prêmio de risco, não só inflação esperada.',
+        + P.pct(a.implicita) + ' ao ano, ' + (dif > 0 ? P.pp(dif) + ' acima' : P.pp(dif) + ' abaixo') + ' do IPCA esperado pelo Focus para ' + c.anos[2] + ' (Focus: ' + fx + '). Taxas de compra do Tesouro Direto.',
       tesAria: 'Juro real do Tesouro IPCA+ e inflação implícita, semana a semana, nos últimos 3 anos',
     };
   };

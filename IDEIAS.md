@@ -20,14 +20,14 @@ Brasil x EUA; agenda com navegação entre meses e exportação `.ics`; glossár
 calculadora de rendimento; barra de navegação no rodapé do celular; tela de carregamento; CSV; prévia de link com os
 números do dia; período do gráfico lembrado; leituras em Markdown e resumo automático; validação dos dados; testes
 (pytest e navegador); aviso no Telegram (opcional, por segredos); versões fixas e Dependabot; publicação no Pages;
-selos no README; `manual.json`; código dividido por aba; feed RSS; seção "Sobre" com como citar.
+selos no README; `manual.json`; código dividido por aba; feed RSS; seção "Sobre" com como citar; Fed funds e inflação
+dos EUA pelo FRED; **fonte com link em todos os blocos** (dados só de fontes oficiais: BC, IBGE, B3, Tesouro e FRED).
 
 **Não implementado, e por quê:**
 
 | Ideia | Motivo |
 |---|---|
 | Top 5 e Focus mensal do IPCA | Ficaram para depois, para não sobrecarregar a aba Expectativas |
-| Fed funds e inflação dos EUA (FRED) | Exige chave de API; foi usado o T-bill de 3 meses (sem chave) como juro curto americano |
 | Divulgações do IBGE e reuniões do Fed na agenda | Sem fonte confiável de datas sem chave; o `manual.json` ganhou o campo `eventos` para cadastrar |
 | Compartilhar card como imagem | Exigiria uma biblioteca externa; o painel segue sem dependências. A prévia do link já mostra os números |
 | Tema claro / alto contraste | Mudaria a identidade visual, que foi mantida |

@@ -103,9 +103,9 @@
     const defs = [
       { label: 'Dólar (PTAX)', display: P.reais(E.dolar.valor), note: P.ddmm(P.dia(E.dolar.data)) + ' · ' + P.comSinal((E.dolar.valor / ha12(E.dolar.historico).valor - 1) * 100) + '% em 12 meses', arr: E.dolar.historico.map((x) => x.valor), color: OSSO, icon: P.icones.trend },
       { label: 'Atividade (IBC-Br)', display: P.comSinal(ult(E.ibcbr.historico).valor) + '%', note: P.maiuscula(P.mesLongo(ult(E.ibcbr.historico).mes)) + ' · 12 meses contra os 12 anteriores', arr: E.ibcbr.historico.map((x) => x.valor), color: AZUL, icon: P.icones.pulse },
-      { label: 'Desemprego', display: P.pct(ult(E.desemprego.historico).valor, 1), note: 'Trimestre até ' + P.mesLongo(ult(E.desemprego.historico).mes) + ' · era ' + P.pct(ha12(E.desemprego.historico).valor, 1) + ' um ano antes', arr: E.desemprego.historico.map((x) => x.valor), color: OSSO, icon: P.icones.bars },
+      { label: 'Desocupação (PNAD)', display: P.pct(ult(E.desemprego.historico).valor, 1), note: 'Trimestre até ' + P.mesLongo(ult(E.desemprego.historico).mes) + ' · era ' + P.pct(ha12(E.desemprego.historico).valor, 1) + ' um ano antes', arr: E.desemprego.historico.map((x) => x.valor), color: OSSO, icon: P.icones.bars },
       { label: 'Dívida bruta', display: P.pct(ult(E.divida.historico).valor, 1), note: '% do PIB · ' + P.mesLongo(ult(E.divida.historico).mes) + ' · ' + P.comSinal(ult(E.divida.historico).valor - ha12(E.divida.historico).valor) + ' p.p. em 12 meses', arr: E.divida.historico.map((x) => x.valor), color: AMBAR, icon: P.icones.percent },
-      { label: 'IGP-M em 12 meses', display: P.pct(ult(E.igpm.historico).valor), note: 'Reajuste de aluguel · ' + P.mesLongo(ult(E.igpm.historico).mes) + ' · ' + P.comSinal(E.igpm.mes.valor, 2) + '% no mês', arr: E.igpm.historico.map((x) => x.valor), color: AMBAR, icon: P.icones.trend },
+      { label: 'IGP-M em 12 meses', display: P.pct(ult(E.igpm.historico).valor), note: 'FGV · ' + P.mesLongo(ult(E.igpm.historico).mes) + ' · ' + P.comSinal(E.igpm.mes.valor, 2) + '% no mês', arr: E.igpm.historico.map((x) => x.valor), color: AMBAR, icon: P.icones.trend },
     ];
     return {
       econCards: defs.map((k, i) => Object.assign({ cardStyle: 'animation-delay: ' + (100 + i * 70) + 'ms' }, k, spark(k.arr))),
@@ -114,17 +114,21 @@
 
   S.mercadosMundo = (c) => {
     const W = c.D.mundo;
-    if (!W) throw new Error('sem dados do mundo');
-    const dif = c.selic - W.tbill3m.valor;
+    if (!W || !W.fed_funds) throw new Error('sem dados dos EUA (FRED)');
+    const realEua = P.fisher(W.fed_funds.valor, W.inflacao_eua.valor);
+    const dt = (x) => P.ddmm(P.dia(x.data));
     return {
       mundoRows: [
-        { nome: 'Selic (Brasil)', valor: P.pct(c.selic), nota: 'meta definida pelo Copom' },
-        { nome: 'T-bill 3 meses (EUA)', valor: P.pct(W.tbill3m.valor), nota: 'juro curto americano · ' + P.ddmm(P.dia(W.tbill3m.data)) },
-        { nome: 'Treasury 10 anos (EUA)', valor: P.pct(W.treasury10.valor), nota: 'juro longo americano · ' + P.ddmm(P.dia(W.treasury10.data)) },
-        { nome: 'Petróleo Brent', valor: 'US$ ' + P.fmt(W.brent.valor), nota: 'barril · ' + P.ddmm(P.dia(W.brent.data)) },
+        { nome: 'Selic (Brasil)', valor: P.pct(c.selic), nota: 'meta definida pelo Copom · BCB' },
+        { nome: 'Fed funds efetiva (EUA)', valor: P.pct(W.fed_funds.valor), nota: 'taxa básica dos EUA · Federal Reserve · ' + dt(W.fed_funds) },
+        { nome: 'Inflação dos EUA (CPI, 12 meses)', valor: P.pct(W.inflacao_eua.valor), nota: 'BLS · ' + P.mesLongo(W.inflacao_eua.mes) },
+        { nome: 'Juro real dos EUA', valor: P.pct(realEua), nota: 'Fed funds descontada o CPI (Fisher) · cálculo do painel' },
+        { nome: 'Título americano de 3 meses', valor: P.pct(W.tbill3m.valor), nota: 'U.S. Treasury · ' + dt(W.tbill3m) },
+        { nome: 'Título americano de 10 anos', valor: P.pct(W.treasury10.valor), nota: 'U.S. Treasury · ' + dt(W.treasury10) },
+        { nome: 'Petróleo Brent', valor: 'US$ ' + P.fmt(W.brent.valor), nota: 'preço à vista do barril · EIA · ' + dt(W.brent) },
       ],
-      difTxt: P.pp(dif),
-      difCaption: 'Diferença entre a Selic e o juro de 3 meses dos EUA. Quanto maior, mais atraente aplicar no Brasil, o que tende a segurar o dólar.',
+      difTxt: P.pp(c.selic - W.fed_funds.valor),
+      difCaption: 'Selic menos a Fed funds efetiva. Em juro real: Brasil ' + P.pct(c.realNow) + ' e EUA ' + P.pct(realEua) + ' (inflação dos últimos 12 meses em cada país).',
     };
   };
 })();

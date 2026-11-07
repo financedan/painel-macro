@@ -14,11 +14,11 @@ painel num navegador (desktop 1440 px, iPhone 13 e modo "menos movimento").
 | # | Problema | Status |
 |---|---|---|
 | 1 | Data do corte da Selic | ✅ Copom de setembro corrigido para 15–16/09; a data da decisão vem do próprio SGS; Metodologia diz "em vigor desde 17/09 (decisão de 16/09)"; teste acusa decisão fora de quarta-feira |
-| 2 | Card "Brasil no mundo" | ✅ Números no `manual.json` com o mês do ranking em destaque, linha "Brasil hoje" calculada e diferencial de juros com os EUA |
-| 3 | Índice do medo | ✅ Trocado por volatilidade calculada sozinha (Ibovespa, 21 pregões); escala 0–60% descrita certo; VIX manual vira referência com "há X dias" e selo "desatualizado" |
+| 2 | Card "Brasil no mundo" | ✅ Ranking atualizado (Moneyou, 06/11/2026) com link da Agência Brasil, e diferencial de juros com os EUA (FRED) |
+| 3 | Índice do medo | ✅ Trocado por volatilidade calculada com dados da B3; faixas pelo próprio histórico desde 2000 (sem limite inventado); VIX sem fonte verificável removido |
 | 4 | Leitura da semana vazia | ✅ Leituras em `leituras/*.md`; sem leitura nova, aparece um resumo automático do Focus |
 | 5 | Sem aviso de dado velho | ✅ Faixa de aviso quando uma fonte falha ou a coleta para; status de cada fonte na Metodologia; validação antes de salvar; versões fixas |
-| 6 | Calendário acabando | ⚠️ Feriados de 2027 cadastrados e Focus pula para o próximo dia útil. **O calendário do Copom de 2027 ainda precisa ser cadastrado à mão**; o painel e os testes avisam |
+| 6 | Calendário acabando | ✅ Calendário oficial do Copom de 2027 cadastrado; feriados de 2027 marcados como previstos até a B3 publicar; ata pula feriado |
 | 7 | Fechamento no meio do pregão | ✅ Robô roda às 19h e o coletor descarta a linha do dia antes das 18h |
 | 8 | Menu duplicado | ✅ Computador: só o menu do topo. Celular: só a barra fixa no rodapé |
 | 9 | Tela de nome obrigatória | ✅ Painel abre direto; convite discreto; "Cancelar" e "Remover meu nome" |

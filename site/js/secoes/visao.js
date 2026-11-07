@@ -15,6 +15,30 @@
   };
   const tagReuniao = (c, reuniao) => c.decisoes.find((d) => d.reuniao === reuniao);
 
+  /*
+   * Selic esperada para os próximos 12 meses (acumulada), como o BC usa na Selic real ex-ante
+   * (RPM set/2026, p. 80): Selic de hoje até a próxima decisão e, depois de cada reunião,
+   * a mediana do Focus para ela. Precisa do calendário do Copom cobrindo os 12 meses.
+   */
+  function selicEsperada12m(c) {
+    const R = c.F.reunioes || [];
+    const fim = P.somaDias(c.hoje, 365);
+    const futuras = c.decisoes.filter((d) => d.data >= c.hoje && d.reuniao);
+    if (!R.length || !futuras.length || P.difDias(fim, futuras[futuras.length - 1].data) > 60) return null;
+    let taxa = c.selic, ini = c.hoje, fator = 1;
+    for (const d of futuras) {
+      const vigencia = P.somaDias(d.data, 1);
+      if (vigencia > fim) break;
+      const r = R.find((x) => x.reuniao === d.reuniao);
+      if (!r) return null;
+      fator *= Math.pow(1 + taxa / 100, P.difDias(vigencia, ini) / 365);
+      taxa = r.mediana; ini = vigencia;
+    }
+    fator *= Math.pow(1 + taxa / 100, P.difDias(fim, ini) / 365);
+    return (fator - 1) * 100;
+  }
+  P.selicEsperada12m = selicEsperada12m;
+
   // ---------- cabeçalho da visão geral
   S.hero = (c) => {
     const p = c.proximo;
@@ -93,13 +117,14 @@
     const ult = B.ultimos_dias.slice(-6);
     const ibovSemana = (ult[ult.length - 1].valor / ult[0].valor - 1) * 100;
     const ipca12e = c.F.ipca_12m ? c.F.ipca_12m.mediana : null;
-    const exante = P.fisher(selic, ipca12e);
+    const selic12 = selicEsperada12m(c);
+    const exante = P.fisher(selic12, ipca12e);
     const defs = [
       { label: 'Selic (meta)', v: selic, note: selicNota, arr: sel12, color: OSSO, icon: P.icones.percent },
       { label: 'IPCA em 12 meses', v: ipca, note: P.maiuscula(c.ipcaMesNome) + ' · ' + faixaMeta(ipca), arr: ip12.map((x) => x.valor), color: AMBAR, icon: P.icones.trend },
       { label: 'Juro real hoje', v: c.realNow, note: P.fmt(Math.abs(c.realNow - neutro), 1) + ' p.p. ' + (c.realNow >= neutro ? 'acima' : 'abaixo') + ' do juro neutro de referência (' + P.pct(neutro, 0) + ')', arr: real12, color: AZUL, icon: P.icones.gauge },
       exante != null
-        ? { label: 'Juro real ex-ante', v: exante, note: 'Selic de hoje e a inflação esperada para os próximos 12 meses (Focus: ' + P.pct(ipca12e) + ')', foot: 'Ex-post ' + P.pct(c.realNow) + ' · ex-ante ' + P.pct(exante), icon: P.icones.clock }
+        ? { label: 'Juro real ex-ante', v: exante, note: 'Método do BC: Selic esperada para 12 meses (' + P.pct(selic12) + ') e inflação esperada (' + P.pct(ipca12e) + '), ambas do Focus', foot: 'Ex-post ' + P.pct(c.realNow) + ' · ex-ante ' + P.pct(exante), icon: P.icones.clock }
         : { label: 'Juro real em ' + anos[1], v: P.fisher(Sf[1].mediana, I[1].mediana), note: 'Focus: Selic ' + P.pct(Sf[1].mediana) + ' e IPCA ' + P.pct(I[1].mediana), foot: 'Hoje ' + P.pct(c.realNow), icon: P.icones.clock },
       { label: 'Focus · IPCA ' + anos[0], v: I[0].mediana,
         note: I[0].variacao == null ? 'Mediana do mercado' : (I[0].variacao === 0 ? '= estável na semana' : P.seta(I[0].variacao) + P.pp(I[0].variacao) + ' na semana (era ' + P.pct(c.antes(I[0])) + ')'),
@@ -168,7 +193,7 @@
       dias = n === 0 ? 'Hoje' : String(n);
       palavra = n === 0 ? '' : (n === 1 ? 'dia' : 'dias');
       quando = 'Reunião de ' + p.ini.getDate() + (p.ini.getMonth() === p.data.getMonth() ? '' : ' de ' + P.MESES_LONGOS[p.ini.getMonth()]) + ' e ' + P.dataLonga(p.data)
-        + ' · ' + (p.nota ? p.nota + ' · ' : '') + 'decisão na ' + P.SEMANA[p.data.getDay()] + ' à noite';
+        + ' · ' + (p.nota ? p.nota + ' · ' : '') + 'decisão divulgada na ' + P.SEMANA[p.data.getDay()];
     }
     const reunioes = c.F.reunioes || [];
     const daProxima = p && p.reuniao ? reunioes.find((r) => r.reuniao === p.reuniao) : null;
@@ -243,7 +268,7 @@
     }
     const contador = seguidos === 0 ? 'Dentro da banda' : seguidos + (seguidos === 1 ? ' mês ' : ' meses ') + lado;
     const contadorCaption = seguidos === 0 ? 'O IPCA de 12 meses está dentro da banda de tolerância.'
-      : (seguidos >= 6 ? 'Com 6 meses seguidos fora da banda, a meta contínua é considerada descumprida e o BC precisa explicar por carta.'
+      : (seguidos >= 6 ? 'Com 6 meses seguidos fora da banda, a meta contínua é considerada descumprida e o BC publica carta aberta ao Ministro da Fazenda (Decreto 12.079/2024).'
         : 'Na meta contínua, 6 meses seguidos fora da banda configuram descumprimento. Faltam ' + (6 - seguidos) + '.');
     const ip12 = hist.slice(-12), acimaTeto = ip12.filter((x) => x.valor > TETO).length;
 
@@ -350,40 +375,34 @@
     };
   };
 
-  // ---------- medo na bolsa: volatilidade calculada pelo painel + VIX manual como referência
+  // ---------- medo na bolsa: volatilidade do Ibovespa comparada com o próprio histórico desde 2000
   S.medo = (c) => {
     const vol = c.B.volatilidade;
-    if (!vol || vol.atual == null) throw new Error('sem volatilidade no dados.json');
-    const agora = vol.atual, hist = vol.historico.slice(-60);
-    const gMax = 60, gcx = 140, gcy = 140, gr = 110;
+    if (!vol || vol.atual == null || vol.p90_desde_2000 == null) throw new Error('sem volatilidade no dados.json');
+    const agora = vol.atual, hist = vol.historico.slice(-60), med = vol.mediana_desde_2000, p90 = vol.p90_desde_2000;
+    const gMax = Math.max(60, Math.ceil(agora / 10) * 10), gcx = 140, gcy = 140, gr = 110;
     const ang = (v) => Math.PI * (1 - Math.min(v, gMax) / gMax);
     const gPt = (v, r) => [gcx + r * Math.cos(ang(v)), gcy - r * Math.sin(ang(v))];
     const arco = (a, b) => { const p1 = gPt(a, gr), p2 = gPt(b, gr); return 'M' + p1[0].toFixed(1) + ' ' + p1[1].toFixed(1) + ' A' + gr + ' ' + gr + ' 0 0 1 ' + p2[0].toFixed(1) + ' ' + p2[1].toFixed(1); };
     const agulha = gPt(agora * c.e, gr - 24);
-    const zona = agora < 20 ? 'Calmo' : (agora < 30 ? 'Atenção' : 'Turbulência');
-    const zonaCor = agora < 20 ? OSSO : (agora < 30 ? 'rgba(240,179,122,.8)' : AMBAR);
+    // faixas relativas ao próprio histórico: abaixo da mediana, entre a mediana e o percentil 90, acima do percentil 90
+    const zona = agora < med ? 'Baixa' : (agora < p90 ? 'Elevada' : 'Muito elevada');
+    const zonaCor = agora < med ? OSSO : (agora < p90 ? 'rgba(240,179,122,.8)' : AMBAR);
     const lmax = Math.max(gMax, ...hist.map((h) => h.valor));
     const mX = (i) => 16 + i * (264 - 16) / (hist.length - 1), mY = (v) => 8 + (lmax - v) / lmax * 68;
     const cada = Math.ceil(hist.length / 5);
-    const vix = c.M.vix && c.M.vix.leituras && c.M.vix.leituras.length ? c.M.vix.leituras[c.M.vix.leituras.length - 1] : null;
-    let vixTxt = '';
-    if (vix) {
-      const dias = P.difDias(c.hoje, P.dia(vix[0]));
-      vixTxt = (c.M.vix.nome || 'S&P/B3 Ibovespa VIX') + ' (atualização manual, ' + c.M.vix.fonte + '): ' + P.fmt(vix[1]) + ' em ' + P.ddmm(P.dia(vix[0])) + ' · ' + P.haDias(dias) + (dias > 7 ? ' (desatualizado)' : '');
-    }
     return {
-      medoArcCalm: arco(0, 20), medoArcWarn: arco(20, 30), medoArcHigh: arco(30, gMax),
-      medoTicks: [0, 20, 30, 60].map((t) => { const p = gPt(t, gr + 20); return { x: p[0].toFixed(1), y: (p[1] + 4).toFixed(1), label: String(t) }; }),
+      medoArcCalm: arco(0, med), medoArcWarn: arco(med, p90), medoArcHigh: arco(p90, gMax),
+      medoTicks: [0, med, p90, gMax].map((t) => { const p = gPt(t, gr + 20); return { x: p[0].toFixed(1), y: (p[1] + 4).toFixed(1), label: P.fmt(t, 0) }; }),
       medoNeedleX: agulha[0].toFixed(1), medoNeedleY: agulha[1].toFixed(1),
       medoValueTxt: P.pct(agora * c.e, 1), medoZone: zona,
       medoPillStyle: 'padding: 4px 10px; border-radius: 9999px; font-size: 13px; white-space: nowrap; color: #161616; background: ' + zonaCor,
-      medoAria: 'Volatilidade do Ibovespa em ' + P.pct(agora, 1) + ' ao ano, faixa de ' + zona.toLowerCase(),
-      medoPts: hist.map((m, i) => ({ x: mX(i).toFixed(1), y: mY(m.valor).toFixed(1), label: i % cada === 0 || i === hist.length - 1 ? P.ddmm(P.dia(m.data)) : '', fill: m.valor >= 30 ? AMBAR : OSSO, show: i % cada === 0 || i === hist.length - 1 })),
+      medoAria: 'Volatilidade do Ibovespa em ' + P.pct(agora, 1) + ' ao ano; ' + zona.toLowerCase() + ' do histórico desde 2000',
+      medoPts: hist.map((m, i) => ({ x: mX(i).toFixed(1), y: mY(m.valor).toFixed(1), label: i % cada === 0 || i === hist.length - 1 ? P.ddmm(P.dia(m.data)) : '', fill: m.valor >= p90 ? AMBAR : OSSO, show: i % cada === 0 || i === hist.length - 1 })),
       medoPath: 'M' + hist.map((m, i) => mX(i).toFixed(1) + ' ' + mY(m.valor).toFixed(1)).join(' L'),
-      medoLine30: mY(30).toFixed(1), medoLine30Txt: (mY(30) - 5).toFixed(1),
+      medoLine30: mY(p90).toFixed(1), medoLine30Txt: (mY(p90) - 5).toFixed(1), medoLinhaTxt: '10% mais altos desde 2000 (' + P.pct(p90, 0) + ')',
       medoLineAria: 'Volatilidade dos últimos ' + hist.length + ' pregões, de ' + P.pct(hist[0].valor, 1) + ' a ' + P.pct(agora, 1),
-      medoComment: 'Volatilidade realizada: o desvio-padrão dos retornos diários dos últimos ' + vol.janela + ' pregões, anualizado. Escala do mostrador de 0% a 60%; acima de 30%, o mercado costuma estar em turbulência.',
-      hasVix: !!vixTxt, medoVix: vixTxt,
+      medoComment: 'Hoje a volatilidade está maior que em ' + P.fmt(vol.percentil_atual, 0) + '% dos pregões desde 2000. Baixa: abaixo da mediana desde 2000 (' + P.pct(med, 1) + '); muito elevada: acima dos 10% mais altos (' + P.pct(p90, 1) + ').',
     };
   };
 
@@ -391,9 +410,9 @@
   S.simulador = (c) => {
     const s = c.s, neutro = c.neutro;
     const real = P.fisher(s.simSelic, s.simIpca), simples = s.simSelic - s.simIpca;
-    let postura = 'Neutra', cor = OSSO, desc = 'Juro real perto do neutro: nem acelera nem freia a economia.';
-    if (real < neutro - 1) { postura = 'Estimulativa'; cor = AZUL; desc = 'Juro real abaixo do neutro: estimula crédito, consumo e investimento.'; }
-    else if (real > neutro + 1) { postura = 'Contracionista'; cor = AMBAR; desc = 'Juro real acima do neutro: freia a economia para conter a inflação.'; }
+    let postura = 'Próxima da neutra', cor = OSSO, desc = 'Juro real a menos de 0,25 ponto da taxa neutra de ' + P.pct(neutro) + ' usada pelo BC.';
+    if (real < neutro - 0.25) { postura = 'Estimulativa'; cor = AZUL; desc = 'Juro real abaixo da taxa neutra de ' + P.pct(neutro) + ' usada pelo BC: política monetária estimulativa.'; }
+    else if (real > neutro + 0.25) { postura = 'Contracionista'; cor = AMBAR; desc = 'Juro real acima da taxa neutra de ' + P.pct(neutro) + ' usada pelo BC: política monetária contracionista.'; }
     const pos = (v) => Math.max(0, Math.min(100, (v + 5) / 20 * 100));
     return {
       simSelic: s.simSelic, simIpca: s.simIpca, simSelicTxt: P.pct(s.simSelic), simIpcaTxt: P.pct(s.simIpca),
@@ -410,18 +429,17 @@
     };
   };
 
-  // ---------- Brasil no mundo (ranking manual + diferencial automático)
+  // ---------- Brasil no mundo (ranking Moneyou, via Agência Brasil) + diferencial com os EUA (FRED)
   S.mundo = (c) => {
     const R = c.M.ranking_mundo;
-    const maior = Math.max(...R.paises.map((x) => x[1]), c.realNow);
+    const maior = Math.max(...R.paises.map((x) => x[1]));
     const barra = (v, cor) => 'width: ' + (v / maior * 100).toFixed(1) + '%; height: 100%; border-radius: 9999px; background: ' + cor;
-    const linhas = R.paises.map((x) => ({ nome: x[0] + ' (' + P.mesCurto(R.mes) + ')', valor: P.pct(x[1]), style: barra(x[1], 'rgba(237,237,237,.45)') }));
-    linhas.push({ nome: 'Brasil hoje', valor: P.pct(c.realNow), style: barra(c.realNow, AZUL) });
     let dif = '';
-    if (c.D.mundo && c.D.mundo.tbill3m) dif = 'Diferencial de juros com os EUA: Selic ' + P.pct(c.selic) + ' − T-bill de 3 meses ' + P.pct(c.D.mundo.tbill3m.valor) + ' = ' + P.pp(c.selic - c.D.mundo.tbill3m.valor) + '.';
+    if (c.D.mundo && c.D.mundo.fed_funds) dif = 'Diferencial com os EUA hoje: Selic ' + P.pct(c.selic) + ' − Fed funds ' + P.pct(c.D.mundo.fed_funds.valor) + ' = ' + P.pp(c.selic - c.D.mundo.fed_funds.valor) + '.';
     return {
-      mundoPos: R.posicao_brasil + 'º', mundoTitulo: 'maior juro real do mundo em ' + P.mesLongo(R.mes),
-      mundoLinhas: linhas, mundoCaption: R.contexto + ' Fonte: ' + R.fonte + '. Hoje o juro real brasileiro é ' + P.pct(c.realNow) + '.',
+      mundoPos: R.posicao_brasil + 'º', mundoTitulo: 'maior juro real entre ' + R.paises_no_ranking + ' países',
+      mundoLinhas: R.paises.map((x) => ({ nome: x[0], valor: P.pct(x[1]), style: barra(x[1], x[0] === 'Brasil' ? AZUL : 'rgba(237,237,237,.45)') })),
+      mundoCaption: 'Ranking publicado em ' + P.ddmmaaaa(P.dia(R.publicado_em)) + '. Média dos ' + R.paises_no_ranking + ' países: ' + P.pct(R.media) + '. A metodologia é da consultoria e pode diferir do cálculo do painel.',
       hasMundoDif: !!dif, mundoDif: dif,
     };
   };
@@ -465,7 +483,7 @@
       })),
       compSub: 'R$ 100 aplicados em ' + P.mesCurto(C.base) + ', ' + nomes[modo],
       compCaption: 'R$ 100 em ' + P.mesCurto(C.base) + ' viraram R$ ' + P.fmt(ultI, 0) + ' no Ibovespa e R$ ' + P.fmt(ultC, 0) + ' no CDI (' + nomes[modo] + '). No período, ' + vence + ' rendeu mais. '
-        + 'Sem impostos e custos; o Ibovespa aqui não inclui dividendos, o que favorece o CDI na comparação.',
+        + 'O Ibovespa é um índice de retorno total (proventos reinvestidos, segundo a B3). Sem impostos nem custos.',
       compAria: 'Linhas do Ibovespa e do CDI desde ' + P.mesCurto(C.base) + ', base 100, ' + nomes[modo],
     };
   };
@@ -477,12 +495,14 @@
     const cdiAno = D.comparacao && D.comparacao.cdi_hoje != null ? (Math.pow(1 + D.comparacao.cdi_hoje / 100, 252) - 1) * 100 : c.selic - 0.1;
     const tr = D.economia && D.economia.tr_mes ? D.economia.tr_mes.valor : 0;
     const poupAno = c.selic > 8.5 ? (Math.pow(1.005 * (1 + tr / 100), 12) - 1) * 100 : (Math.pow((1 + c.selic * 0.7 / 100) ** (1 / 12) * (1 + tr / 100), 12) - 1) * 100;
-    const ir = meses * 30 <= 180 ? 22.5 : meses * 30 <= 360 ? 20 : meses * 30 <= 720 ? 17.5 : 15;
+    const dias = Math.round(meses * 365 / 12);  // Lei 11.033/2004: até 180, 181–360, 361–720 e acima de 720 dias
+    const ir = dias <= 180 ? 22.5 : dias <= 360 ? 20 : dias <= 720 ? 17.5 : 15;
+    const custodia = valor > 0 ? 0.2 * Math.max(0, valor - 10000) / valor : 0;  // B3: 0,20% a.a., Tesouro Selic isento até R$ 10 mil
     const inflAno = c.F.ipca_12m ? c.F.ipca_12m.mediana : c.I[0].mediana;
     const inflPeriodo = Math.pow(1 + inflAno / 100, anos) - 1;
     const opcoes = [
-      { nome: 'Poupança', taxa: poupAno, ir: 0, nota: 'isenta de IR · 0,5% ao mês + TR' },
-      { nome: 'Tesouro Selic', taxa: c.selic - 0.2, ir, nota: 'Selic − 0,2% de custódia · IR ' + P.fmt(ir, 1) + '%' },
+      { nome: 'Poupança', taxa: poupAno, ir: 0, nota: 'isenta de IR · ' + (c.selic > 8.5 ? '0,5% ao mês + TR' : '70% da Selic + TR') },
+      { nome: 'Tesouro Selic', taxa: c.selic - custodia, ir, nota: 'Selic' + (custodia ? ' − custódia de ' + P.fmt(custodia, 2) + '% a.a.' : ', sem custódia (até R$ 10 mil)') + ' · IR ' + P.fmt(ir, 1) + '%' },
       { nome: 'CDB 100% do CDI', taxa: cdiAno, ir, nota: 'CDI de hoje · IR ' + P.fmt(ir, 1) + '%' },
     ].map((o) => {
       const bruto = valor * (Math.pow(1 + o.taxa / 100, anos) - 1);
@@ -504,13 +524,48 @@
         ganho: valor ? '+' + dinheiro(o.liquido) + ' líquido · ' + P.comSinal(o.real, 1) + '% acima da inflação' : '',
         barStyle: 'width: ' + (valor ? Math.max(2, o.liquido / maior * 100) : 0).toFixed(1) + '%; height: 100%; border-radius: 9999px; background: ' + (i === 0 ? 'rgba(237,237,237,.45)' : AZUL),
       })),
-      calcNota: 'Taxas de hoje mantidas constantes: CDI ' + P.pct(cdiAno) + ' ao ano, poupança ' + P.pct(poupAno) + ' ao ano (TR ' + P.pct(tr, 4) + ' ao mês). Inflação estimada pelo Focus: ' + P.pct(inflAno) + ' ao ano. Simulação educativa, não é recomendação de investimento.',
+      calcNota: 'Taxas de hoje mantidas constantes: CDI ' + P.pct(cdiAno) + ' ao ano, poupança ' + P.pct(poupAno) + ' ao ano (TR ' + P.pct(tr, 4) + ' ao mês), prazo de ' + dias + ' dias. Inflação esperada pelo Focus: ' + P.pct(inflAno) + ' ao ano. Simulação educativa, não é recomendação de investimento.',
     };
   };
 
   // ---------- rodapé
   S.rodape = (c) => ({
-    footer: 'Painel criado por ' + c.M.autor.nomeCompleto + '. Fontes: Banco Central do Brasil (SGS e Boletim Focus com coleta até ' + P.ddmmaaaa(c.coleta) + '), IBGE (SIDRA), Tesouro Transparente e Yahoo Finance via yfinance (Ibovespa até '
-      + P.ddmmaaaa(c.ibovData) + '). Ranking mundial: ' + c.M.ranking_mundo.fonte + ' (' + P.mesCurto(c.M.ranking_mundo.mes) + '). Juro real pela fórmula de Fisher. Atualização automática em dias úteis; última em ' + c.atualizado.ddmmaaaa + ' às ' + c.atualizado.hora + ' (Brasília).',
+    footer: 'Painel criado por ' + c.M.autor.nomeCompleto + '. Fontes: Banco Central do Brasil (SGS, Boletim Focus com coleta até ' + P.ddmmaaaa(c.coleta) + ' e Relatório de Política Monetária), IBGE (SIDRA), B3 (Ibovespa até '
+      + P.ddmmaaaa(c.ibovData) + ' e calendário de negociação), Tesouro Nacional (Tesouro Transparente), FRED/Federal Reserve de St. Louis (EUA e petróleo) e Moneyou via Agência Brasil (ranking mundial). Cada bloco mostra a sua fonte com link. Atualização automática em dias úteis; última em ' + c.atualizado.ddmmaaaa + ' às ' + c.atualizado.hora + ' (Brasília).',
   });
+
+  // ---------- fonte de cada bloco (linha "Fonte:" no rodapé de cada card)
+  S.fontesCards = () => {
+    const f = P.fontes;
+    return {
+      fx: {
+        kpis: f('selic', 'ipca12', 'exante', 'focus', 'neutro', 'ibov'),
+        barras: f('selic', 'ipca12', 'neutro'),
+        copom: f('copomCal', 'focus', 'focusApi'),
+        inflacao: f('ipca12', 'ipcaMes', 'mediaNucleos', 'metas', 'metaContinua'),
+        ancoragem: f('ipca12', 'focus', 'metas'),
+        ibovAnos: f('ibov', 'ibovMetodo'),
+        pregoes: f('ibov'),
+        comparacao: f('ibov', 'ibovMetodo', 'cdi', 'dolar', 'ipcaMes'),
+        calculadora: f('cdi', 'tr', 'focus', 'poupanca', 'ir', 'custodia'),
+        medo: f('ibov', 'calculo'),
+        simulador: f('selic', 'ipca12', 'neutro'),
+        mundo: f('ranking', 'fedFunds'),
+        leitura: f('focus'),
+        focusTabela: f('focus', 'focusApi'),
+        trajetoria: f('selic', 'ipca12', 'focus'),
+        mudancas: f('focus'),
+        historico: f('focus', 'focusApi'),
+        reunioes: f('focusApi', 'copomCal'),
+        tesouro: f('tesouro', 'focus'),
+        perguntas: f('focus', 'metas'),
+        selicLinha: f('selic'),
+        grupos: f('grupos'),
+        nucleos: f('ipca12', 'mediaNucleos', 'nucleos'),
+        economia: f('dolar', 'ibcbr', 'desemprego', 'divida', 'igpm'),
+        mercadosMundo: f('selic', 'fedFunds', 'tbill', 'treasury10', 'brent', 'cpiEua'),
+        agenda: f('copomCal', 'feriadosB3', 'focus'),
+      },
+    };
+  };
 })();
