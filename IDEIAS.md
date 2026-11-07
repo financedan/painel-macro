@@ -10,6 +10,33 @@ e do IBGE); vale checar antes de implementar.
 
 ---
 
+## Status da implementação (atualizado em 07/11/2026)
+
+**Implementado:** as 6 melhores apostas; juro real ex-ante; juro real de mercado e inflação implícita (Tesouro IPCA+ x
+Prefixado); linha do tempo da Selic e ciclo atual; IPCA do mês e acumulado no ano; IPCA por grupo (SIDRA 7060); média
+de 5 núcleos; contador da meta contínua; faixa de respostas do Focus; aba **Economia** (dólar, IBC-Br, desemprego,
+dívida bruta, IGP-M); Ibovespa em dólar e descontada a inflação; máxima histórica; juros dos EUA e Brent; diferencial
+Brasil x EUA; agenda com navegação entre meses e exportação `.ics`; glossário com botões "?" e modo explicativo;
+calculadora de rendimento; barra de navegação no rodapé do celular; tela de carregamento; CSV; prévia de link com os
+números do dia; período do gráfico lembrado; leituras em Markdown e resumo automático; validação dos dados; testes
+(pytest e navegador); aviso no Telegram (opcional, por segredos); versões fixas e Dependabot; publicação no Pages;
+selos no README; `manual.json`; código dividido por aba; feed RSS; seção "Sobre" com como citar.
+
+**Não implementado, e por quê:**
+
+| Ideia | Motivo |
+|---|---|
+| Top 5 e Focus mensal do IPCA | Ficaram para depois, para não sobrecarregar a aba Expectativas |
+| Fed funds e inflação dos EUA (FRED) | Exige chave de API; foi usado o T-bill de 3 meses (sem chave) como juro curto americano |
+| Divulgações do IBGE e reuniões do Fed na agenda | Sem fonte confiável de datas sem chave; o `manual.json` ganhou o campo `eventos` para cadastrar |
+| Compartilhar card como imagem | Exigiria uma biblioteca externa; o painel segue sem dependências. A prévia do link já mostra os números |
+| Tema claro / alto contraste | Mudaria a identidade visual, que foi mantida |
+| Versão em inglês | Esforço grande; fica para uma próxima etapa |
+| Boletim por e-mail e alertas para visitantes | Precisam de servidor ou serviço pago; ficaram o RSS e o Telegram do autor |
+| Tirar todos os estilos inline | Feito em parte (classes para os padrões repetidos); o resto sai aos poucos |
+
+---
+
 ## As 6 melhores apostas
 
 Combinam muito valor para quem usa com pouco esforço, e várias reaproveitam dados que o coletor **já baixa**.

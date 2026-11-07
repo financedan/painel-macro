@@ -1,0 +1,66 @@
+{
+  "_leia_me": "Dados sem fonte automática. Edite direto no GitHub (botão de lápis). Datas sempre no formato AAAA-MM-DD. O teste automático avisa se uma decisão do Copom não cair numa quarta-feira ou se o calendário estiver acabando.",
+
+  "autor": { "nomeCompleto": "Daniel Prado" },
+
+  "site_url": "https://financedan.github.io/painel-macro/",
+
+  "copom": [
+    { "reuniao": "R6/2026", "inicio": "2026-09-15", "decisao": "2026-09-16" },
+    { "reuniao": "R7/2026", "inicio": "2026-11-03", "decisao": "2026-11-04" },
+    { "reuniao": "R8/2026", "inicio": "2026-12-08", "decisao": "2026-12-09", "nota": "última de 2026" }
+  ],
+
+  "feriados": [
+    ["2026-11-02", "Finados", "Mercado fechado"],
+    ["2026-11-15", "Proclamação da República", "Domingo"],
+    ["2026-11-20", "Dia da Consciência Negra", "Mercado fechado"],
+    ["2026-12-24", "Véspera de Natal", "Sem pregão na B3"],
+    ["2026-12-25", "Natal", "Mercado fechado"],
+    ["2026-12-31", "Véspera de Ano-Novo", "Sem pregão na B3"],
+    ["2027-01-01", "Confraternização Universal", "Mercado fechado"],
+    ["2027-02-08", "Carnaval", "Mercado fechado"],
+    ["2027-02-09", "Carnaval", "Mercado fechado"],
+    ["2027-03-26", "Sexta-feira Santa", "Mercado fechado"],
+    ["2027-04-21", "Tiradentes", "Mercado fechado"],
+    ["2027-05-01", "Dia do Trabalho", "Sábado"],
+    ["2027-05-27", "Corpus Christi", "Mercado fechado"],
+    ["2027-09-07", "Independência do Brasil", "Mercado fechado"],
+    ["2027-10-12", "Nossa Senhora Aparecida", "Mercado fechado"],
+    ["2027-11-02", "Finados", "Mercado fechado"],
+    ["2027-11-15", "Proclamação da República", "Mercado fechado"],
+    ["2027-11-20", "Dia da Consciência Negra", "Sábado"],
+    ["2027-12-24", "Véspera de Natal", "Sem pregão na B3"],
+    ["2027-12-25", "Natal", "Sábado"],
+    ["2027-12-31", "Véspera de Ano-Novo", "Sem pregão na B3"]
+  ],
+
+  "eventos": [],
+
+  "neutro": {
+    "valor": 5.0,
+    "fonte": "Referência adotada pelo autor, em linha com as estimativas de juro real neutro discutidas pelo Banco Central. Revise quando o BC atualizar a estimativa no Relatório de Política Monetária.",
+    "revisado_em": "2026-11-07"
+  },
+
+  "ranking_mundo": {
+    "mes": "2026-05",
+    "fonte": "MoneYou e Lev Intelligence",
+    "posicao_brasil": 2,
+    "contexto": "Levantamento feito logo após o corte da Selic para 14,50%.",
+    "paises": [["Rússia", 9.67], ["Brasil", 9.33]]
+  },
+
+  "vix": {
+    "nome": "S&P/B3 Ibovespa VIX",
+    "fonte": "valores citados pela imprensa",
+    "leituras": [
+      ["2026-10-02", 32.77],
+      ["2026-10-05", 23.68],
+      ["2026-10-17", 40.67],
+      ["2026-10-21", 42.42],
+      ["2026-10-22", 45.27],
+      ["2026-10-26", 26.11]
+    ]
+  }
+}

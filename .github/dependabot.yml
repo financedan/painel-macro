@@ -1,0 +1,15 @@
+# Propõe atualizações das bibliotecas uma vez por semana (os testes rodam em cada proposta).
+version: 2
+updates:
+  - package-ecosystem: pip
+    directory: "/"
+    schedule:
+      interval: weekly
+  - package-ecosystem: github-actions
+    directory: "/"
+    schedule:
+      interval: weekly
+  - package-ecosystem: npm
+    directory: "/"
+    schedule:
+      interval: monthly

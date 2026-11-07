@@ -1,1 +1,4 @@
 .venv/
+avisos.txt
+__pycache__/
+node_modules/

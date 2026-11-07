@@ -9,6 +9,35 @@ painel num navegador (desktop 1440 px, iPhone 13 e modo "menos movimento").
 
 ---
 
+## Status das correções (atualizado em 07/11/2026)
+
+| # | Problema | Status |
+|---|---|---|
+| 1 | Data do corte da Selic | ✅ Copom de setembro corrigido para 15–16/09; a data da decisão vem do próprio SGS; Metodologia diz "em vigor desde 17/09 (decisão de 16/09)"; teste acusa decisão fora de quarta-feira |
+| 2 | Card "Brasil no mundo" | ✅ Números no `manual.json` com o mês do ranking em destaque, linha "Brasil hoje" calculada e diferencial de juros com os EUA |
+| 3 | Índice do medo | ✅ Trocado por volatilidade calculada sozinha (Ibovespa, 21 pregões); escala 0–60% descrita certo; VIX manual vira referência com "há X dias" e selo "desatualizado" |
+| 4 | Leitura da semana vazia | ✅ Leituras em `leituras/*.md`; sem leitura nova, aparece um resumo automático do Focus |
+| 5 | Sem aviso de dado velho | ✅ Faixa de aviso quando uma fonte falha ou a coleta para; status de cada fonte na Metodologia; validação antes de salvar; versões fixas |
+| 6 | Calendário acabando | ⚠️ Feriados de 2027 cadastrados e Focus pula para o próximo dia útil. **O calendário do Copom de 2027 ainda precisa ser cadastrado à mão**; o painel e os testes avisam |
+| 7 | Fechamento no meio do pregão | ✅ Robô roda às 19h e o coletor descarta a linha do dia antes das 18h |
+| 8 | Menu duplicado | ✅ Computador: só o menu do topo. Celular: só a barra fixa no rodapé |
+| 9 | Tela de nome obrigatória | ✅ Painel abre direto; convite discreto; "Cancelar" e "Remover meu nome" |
+| 10 | Sino de alertas | ✅ Conta só o que não foi visto; fecha com Esc e clique fora; `aria-expanded` correto; novidades desde a última visita |
+| 11 | Cores | ✅ Azul = agora/destaque, âmbar = inflação e alerta, cinza = histórico (regra documentada em `js/util.js`) |
+| 12 | Formatos | ✅ Datas `06/11` e `6 de novembro`; 2 casas em taxas, 1 em rótulos e bolsa; "—" no lugar de valor ausente |
+| 13 | Fuso | ✅ Datas e horas sempre no fuso de Brasília, com "(Brasília)" |
+| 14 | Menos movimento | ✅ Respeitado também nos números; contagem animada só na primeira entrada |
+| 15 | Acessibilidade | ✅ Barras com foco por teclado e rótulo; "Toque ou passe o mouse"; `aria-valuetext` nos controles; agenda com meses |
+| 16 | Textos fixos | ✅ Frase dos anos negativos gerada pelos dados; asterisco explicado; "Banco Central, IBGE e B3" |
+| 17 | Simulador | ✅ Passo de 0,01 e duas casas; marcações −5%, neutro e 15% |
+| 18 | Clicável e espaços vazios | ✅ Sem efeito de elevação em cards não clicáveis; linhas alinhadas pelo topo |
+| 19 | Juro neutro sem fonte | ✅ Valor, fonte e data no `manual.json`, explicados na Metodologia |
+| 20 | Perguntas do Focus | ✅ Resposta do painel ao marcar (inclusive a das semanas seguidas); marcações salvas por semana |
+| 21 | Erros de carregamento | ✅ Tela de erro com "Tentar de novo" e explicação para quem abre o arquivo direto; cada bloco falha sozinho |
+| 22 | Manutenção | ✅ README completo, publicação no GitHub Pages, testes, `og:image` absoluta, favicon, código sem uso removido. ⚠️ Estilos inline: os repetidos viraram classes; o resto sai aos poucos |
+
+---
+
 ## 1. Como o projeto funciona (resumo)
 
 ```

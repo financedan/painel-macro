@@ -1,0 +1,11 @@
+{
+  "name": "painel-macro",
+  "private": true,
+  "description": "Testes do Painel Macro Brasil no navegador",
+  "scripts": {
+    "test": "node tests/smoke.js"
+  },
+  "devDependencies": {
+    "playwright": "1.63.0"
+  }
+}
