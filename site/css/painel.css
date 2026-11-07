@@ -1,0 +1,87 @@
+/* Visual do Painel Macro Brasil: vidro, fundo de pôr do sol e animações */
+body{margin:0;background:#0a0a0a}
+a{color:#ededed}
+a:hover{color:#ffffff}
+button,a,input,textarea{font:inherit}
+:focus-visible{outline:2px solid rgba(255,255,255,.9);outline-offset:2px}
+.pm-bg{position:fixed;inset:-3%;background:#1a1716;animation:pm-kb 42s ease-in-out infinite alternate;will-change:transform;z-index:0;overflow:hidden}
+.pm-scene{position:absolute;inset:0;background-position:center;background-size:cover;background-repeat:no-repeat;opacity:0;filter:blur(14px) saturate(.85) brightness(.9);transform:scale(1.06);transition:opacity 3s cubic-bezier(.45,0,.2,1),filter 3s cubic-bezier(.45,0,.2,1),transform 5s cubic-bezier(.16,.84,.24,1)}
+.pm-scene-on{opacity:1;filter:none;transform:none}
+.pm-scene-dusk{background-image:url(../img/fundo.jpg)}
+.pm-veil{position:fixed;inset:0;background:linear-gradient(180deg,rgba(10,10,10,.34) 0%,rgba(10,10,10,.20) 38%,rgba(10,10,10,.58) 100%);z-index:0}
+@keyframes pm-kb{0%{transform:scale(1.04) translate3d(-1%,0,0)}
+100%{transform:scale(1.12) translate3d(1.2%,-1%,0)}
+}
+.pm-glass{background-color:rgba(212,212,212,.10);-webkit-backdrop-filter:blur(22px) saturate(140%);backdrop-filter:blur(22px) saturate(140%);border:1px solid rgba(229,229,229,.14);box-shadow:inset 0 1px 0 rgba(255,255,255,.07)}
+.pm-glass-dark{background-color:rgba(14,14,14,.46);-webkit-backdrop-filter:blur(22px) saturate(140%);backdrop-filter:blur(22px) saturate(140%);border:1px solid rgba(229,229,229,.14)}
+.pm-lift{transition:transform .45s cubic-bezier(.2,.8,.2,1),background-color .45s,border-color .45s}
+.pm-lift:hover{transform:translateY(-5px);background-color:rgba(212,212,212,.15);border-color:rgba(229,229,229,.26)}
+.pm-rise{animation:pm-rise .9s cubic-bezier(.16,.84,.24,1) backwards}
+@keyframes pm-rise{0%{opacity:0;transform:translateY(18px) scale(.985);filter:blur(12px)}
+100%{opacity:1;transform:none;filter:blur(0)}
+}
+.pm-fade{animation:pm-fade 1.1s ease backwards}
+@keyframes pm-fade{from{opacity:0}
+to{opacity:1}
+}
+.pm-bar{transform-box:fill-box;transform-origin:50% 100%;animation:pm-grow 1.1s cubic-bezier(.16,.84,.24,1) backwards;transition:fill .3s}
+.pm-bar-neg{transform-origin:50% 0%}
+@keyframes pm-grow{from{transform:scaleY(0)}
+to{transform:scaleY(1)}
+}
+.pm-draw{stroke-dasharray:1;stroke-dashoffset:0;animation:pm-draw 1.8s cubic-bezier(.45,0,.2,1) backwards}
+@keyframes pm-draw{from{stroke-dashoffset:1}
+to{stroke-dashoffset:0}
+}
+.pm-pulse{animation:pm-pulse 2.4s ease-in-out infinite}
+@keyframes pm-pulse{0%,100%{opacity:1}
+50%{opacity:.35}
+}
+.pm-pill{display:inline-flex;align-items:center;gap:8px;padding:8px 14px;border-radius:9999px;font-size:14px;white-space:nowrap;border:1px solid rgba(229,229,229,.14);background-color:rgba(212,212,212,.10);color:rgba(237,237,237,.88);-webkit-backdrop-filter:blur(18px);backdrop-filter:blur(18px);cursor:pointer;text-decoration:none;transition:background-color .3s,color .3s,border-color .3s}
+.pm-pill:hover{background-color:rgba(212,212,212,.18);color:#ffffff}
+.pm-pill-on{background-color:rgba(12,12,12,.62);color:#ffffff;border-color:rgba(229,229,229,.30)}
+.pm-pill-on:hover{background-color:rgba(12,12,12,.72)}
+.pm-dockbtn{position:relative;width:40px;height:40px;border-radius:9999px;border:0;padding:0;background-color:transparent;color:rgba(237,237,237,.82);display:flex;align-items:center;justify-content:center;cursor:pointer;transition:background-color .3s,color .3s}
+.pm-dockbtn:hover{background-color:rgba(255,255,255,.14);color:#ffffff}
+.pm-dockbtn-on,.pm-dockbtn-on:hover{background-color:#ffffff;color:#161616}
+.pm-tip{position:absolute;left:52px;top:50%;z-index:20;transform:translate(-6px,-50%);opacity:0;pointer-events:none;transition:opacity .25s,transform .25s;white-space:nowrap}
+.pm-dockbtn:hover .pm-tip,.pm-dockbtn:focus-visible .pm-tip{opacity:1;transform:translate(0,-50%)}
+.pm-seg{border:0;padding:6px 12px;border-radius:9999px;background-color:transparent;color:rgba(237,237,237,.82);font-size:13px;cursor:pointer;transition:background-color .3s,color .3s}
+.pm-seg:hover{color:#ffffff;background-color:rgba(255,255,255,.08)}
+.pm-seg-on,.pm-seg-on:hover{background-color:#ffffff;color:#161616}
+.pm-day{border:1px solid transparent;border-radius:14px;background-color:transparent;color:#ededed;cursor:pointer;transition:background-color .25s,border-color .25s}
+.pm-day:hover{background-color:rgba(255,255,255,.10)}
+.pm-day-on,.pm-day-on:hover{background-color:rgba(255,255,255,.16);border-color:rgba(229,229,229,.45)}
+.pm-row{transition:background-color .25s}
+.pm-row:hover{background-color:rgba(255,255,255,.05)}
+.pm-range{width:100%;accent-color:#ededed;height:24px;margin:0}
+.pm-note{resize:vertical}
+.pm-note::placeholder{color:rgba(237,237,237,.55)}
+.pm-check{width:18px;height:18px;accent-color:#ededed;margin:2px 0 0;flex:0 0 auto}
+.pm-still,.pm-still *{animation:none!important;transition:none!important}
+/* Quem pede "menos movimento" no sistema continua vendo os cards surgirem,
+   mas só com um esmaecer suave (sem subir, sem desfoque, sem fundo mexendo). */
+@media (prefers-reduced-motion:reduce){
+.pm-root .pm-bg,.pm-root .pm-pulse,.pm-root .pm-bar,.pm-root .pm-draw{animation:none!important}
+.pm-root .pm-rise{animation-name:pm-fade!important;animation-duration:1.1s!important}
+.pm-root .pm-lift:hover,.pm-root .pm-cta:hover,.pm-root .pm-avatar:hover{transform:none!important}
+}
+@media (max-width:760px){.pm-dock{flex-direction:row!important;width:auto!important;margin-top:0!important}
+.pm-tip{display:none}
+.pm-topnav{order:3;width:100%;justify-content:flex-start!important;overflow-x:auto;padding-bottom:4px}
+}
+
+
+/* Tela de boas-vindas (pergunta o nome) */
+.pm-welcome-card{width:100%;max-width:480px;box-sizing:border-box;border-radius:32px;padding:40px;display:flex;flex-direction:column;gap:24px;box-shadow:0 24px 64px rgba(0,0,0,.28),inset 0 1px 0 rgba(255,255,255,.07)}
+.pm-field{display:flex;align-items:center;gap:10px;border-radius:16px;padding:0 18px;transition:border-color .25s,background-color .25s}
+.pm-field:focus-within{border-color:rgba(229,229,229,.5);background-color:rgba(14,14,14,.6)}
+.pm-input{flex:1;min-width:0;background:transparent;border:0;outline:0;color:#ededed;font-size:16px;padding:16px 0}
+.pm-input::placeholder{color:rgba(237,237,237,.55)}
+.pm-cta{width:100%;display:inline-flex;align-items:center;justify-content:center;gap:8px;padding:15px 24px;border:0;border-radius:9999px;background:#ffffff;color:#161616;font-size:15px;font-weight:500;cursor:pointer;transition:background-color .25s,transform .25s}
+.pm-cta:hover{background:#ececec;transform:translateY(-1px)}
+.pm-link{border:0;background:none;padding:4px 8px;color:#c2c2c2;font-size:14px;text-decoration:underline;text-underline-offset:3px;cursor:pointer}
+.pm-link:hover{color:#ffffff}
+.pm-avatar{width:40px;height:40px;border-radius:9999px;border:0;padding:0;background:#e8955a;color:#161616;font-size:14px;font-weight:600;display:flex;align-items:center;justify-content:center;cursor:pointer;transition:transform .25s,box-shadow .25s}
+.pm-avatar:hover{transform:scale(1.06);box-shadow:0 0 0 3px rgba(232,149,90,.35)}
+@media (max-width:520px){.pm-welcome-card{padding:28px;border-radius:28px;gap:20px}.pm-welcome-card h1{font-size:32px!important}}

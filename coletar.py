@@ -73,6 +73,19 @@ def coletar_selic_e_ipca():
     selic_hoje_data, selic_hoje = selic[-1]
     ipca_mes, ipca_hoje = ipca[-1]
 
+    # desde quando a Selic está no valor atual, e qual era o valor anterior
+    selic_desde, selic_anterior = selic[0][0], None
+    for dia, valor in reversed(selic):
+        if valor != selic_hoje:
+            selic_anterior = valor
+            break
+        selic_desde = dia
+
+    # Selic do último dia de cada mês (para comparar com o IPCA, que é mensal)
+    selic_fim_mes = {}
+    for dia, valor in selic:
+        selic_fim_mes[dia.strftime("%Y-%m")] = valor
+
     # juro real no fim de cada ano: Selic do último dia do ano x IPCA 12m de dezembro
     selic_fim_ano = {}
     for dia, valor in selic:
@@ -91,7 +104,13 @@ def coletar_selic_e_ipca():
             })
 
     return {
-        "selic": {"valor": selic_hoje, "data": selic_hoje_data.isoformat()},
+        "selic": {
+            "valor": selic_hoje,
+            "data": selic_hoje_data.isoformat(),
+            "desde": selic_desde.isoformat(),
+            "anterior": selic_anterior,
+            "fim_de_mes": [{"mes": m, "valor": v} for m, v in selic_fim_mes.items()],
+        },
         "ipca12m": {
             "valor": ipca_hoje,
             "mes": ipca_mes.strftime("%Y-%m"),
