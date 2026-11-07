@@ -1,5 +1,5 @@
 {
-  "atualizado_em": "2026-11-07T11:35-03:00",
+  "atualizado_em": "2026-11-07T11:50-03:00",
   "selic": {
     "valor": 13.75,
     "data": "2026-11-07"
@@ -543,6 +543,97 @@
       }
     ]
   },
+  "focus": {
+    "coleta_ate": "2026-10-30",
+    "coleta_anterior": "2026-10-23",
+    "anos": [
+      2026,
+      2027,
+      2028
+    ],
+    "tabela": [
+      {
+        "indicador": "IPCA",
+        "valores": [
+          {
+            "ano": 2026,
+            "mediana": 5.22,
+            "variacao": 0.03
+          },
+          {
+            "ano": 2027,
+            "mediana": 4.76,
+            "variacao": 0.42
+          },
+          {
+            "ano": 2028,
+            "mediana": 4.0,
+            "variacao": 0.25
+          }
+        ]
+      },
+      {
+        "indicador": "Selic",
+        "valores": [
+          {
+            "ano": 2026,
+            "mediana": 13.5,
+            "variacao": 0.25
+          },
+          {
+            "ano": 2027,
+            "mediana": 12.5,
+            "variacao": 0.75
+          },
+          {
+            "ano": 2028,
+            "mediana": 11.0,
+            "variacao": 1.0
+          }
+        ]
+      },
+      {
+        "indicador": "PIB Total",
+        "valores": [
+          {
+            "ano": 2026,
+            "mediana": 1.76,
+            "variacao": -0.04
+          },
+          {
+            "ano": 2027,
+            "mediana": 1.2,
+            "variacao": -0.11
+          },
+          {
+            "ano": 2028,
+            "mediana": 1.8,
+            "variacao": -0.01
+          }
+        ]
+      },
+      {
+        "indicador": "Câmbio",
+        "valores": [
+          {
+            "ano": 2026,
+            "mediana": 5.34,
+            "variacao": 0.29
+          },
+          {
+            "ano": 2027,
+            "mediana": 5.4,
+            "variacao": 0.25
+          },
+          {
+            "ano": 2028,
+            "mediana": 5.4,
+            "variacao": 0.2
+          }
+        ]
+      }
+    ]
+  },
   "ibovespa": {
     "fechamento": 168499.0,
     "data": "2026-11-06",
@@ -737,7 +828,5 @@
       }
     ]
   },
-  "erros": [
-    "coletar_focus: Não consegui baixar https://olinda.bcb.gov.br/olinda/servico/Expectativas/versao/v1/odata/ExpectativasMercadoAnuais"
-  ]
+  "erros": []
 }

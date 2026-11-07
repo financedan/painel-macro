@@ -11,6 +11,7 @@ Como rodar (com o .venv ativado):  python coletar.py
 """
 
 import json
+from urllib.parse import quote
 from datetime import date, datetime, timedelta, timezone
 from pathlib import Path
 
@@ -30,7 +31,9 @@ def baixar_json(url, params=None):
     for tentativa in range(3):
         try:
             resposta = requests.get(url, params=params, headers=CABECALHO, timeout=60)
-            resposta.raise_for_status()
+            if resposta.status_code != 200:
+                # mostra o que a API respondeu, para facilitar achar o problema
+                raise RuntimeError(f"HTTP {resposta.status_code}: {resposta.text[:300]}")
             return resposta.json()
         except Exception as erro:  # rede instável, API fora do ar...
             ultimo_erro = erro
@@ -115,13 +118,14 @@ def coletar_focus():
 
     url = "https://olinda.bcb.gov.br/olinda/servico/Expectativas/versao/v1/odata/ExpectativasMercadoAnuais"
     nomes = " or ".join(f"Indicador eq '{n}'" for n in INDICADORES_FOCUS)
-    params = {
-        "$filter": f"({nomes}) and Data ge '{desde}' and baseCalculo eq 0",
-        "$select": "Indicador,Data,DataReferencia,Mediana",
-        "$format": "json",
-        "$top": "5000",
-    }
-    linhas = baixar_json(url, params)["value"]
+    filtro = f"({nomes}) and Data ge '{desde}' and baseCalculo eq 0"
+    # a API do BC exige espaço como %20 (o requests mandaria "+"), por isso a URL é montada à mão
+    url += (
+        "?$filter=" + quote(filtro, safe="'()")
+        + "&$select=Indicador,Data,DataReferencia,Mediana"
+        + "&$format=json&$top=5000"
+    )
+    linhas = baixar_json(url)["value"]
 
     # agrupa por semana e fica com o último dia de cada semana já encerrada
     semana_atual = hoje.isocalendar()[:2]
@@ -140,7 +144,8 @@ def coletar_focus():
 
     mediana = {}  # (indicador, ano, data) -> valor
     for linha in linhas:
-        mediana[(linha["Indicador"], int(linha["DataReferencia"]), linha["Data"])] = linha["Mediana"]
+        # o boletim publica com 2 casas (5,2166 vira 5,22); a variação usa os valores já arredondados
+        mediana[(linha["Indicador"], int(linha["DataReferencia"]), linha["Data"])] = arredondar(linha["Mediana"])
 
     tabela = []
     for indicador in INDICADORES_FOCUS:
