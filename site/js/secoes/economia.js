@@ -80,7 +80,7 @@
     const g = P.linhas([
       { valores: h.map((x) => ipca[x.mes] ?? null), cor: AMBAR, lastTxt: P.pct(ipca[h[h.length - 1].mes]) },
       { valores: h.map((x) => x.valor), cor: OSSO, tracejado: '5 5', lastTxt: P.pct(h[h.length - 1].valor) },
-    ], h.map((x) => P.mesCurto(x.mes)), { L: 44, R: 680, T: 14, B: 196 }, { passo: 1, maxRotulos: 6, incluir: [3] });
+    ], h.map((x) => P.mesCurto(x.mes)), { L: 44, R: 680, T: 14, B: 196 }, { chave: 'nuc', passo: 1, maxRotulos: 6, incluir: [3] });
     const ult = h[h.length - 1].valor, ip = ipca[h[h.length - 1].mes];
     return {
       nuc: g, nucMetaY: g.Y(3).toFixed(1),

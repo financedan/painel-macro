@@ -80,10 +80,10 @@
     const cada = Math.max(1, Math.ceil(n / (opc.maxRotulos || 6)));
     const xlabels = rotulos.map((r, i) => ({ x: X(i).toFixed(1), label: r, i })).filter((r) => r.i % cada === 0 || r.i === n - 1)
       .filter((r, k, arr) => !(r.i === n - 1 && k > 0 && r.i - arr[k - 1].i < cada * 0.6));
-    const linhas = series.map((s) => {
+    const linhas = series.map((s, k) => {
       const pts = s.valores.map((v, i) => (v == null ? null : [X(i), Y(v)])).filter(Boolean);
       const ult = pts[pts.length - 1] || [0, 0];
-      return { d: PM.caminho(pts), cor: s.cor, largura: s.largura || 2.5, cls: s.tracejado ? 'pm-fade' : 'pm-draw', dash: s.tracejado ? 'stroke-dasharray: ' + s.tracejado : '', lastX: ult[0].toFixed(1), lastY: ult[1].toFixed(1), lastTxt: s.lastTxt || '', labelY: (ult[1] + 4).toFixed(1), labelX: (ult[0] + 10).toFixed(1) };
+      return { id: 'ln-' + (opc.chave || 'g') + '-' + k, d: PM.caminho(pts), cor: s.cor, largura: s.largura || 2.5, cls: s.tracejado ? 'pm-fade' : 'pm-draw', dash: s.tracejado ? 'stroke-dasharray: ' + s.tracejado : '', lastX: ult[0].toFixed(1), lastY: ult[1].toFixed(1), lastTxt: s.lastTxt || '', labelY: (ult[1] + 4).toFixed(1), labelX: (ult[0] + 10).toFixed(1) };
     });
     // rótulos do fim das linhas muito próximos: afasta um do outro
     const ord = linhas.slice().sort((a, b) => Number(a.labelY) - Number(b.labelY));

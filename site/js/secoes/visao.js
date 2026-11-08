@@ -283,7 +283,7 @@
         band: P.caminho(cima.concat(baixo.slice().reverse())) + ' Z', center: P.caminho(centro), line: P.caminho(vals.map((v, i) => [X(i), Y(v)])),
         ticks, xlabels,
         lastX: X(vals.length - 1).toFixed(1), lastY: Y(ultimoV).toFixed(1), labelX: (X(vals.length - 1) + 12).toFixed(1), labelY: (Y(ultimoV) + 4).toFixed(1),
-        lastTxt: P.pct(ultimoV),
+        lastTxt: P.pct(ultimoV), id: 'infl-linha-' + s.range,
       },
       inflCaption: acimaTeto + (acimaTeto === 1 ? ' dos últimos 12 meses ficou' : ' dos últimos 12 meses ficaram') + ' acima do teto de 4,5%. A meta de 3% vale desde 2024; antes, era maior.',
       inflMes: mesTxt, hasInflMes: !!mesTxt,
@@ -469,7 +469,7 @@
     const ibov = serie.map((x) => (modo === 'real' ? x.ibov_real : modo === 'dolar' ? x.ibov_dolar : x.ibov));
     const cdi = serie.map((x) => (modo === 'real' ? x.cdi * x.ibov_real / x.ibov : modo === 'dolar' ? x.cdi * x.ibov_dolar / x.ibov : x.cdi));
     const g = P.linhas([{ valores: cdi, cor: OSSO }, { valores: ibov, cor: AZUL }], serie.map((x) => x.mes.slice(0, 4)), { L: 52, R: 690, T: 14, B: 226 },
-      { incluir: [100], passo: 50, fmtTick: (t) => P.fmt(t, 0), maxRotulos: 10 });
+      { chave: 'comp-' + modo, incluir: [100], passo: 50, fmtTick: (t) => P.fmt(t, 0), maxRotulos: 10 });
     // rótulos do eixo x: só a virada de cada ano
     g.xlabels = serie.map((x, i) => ({ x: g.X(i).toFixed(1), label: x.mes.slice(0, 4), jan: x.mes.endsWith('-01') })).filter((x) => x.jan && Number(x.label) % 2 === 1);
     const ultI = ibov[ibov.length - 1], ultC = cdi[cdi.length - 1];

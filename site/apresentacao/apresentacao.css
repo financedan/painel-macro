@@ -1,0 +1,103 @@
+/*
+ * Apresentação do Painel Macro Brasil — mesma identidade do painel (css/painel.css):
+ * fundo #0a0a0a com o pôr do sol, vidro rgba(212,212,212,.10) + blur 22px, bordas rgba(229,229,229,.14),
+ * cantos de 24px, DM Sans (texto) e Geist (títulos de bloco), azul #8fb0ff = agora/destaque,
+ * âmbar #f0b37a = inflação e alerta, osso #ededed e cinza #c2c2c2 = texto e histórico.
+ */
+@font-face { font-family: 'DM Sans'; font-weight: 400; font-display: block; src: url(fontes/dm-sans-latin-400-normal.woff2) format('woff2'); }
+@font-face { font-family: 'DM Sans'; font-weight: 500; font-display: block; src: url(fontes/dm-sans-latin-500-normal.woff2) format('woff2'); }
+@font-face { font-family: 'DM Sans'; font-weight: 600; font-display: block; src: url(fontes/dm-sans-latin-600-normal.woff2) format('woff2'); }
+@font-face { font-family: 'Geist'; font-weight: 500; font-display: block; src: url(fontes/geist-sans-latin-500-normal.woff2) format('woff2'); }
+@font-face { font-family: 'Geist'; font-weight: 600; font-display: block; src: url(fontes/geist-sans-latin-600-normal.woff2) format('woff2'); }
+
+:root {
+  --azul: #8fb0ff; --ambar: #f0b37a; --osso: #ededed; --cinza: #c2c2c2;
+  --vidro: rgba(212,212,212,.10); --vidro-escuro: rgba(14,14,14,.46); --borda: rgba(229,229,229,.14);
+}
+* { box-sizing: border-box; }
+html, body { margin: 0; height: 100%; background: #0a0a0a; color: var(--osso); font-family: 'DM Sans', ui-sans-serif, system-ui, sans-serif; }
+body { display: flex; flex-direction: column; align-items: center; justify-content: center; min-height: 100vh; overflow-x: hidden; }
+a { color: var(--osso); }
+:focus-visible { outline: 2px solid rgba(255,255,255,.9); outline-offset: 2px; }
+
+/* ---------- palco 1920x1080 (escalado para caber na janela) */
+.moldura { position: relative; width: 100%; max-width: 1920px; aspect-ratio: 16 / 9; }
+.palco { position: absolute; left: 0; top: 0; width: 1920px; height: 1080px; transform-origin: 0 0; overflow: hidden; background: #0a0a0a; isolation: isolate; }
+.render .moldura { max-width: none; width: 1920px; height: 1080px; }
+.render body, body.render { display: block; }
+
+.fundo { position: absolute; z-index: 0; inset: -4%; background: #1a1716 url(../img/fundo.jpg) center / cover no-repeat; will-change: transform, filter; }
+.veu { position: absolute; inset: 0; background: linear-gradient(180deg, rgba(10,10,10,.34) 0%, rgba(10,10,10,.20) 38%, rgba(10,10,10,.58) 100%); }
+.escuro { position: absolute; inset: 0; background: #0a0a0a; pointer-events: none; z-index: 2000; }
+
+.tomada { position: absolute; overflow: hidden; will-change: transform, opacity; }
+.tomada.janela { border-radius: 28px; border: 1px solid var(--borda); box-shadow: 0 40px 120px rgba(0,0,0,.55), inset 0 1px 0 rgba(255,255,255,.07); }
+.tomada img { position: absolute; left: 0; top: 0; transform-origin: 0 0; will-change: transform, opacity; user-select: none; -webkit-user-drag: none; }
+
+/* ---------- componentes "nativos" do painel, em escala de vídeo (≈ 1,6x) */
+.camada { position: absolute; inset: 0; pointer-events: none; z-index: 1000; }
+.camada a, .camada button { pointer-events: auto; }
+.vidro { background-color: var(--vidro); -webkit-backdrop-filter: blur(22px) saturate(140%); backdrop-filter: blur(22px) saturate(140%); border: 1px solid var(--borda); box-shadow: inset 0 1px 0 rgba(255,255,255,.07); }
+.vidro-escuro { background-color: rgba(14,14,14,.66); -webkit-backdrop-filter: blur(22px) saturate(140%); backdrop-filter: blur(22px) saturate(140%); border: 1px solid var(--borda); }
+.item { position: absolute; will-change: transform, opacity, filter; }
+
+.olho { font-size: 19px; font-weight: 500; letter-spacing: .12em; color: var(--ambar); text-transform: uppercase; }
+.titulo { font-size: 84px; font-weight: 500; letter-spacing: -0.035em; line-height: 1.06; color: var(--osso); }
+.titulo-m { font-size: 60px; font-weight: 500; letter-spacing: -0.035em; line-height: 1.1; color: var(--osso); }
+.texto { font-size: 30px; line-height: 1.4; color: var(--cinza); }
+.numero { font-weight: 500; letter-spacing: -0.035em; line-height: 1; font-variant-numeric: tabular-nums; color: var(--osso); }
+.rotulo { font-size: 21px; color: var(--cinza); letter-spacing: .02em; }
+.fonte-linha { font-size: 17px; line-height: 1.5; color: rgba(194,194,194,.9); }
+.fonte-linha b { font-weight: 500; color: #b9ccff; }
+
+.cartao { border-radius: 34px; padding: 36px 40px; display: flex; flex-direction: column; gap: 14px; }
+.cartao .numero { font-size: 104px; }
+.cartao .linha { font-size: 27px; line-height: 1.38; color: var(--osso); }
+.cartao .linha.cinza { color: var(--cinza); }
+
+.pilula { display: inline-flex; align-items: center; gap: 14px; padding: 14px 26px; border-radius: 9999px; font-size: 26px; color: rgba(237,237,237,.92); white-space: nowrap; }
+.pilula .ponto { width: 10px; height: 10px; border-radius: 9999px; background: var(--osso); }
+.marca { display: flex; align-items: center; gap: 22px; }
+.marca .icone { width: 96px; height: 96px; border-radius: 9999px; display: flex; align-items: center; justify-content: center; }
+.marca .nome { font-size: 76px; font-weight: 500; letter-spacing: -0.03em; }
+
+.capitulo { position: absolute; right: 40px; bottom: 34px; display: flex; align-items: center; gap: 12px; padding: 10px 18px; border-radius: 9999px; font-size: 18px; color: rgba(237,237,237,.9); }
+.capitulo .num { font-variant-numeric: tabular-nums; color: var(--cinza); }
+
+/* destaque: anel branco com o resto escurecido (como o foco do painel) */
+.destaque { position: absolute; border: 2px solid rgba(255,255,255,.92); border-radius: 26px; box-shadow: 0 0 0 9999px rgba(10,10,10,.42), 0 0 0 8px rgba(237,237,237,.10); pointer-events: none; }
+.destaque.pilula-d { border-radius: 9999px; }
+.destaque.leve { box-shadow: 0 0 0 8px rgba(237,237,237,.10); }
+
+.cursor { position: absolute; width: 40px; height: 40px; pointer-events: none; filter: drop-shadow(0 6px 14px rgba(0,0,0,.45)); }
+.clique { position: absolute; width: 90px; height: 90px; margin: -45px 0 0 -45px; border-radius: 9999px; border: 3px solid rgba(255,255,255,.9); pointer-events: none; }
+
+.legenda { position: absolute; left: 64px; bottom: 56px; display: inline-flex; align-items: center; gap: 16px; padding: 18px 30px; border-radius: 9999px; font-size: 30px; color: var(--osso); }
+.legenda .ic { width: 30px; height: 30px; flex: 0 0 auto; }
+
+/* hotspots (só na versão interativa) */
+.atalho { position: absolute; display: inline-flex; align-items: center; gap: 10px; padding: 14px 24px; border-radius: 9999px; font-size: 22px; font-weight: 500; text-decoration: none; background: #ffffff; color: #161616; box-shadow: 0 14px 40px rgba(0,0,0,.35); }
+.atalho:hover { background: #ececec; }
+.atalho.sec { background: rgba(212,212,212,.14); color: var(--osso); border: 1px solid var(--borda); -webkit-backdrop-filter: blur(18px); backdrop-filter: blur(18px); }
+.render .atalho, .render .controles { display: none !important; }
+
+/* ---------- controles da versão interativa (fora do palco) */
+.controles { width: 100%; max-width: 1920px; padding: 14px 16px 18px; display: flex; flex-direction: column; gap: 10px; }
+.barra { display: flex; align-items: center; gap: 12px; flex-wrap: wrap; }
+.btn { text-decoration: none; display: inline-flex; align-items: center; justify-content: center; gap: 8px; height: 40px; padding: 0 16px; border-radius: 9999px; border: 1px solid var(--borda); background: var(--vidro); color: rgba(237,237,237,.9); font: inherit; font-size: 14px; cursor: pointer; transition: background-color .3s, color .3s; }
+.btn:hover { background: rgba(212,212,212,.18); color: #fff; }
+.btn.redondo { width: 40px; padding: 0; }
+.btn.claro { background: #fff; color: #161616; border-color: #fff; font-weight: 500; }
+.btn.claro:hover { background: #ececec; }
+.tempo { font-size: 13px; color: var(--cinza); font-variant-numeric: tabular-nums; min-width: 92px; }
+.espaco { flex: 1; }
+.trilho { position: relative; height: 34px; display: flex; gap: 4px; cursor: pointer; touch-action: none; }
+.seg { position: relative; flex: 1; border: 0; padding: 0; background: none; cursor: pointer; display: flex; flex-direction: column; gap: 7px; text-align: left; color: var(--cinza); font: inherit; font-size: 12px; }
+.seg .faixa { width: 100%; height: 6px; border-radius: 9999px; background: rgba(255,255,255,.12); overflow: hidden; }
+.seg .faixa i { display: block; height: 100%; width: 0; background: var(--osso); }
+.seg.on { color: var(--osso); }
+.seg.on .faixa i { background: var(--azul); }
+.seg span { white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.nota { font-size: 12px; color: var(--cinza); }
+@media (max-width: 760px) { .seg span { display: none; } .btn .lbl { display: none; } .nota { display: none; } }
+@media (prefers-reduced-motion: reduce) { .btn { transition: none; } }

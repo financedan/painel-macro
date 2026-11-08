@@ -1,0 +1,45 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Painel Macro Brasil · Apresentação</title>
+<meta name="description" content="Apresentação interativa do Painel Macro Brasil: juros, inflação, expectativas e bolsa com dados oficiais. Cenas navegáveis e atalhos para explorar o painel.">
+<meta name="theme-color" content="#0a0a0a">
+<link rel="icon" href="../img/icone.svg" type="image/svg+xml">
+<link rel="preload" href="fontes/dm-sans-latin-500-normal.woff2" as="font" type="font/woff2" crossorigin>
+<link href="apresentacao.css" rel="stylesheet">
+</head>
+<body>
+<div class="moldura" id="moldura">
+  <div class="palco" id="palco" role="img" aria-label="Apresentação animada do Painel Macro Brasil">
+    <div class="fundo" id="fundo"></div>
+    <div class="veu"></div>
+    <div id="tomadas"></div>
+    <div class="camada" id="camada"></div>
+    <div class="escuro" id="escuro"></div>
+  </div>
+</div>
+
+<div class="controles" id="controles">
+  <div class="trilho" id="trilho" role="group" aria-label="Capítulos"></div>
+  <div class="barra">
+    <button class="btn redondo" id="play" type="button" aria-label="Reproduzir">
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path id="play-ic" d="M7 4.5v15l13-7.5z"></path></svg>
+    </button>
+    <button class="btn" id="som" type="button" aria-pressed="false">
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" style="stroke-width: 1.8; stroke-linecap: round; stroke-linejoin: round" aria-hidden="true"><path d="M4 9.5h3.5L12 5.5v13l-4.5-4H4zM16 9a4 4 0 0 1 0 6M18.5 6.5a7.5 7.5 0 0 1 0 11"></path></svg><span class="lbl" id="som-txt">Ativar trilha</span>
+    </button>
+    <span class="tempo" id="tempo">0:00 / 1:25</span>
+    <span class="espaco"></span>
+    <span class="nota">Espaço: pausar · ← →: 5 s · 1 a 5: capítulos</span>
+    <a class="btn" href="../#metodologia">Fontes</a>
+    <a class="btn claro" href="../">Abrir o painel ↗</a>
+  </div>
+</div>
+
+<audio id="trilha" src="trilha.mp3" preload="auto"></audio>
+<script src="../js/util.js"></script>
+<script src="apresentacao.js"></script>
+</body>
+</html>

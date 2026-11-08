@@ -8,6 +8,14 @@ Os dados se atualizam sozinhos todo dia útil, às 19h de Brasília.
 
 **Site:** https://financedan.github.io/painel-macro/ · **Feed RSS:** `/feed.xml`
 
+## Apresentação
+
+- **Versão interativa:** [`/apresentacao/`](https://financedan.github.io/painel-macro/apresentacao/), com capítulos clicáveis, atalhos que abrem cada bloco no painel e trilha.
+- **Vídeo (1 min 25 s, 1920×1080, com capítulos):** [`video/saida/painel-macro-brasil.mp4`](video/saida/painel-macro-brasil.mp4).
+- Roteiro, indicadores escolhidos e como refazer: [`video/ROTEIRO.md`](video/ROTEIRO.md).
+
+As duas versões usam frames reais do painel e os mesmos dados da captura.
+
 ## O que tem no painel
 
 | Aba | Conteúdo |

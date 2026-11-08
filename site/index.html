@@ -315,7 +315,7 @@
 <template data-for="infl.xlabels" data-as="xl">
 <text x="{{xl.x}}" y="252" fill="#c2c2c2" style="font-size: 12px; text-anchor: middle">{{xl.label}}</text>
 </template>
-<path class="pm-draw" pathLength="1" d="{{infl.line}}" fill="none" stroke="#f0b37a" style="stroke-width: 2.5; stroke-linecap: round; stroke-linejoin: round"></path>
+<path id="{{infl.id}}" class="pm-draw" pathLength="1" d="{{infl.line}}" fill="none" stroke="#f0b37a" style="stroke-width: 2.5; stroke-linecap: round; stroke-linejoin: round"></path>
 <circle class="pm-fade" cx="{{infl.lastX}}" cy="{{infl.lastY}}" r="5" fill="#f0b37a" stroke="#0a0a0a" style="stroke-width: 2; animation-delay: 1.4s"></circle>
 <text class="pm-fade" x="{{infl.labelX}}" y="{{infl.labelY}}" fill="#ededed" style="font-size: 13px; font-weight: 500; animation-delay: 1.5s">{{infl.lastTxt}}</text>
 </svg>
@@ -449,7 +449,7 @@
 </template>
 <template data-for="comp.xlabels" data-as="xl"><text x="{{xl.x}}" y="246" fill="#c2c2c2" style="font-size: 12px; text-anchor: middle">{{xl.label}}</text></template>
 <template data-for="comp.linhas" data-as="ln">
-<path class="{{ln.cls}}" pathLength="1" d="{{ln.d}}" fill="none" stroke="{{ln.cor}}" style="stroke-width: {{ln.largura}}; stroke-linecap: round; stroke-linejoin: round; {{ln.dash}}"></path>
+<path id="{{ln.id}}" class="{{ln.cls}}" pathLength="1" d="{{ln.d}}" fill="none" stroke="{{ln.cor}}" style="stroke-width: {{ln.largura}}; stroke-linecap: round; stroke-linejoin: round; {{ln.dash}}"></path>
 <circle cx="{{ln.lastX}}" cy="{{ln.lastY}}" r="4" fill="{{ln.cor}}" stroke="#0a0a0a" style="stroke-width: 2"></circle>
 <text x="{{ln.labelX}}" y="{{ln.labelY}}" fill="{{ln.cor}}" style="font-size: 12px; font-weight: 500">{{ln.lastTxt}}</text>
 </template>
@@ -729,7 +729,7 @@
 <template data-if="histTemMeta"><line x1="64" x2="680" y1="{{histMetaY}}" y2="{{histMetaY}}" stroke="rgba(237,237,237,.45)" style="stroke-width: 1; stroke-dasharray: 4 5"></line></template>
 <template data-for="hist.xlabels" data-as="xl"><text x="{{xl.x}}" y="216" fill="#c2c2c2" style="font-size: 12px; text-anchor: middle">{{xl.label}}</text></template>
 <template data-for="hist.linhas" data-as="ln">
-<path class="{{ln.cls}}" pathLength="1" d="{{ln.d}}" fill="none" stroke="{{ln.cor}}" style="stroke-width: {{ln.largura}}; stroke-linecap: round; stroke-linejoin: round; {{ln.dash}}"></path>
+<path id="{{ln.id}}" class="{{ln.cls}}" pathLength="1" d="{{ln.d}}" fill="none" stroke="{{ln.cor}}" style="stroke-width: {{ln.largura}}; stroke-linecap: round; stroke-linejoin: round; {{ln.dash}}"></path>
 <circle cx="{{ln.lastX}}" cy="{{ln.lastY}}" r="4.5" fill="{{ln.cor}}" stroke="#0a0a0a" style="stroke-width: 2"></circle>
 <text x="{{ln.labelX}}" y="{{ln.labelY}}" fill="#ededed" style="font-size: 13px; font-weight: 500">{{ln.lastTxt}}</text>
 </template>
@@ -787,7 +787,7 @@
 </template>
 <template data-for="tes.xlabels" data-as="xl"><text x="{{xl.x}}" y="216" fill="#c2c2c2" style="font-size: 12px; text-anchor: middle">{{xl.label}}</text></template>
 <template data-for="tes.linhas" data-as="ln">
-<path class="{{ln.cls}}" pathLength="1" d="{{ln.d}}" fill="none" stroke="{{ln.cor}}" style="stroke-width: {{ln.largura}}; stroke-linecap: round; stroke-linejoin: round; {{ln.dash}}"></path>
+<path id="{{ln.id}}" class="{{ln.cls}}" pathLength="1" d="{{ln.d}}" fill="none" stroke="{{ln.cor}}" style="stroke-width: {{ln.largura}}; stroke-linecap: round; stroke-linejoin: round; {{ln.dash}}"></path>
 <circle cx="{{ln.lastX}}" cy="{{ln.lastY}}" r="4" fill="{{ln.cor}}" stroke="#0a0a0a" style="stroke-width: 2"></circle>
 <text x="{{ln.labelX}}" y="{{ln.labelY}}" fill="{{ln.cor}}" style="font-size: 12px; font-weight: 500">{{ln.lastTxt}}</text>
 </template>
@@ -911,7 +911,7 @@
 <line x1="44" x2="680" y1="{{nucMetaY}}" y2="{{nucMetaY}}" stroke="rgba(237,237,237,.45)" style="stroke-width: 1; stroke-dasharray: 4 5"></line>
 <template data-for="nuc.xlabels" data-as="xl"><text x="{{xl.x}}" y="216" fill="#c2c2c2" style="font-size: 12px; text-anchor: middle">{{xl.label}}</text></template>
 <template data-for="nuc.linhas" data-as="ln">
-<path class="{{ln.cls}}" pathLength="1" d="{{ln.d}}" fill="none" stroke="{{ln.cor}}" style="stroke-width: {{ln.largura}}; stroke-linecap: round; stroke-linejoin: round; {{ln.dash}}"></path>
+<path id="{{ln.id}}" class="{{ln.cls}}" pathLength="1" d="{{ln.d}}" fill="none" stroke="{{ln.cor}}" style="stroke-width: {{ln.largura}}; stroke-linecap: round; stroke-linejoin: round; {{ln.dash}}"></path>
 <circle cx="{{ln.lastX}}" cy="{{ln.lastY}}" r="4" fill="{{ln.cor}}" stroke="#0a0a0a" style="stroke-width: 2"></circle>
 <text x="{{ln.labelX}}" y="{{ln.labelY}}" fill="{{ln.cor}}" style="font-size: 12px; font-weight: 500">{{ln.lastTxt}}</text>
 </template>

@@ -85,7 +85,7 @@
     const dinheiro = ind === 'Câmbio';
     const g = P.linhas([{ valores: serie.map((x) => x.mediana), cor: ind === 'IPCA' ? AMBAR : AZUL, lastTxt: valorDe(ind, serie[serie.length - 1].mediana) }],
       serie.map((x) => P.ddmm(P.dia(x.data))), { L: 64, R: 680, T: 14, B: 196 },
-      { passo: dinheiro ? 0.1 : (ind === 'Selic' ? 1 : 0.5), fmtTick: (t) => (dinheiro ? 'R$ ' + P.fmt(t) : P.fmt(t, 1) + '%'), maxRotulos: 7 });
+      { chave: 'hist-' + ind.replace(/\W/g, '') + '-' + ano, passo: dinheiro ? 0.1 : (ind === 'Selic' ? 1 : 0.5), fmtTick: (t) => (dinheiro ? 'R$ ' + P.fmt(t) : P.fmt(t, 1) + '%'), maxRotulos: 7 });
     if (ind === 'IPCA') g.metaY = g.Y(3).toFixed(1);
     const q = sequencia(serie);
     return {
@@ -129,7 +129,7 @@
     const g = P.linhas([
       { valores: h.map((x) => x.real), cor: AZUL, lastTxt: P.pct(a.real) },
       { valores: h.map((x) => x.implicita), cor: AMBAR, lastTxt: P.pct(a.implicita) },
-    ], h.map((x) => P.mesCurto(x.data.slice(0, 7))), { L: 48, R: 1100, T: 14, B: 196 }, { passo: 1, maxRotulos: 8 });
+    ], h.map((x) => P.mesCurto(x.data.slice(0, 7))), { L: 48, R: 1100, T: 14, B: 196 }, { chave: 'tes', passo: 1, maxRotulos: 8 });
     const venc = P.dia(a.venc_ipca).getFullYear();
     const fx = c.I.map((x, k) => c.anos[k] + ': ' + P.pct(x.mediana)).join(', ');
     const dif = a.implicita - c.I[c.I.length - 1].mediana;
