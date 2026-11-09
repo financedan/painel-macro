@@ -1,8 +1,8 @@
 {
-  "atualizado_em": "2026-11-07T12:26-03:00",
+  "atualizado_em": "2026-11-09T11:02-03:00",
   "selic": {
     "valor": 13.75,
-    "data": "2026-11-07",
+    "data": "2026-11-09",
     "desde": "2026-09-17",
     "anterior": 14.0,
     "fim_de_mes": [
@@ -1024,8 +1024,8 @@
     ]
   },
   "focus": {
-    "coleta_ate": "2026-10-30",
-    "coleta_anterior": "2026-10-23",
+    "coleta_ate": "2026-11-06",
+    "coleta_anterior": "2026-10-30",
     "anos": [
       2026,
       2027,
@@ -1038,17 +1038,17 @@
           {
             "ano": 2026,
             "mediana": 5.22,
-            "variacao": 0.03
+            "variacao": 0.0
           },
           {
             "ano": 2027,
-            "mediana": 4.76,
-            "variacao": 0.42
+            "mediana": 4.9,
+            "variacao": 0.14
           },
           {
             "ano": 2028,
             "mediana": 4.0,
-            "variacao": 0.25
+            "variacao": 0.0
           }
         ]
       },
@@ -1057,18 +1057,18 @@
         "valores": [
           {
             "ano": 2026,
-            "mediana": 13.5,
+            "mediana": 13.75,
             "variacao": 0.25
           },
           {
             "ano": 2027,
             "mediana": 12.5,
-            "variacao": 0.75
+            "variacao": 0.0
           },
           {
             "ano": 2028,
             "mediana": 11.0,
-            "variacao": 1.0
+            "variacao": 0.0
           }
         ]
       },
@@ -1077,18 +1077,18 @@
         "valores": [
           {
             "ano": 2026,
-            "mediana": 1.76,
-            "variacao": -0.04
+            "mediana": 1.75,
+            "variacao": -0.01
           },
           {
             "ano": 2027,
-            "mediana": 1.2,
-            "variacao": -0.11
+            "mediana": 1.15,
+            "variacao": -0.05
           },
           {
             "ano": 2028,
             "mediana": 1.8,
-            "variacao": -0.01
+            "variacao": 0.0
           }
         ]
       },
@@ -1097,28 +1097,28 @@
         "valores": [
           {
             "ano": 2026,
-            "mediana": 5.34,
-            "variacao": 0.29
+            "mediana": 5.35,
+            "variacao": 0.01
           },
           {
             "ano": 2027,
             "mediana": 5.4,
-            "variacao": 0.25
+            "variacao": 0.0
           },
           {
             "ano": 2028,
-            "mediana": 5.4,
-            "variacao": 0.2
+            "mediana": 5.45,
+            "variacao": 0.05
           }
         ]
       }
     ]
   },
   "ibovespa": {
-    "fechamento": 168499.0,
-    "data": "2026-11-06",
-    "var_semana": -0.41,
-    "var_ano": 4.58,
+    "fechamento": 169598.25,
+    "data": "2026-11-09",
+    "var_semana": 1.0,
+    "var_ano": 5.26,
     "maxima_12m": {
       "valor": 209067.0,
       "data": "2026-10-09"
@@ -1181,15 +1181,11 @@
       },
       {
         "ano": 2026,
-        "fechamento": 168499.0,
-        "retorno": 4.58
+        "fechamento": 169598.25,
+        "retorno": 5.26
       }
     ],
     "ultimos_dias": [
-      {
-        "data": "2026-09-24",
-        "valor": 183966.0
-      },
       {
         "data": "2026-09-25",
         "valor": 183477.0
@@ -1305,6 +1301,10 @@
       {
         "data": "2026-11-06",
         "valor": 168499.0
+      },
+      {
+        "data": "2026-11-09",
+        "valor": 169598.25
       }
     ]
   },
