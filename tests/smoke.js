@@ -72,6 +72,8 @@ const checar = (cond, msg) => { console.log((cond ? '  ok   ' : '  FALHOU ') + m
   await p.goto(base, { waitUntil: 'networkidle' });
   await p.waitForSelector('#t-overview');
   checar(await p.isVisible('#t-overview'), 'visitante que já passou pela saudação abre direto no painel');
+  checar(await p.evaluate(() => painel.state.p < 1), 'ao abrir, os números da visão geral contam até o valor');
+  checar(await p.$eval('rect.pm-bar', (r) => getComputedStyle(r).animationName === 'pm-grow'), 'barras crescem ao abrir');
   checar((await p.$$('article.pm-glass')).length >= 14, 'visão geral tem os blocos principais');
   checar(await p.isVisible('nav.pm-topnav') && await p.isVisible('nav.pm-dock'), 'no computador: abas no topo e barra lateral (layout original)');
   checar((await p.$$('nav.pm-topnav a')).length === 4, 'quatro abas: Visão geral, Expectativas, Agenda e Metodologia');
@@ -189,8 +191,10 @@ const checar = (cond, msg) => { console.log((cond ? '  ok   ' : '  FALHOU ') + m
   console.log('Menos movimento');
   ({ ctx, p } = await nova({ reducedMotion: 'reduce' }));
   await p.goto(base); await p.waitForSelector('#t-overview');
+  checar(await p.evaluate(() => painel.state.p < 1), 'com "menos movimento" os números ainda contam ao abrir (mais suave)');
+  await p.waitForTimeout(2600);
   const kpi = await p.textContent('article.pm-glass div[style*="font-size: 34px"]');
-  checar(kpi.trim() === (await p.evaluate(() => PM.pct(painel.D.selic.valor))), 'números aparecem prontos, sem contagem animada');
+  checar(kpi.trim() === (await p.evaluate(() => PM.pct(painel.D.selic.valor))), 'a contagem termina no valor certo');
   await ctx.close();
 
   console.log('Fonte faltando');

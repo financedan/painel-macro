@@ -3,7 +3,7 @@
  *   - cada bloco entra (sobe e aparece) quando chega na tela, e só então os gráficos se desenham;
  *   - os números grandes (classe pm-conta) contam do zero até o valor;
  *   - um brilho suave acompanha o mouse sobre os cartões.
- * Quem pede "menos movimento" no sistema não vê nada disso: tudo já aparece pronto.
+ * Com "menos movimento" ligado no sistema as animações continuam, só que mais suaves (sem desfoque).
  */
 (function () {
   const P = (window.PM = window.PM || {});
@@ -11,10 +11,7 @@
   let observador = null;
   const contados = new WeakSet();
 
-  const quieto = () => {
-    try { if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return true; } catch (e) { /* navegador antigo */ }
-    return !!document.querySelector('.pm-still');
-  };
+  const quieto = () => !!document.querySelector('.pm-still');
 
   // ---------- números que contam até o valor (mantém prefixo, sufixo, sinal e casas decimais)
   const NUM = /[-+−]?\d{1,3}(?:\.\d{3})+(?:,\d+)?|[-+−]?\d+(?:,\d+)?/;
@@ -36,7 +33,7 @@
     const alvo = Number(m[0].replace(/[−]/g, '-').replace(/\./g, '').replace(',', '.'));
     if (!isFinite(alvo) || alvo === 0) return;
     const antes = final.slice(0, m.index), depois = final.slice(m.index + m[0].length);
-    const dur = 1300;
+    const dur = 1800;
     let inicio = 0, escrito = null;
     const passo = (agora) => {
       if (escrito !== null && no.nodeValue !== escrito) return;   // o painel redesenhou com outro valor: para

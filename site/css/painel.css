@@ -27,12 +27,16 @@ button,a,input,textarea{font:inherit}
 @keyframes pm-fade{from{opacity:0}
 to{opacity:1}
 }
-.pm-bar{transform-box:fill-box;transform-origin:50% 100%;animation:pm-grow 1.1s cubic-bezier(.16,.84,.24,1) backwards;transition:fill .3s}
+.pm-bar{transform-box:fill-box;transform-origin:50% 100%;animation:pm-grow 1.5s cubic-bezier(.34,1.45,.64,1) backwards;transition:fill .3s}
 .pm-bar-neg{transform-origin:50% 0%}
 @keyframes pm-grow{from{transform:scaleY(0)}
 to{transform:scaleY(1)}
 }
-.pm-draw{stroke-dasharray:1;stroke-dashoffset:0;animation:pm-draw 1.8s cubic-bezier(.45,0,.2,1) backwards}
+.pm-draw{stroke-dasharray:1;stroke-dashoffset:0;animation:pm-draw 2.4s cubic-bezier(.45,0,.2,1) backwards}
+.pm-desliza{animation:pm-desliza 1.8s cubic-bezier(.34,1.3,.64,1) .4s backwards}
+@keyframes pm-desliza{from{left:0;opacity:0}
+15%{opacity:1}
+}
 @keyframes pm-draw{from{stroke-dashoffset:1}
 to{stroke-dashoffset:0}
 }
@@ -87,8 +91,9 @@ main article.pm-glass{background-image:radial-gradient(520px circle at var(--mx,
 /* Quem pede "menos movimento" no sistema continua vendo os cards surgirem,
    mas só com um esmaecer suave (sem subir, sem desfoque, sem fundo mexendo). */
 @media (prefers-reduced-motion:reduce){
-.pm-root .pm-bg,.pm-root .pm-pulse,.pm-root .pm-bar,.pm-root .pm-draw,.pm-root .pm-fill,.pm-root .pm-wipe,.pm-root .js-brilho{animation:none!important}
+.pm-root .pm-bg,.pm-root .pm-pulse{animation:none!important}
 .pm-root .pm-rise{animation-name:pm-fade!important;animation-duration:1.1s!important}
+.pm-root .js-revela.js-visto{animation-name:pm-fade!important}
 .pm-root .pm-lift:hover,.pm-root .pm-cta:hover,.pm-root .pm-avatar:hover{transform:none!important}
 }
 /* Navegação: no computador, botões do topo + barra lateral (layout original); no celular, só a barra fixa no rodapé */
