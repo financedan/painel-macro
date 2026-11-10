@@ -95,7 +95,32 @@ def test_coletor_nao_usa_fontes_nao_oficiais():
     assert "yfinance" not in codigo and "yahoo" not in codigo.lower()
 
 
+def test_serie_fred_usa_a_api_com_chave(monkeypatch):
+    class Resp:
+        status_code = 200
+        def json(self):
+            return {"observations": [{"date": "2026-11-04", "value": "3.88"}, {"date": "2026-11-05", "value": "."}]}
+    pedidos = []
+    monkeypatch.setenv("FRED_API_KEY", "chave-teste")
+    monkeypatch.setattr(coletar.requests, "get", lambda url, params=None, **k: pedidos.append((url, params)) or Resp())
+    monkeypatch.setattr(coletar, "baixar", lambda *a, **k: (_ for _ in ()).throw(AssertionError("não devia usar o CSV")))
+    assert coletar.serie_fred("DFF", date(2026, 11, 1)) == [(date(2026, 11, 4), 3.88)]
+    assert pedidos[0][0] == coletar.FRED_API and pedidos[0][1]["series_id"] == "DFF"
+
+
+def test_serie_fred_cai_para_o_csv_sem_vazar_a_chave(monkeypatch, capsys):
+    def falha(*a, **k):
+        raise coletar.requests.ConnectionError("https://api.stlouisfed.org/?api_key=chave-secreta")
+    monkeypatch.setenv("FRED_API_KEY", "chave-secreta")
+    monkeypatch.setattr(coletar.requests, "get", falha)
+    monkeypatch.setattr(coletar.time, "sleep", lambda s: None)
+    monkeypatch.setattr(coletar, "baixar", lambda *a, **k: "observation_date,DFF\n2026-11-04,3.88\n")
+    assert coletar.serie_fred("DFF", date(2026, 11, 1)) == [(date(2026, 11, 4), 3.88)]
+    assert "chave-secreta" not in capsys.readouterr().out
+
+
 def test_serie_fred_le_csv(monkeypatch):
+    monkeypatch.delenv("FRED_API_KEY", raising=False)
     monkeypatch.setattr(coletar, "baixar", lambda *a, **k: "observation_date,DFF\n2026-11-04,3.88\n2026-11-05,.\n")
     assert coletar.serie_fred("DFF", date(2026, 11, 1)) == [(date(2026, 11, 4), 3.88)]
 
