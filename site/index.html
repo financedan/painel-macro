@@ -172,9 +172,9 @@
 <div style="font-size: 34px; font-weight: 500; letter-spacing: -0.035em; line-height: 1; font-variant-numeric: tabular-nums">{{k.display}}</div>
 <div style="font-size: 13px; color: #c2c2c2; min-height: 40px">{{k.note}}</div>
 <template data-if="k.hasSpark">
-<svg viewBox="0 0 200 40" preserveAspectRatio="none" style="width: 100%; height: 40px; display: block; margin-top: auto" aria-hidden="true">
+<svg class="pm-wipe" viewBox="0 0 200 40" preserveAspectRatio="none" style="width: 100%; height: 40px; display: block; margin-top: auto; {{k.cardStyle}}" aria-hidden="true">
 <path d="{{k.area}}" fill="{{k.color}}" style="opacity: .12"></path>
-<path class="pm-fade" d="{{k.line}}" fill="none" stroke="{{k.color}}" style="stroke-width: 2; vector-effect: non-scaling-stroke; stroke-linecap: round; stroke-linejoin: round"></path>
+<path d="{{k.line}}" fill="none" stroke="{{k.color}}" style="stroke-width: 2; vector-effect: non-scaling-stroke; stroke-linecap: round; stroke-linejoin: round"></path>
 </svg>
 </template>
 <template data-if="k.noSpark">
@@ -236,7 +236,7 @@
 </div>
 <template data-if="aj.copom.on"><p class="pm-glass-dark pm-explica">{{aj.copom.txt}}</p></template>
 <div>
-<div style="display: flex; align-items: baseline; gap: 10px"><span style="font-size: 64px; font-weight: 500; letter-spacing: -0.045em; line-height: 1; font-variant-numeric: tabular-nums">{{copomDays}}</span><span style="font-size: 18px; color: #c2c2c2">{{copomWord}}</span></div>
+<div style="display: flex; align-items: baseline; gap: 10px"><span class="pm-conta" style="font-size: 64px; font-weight: 500; letter-spacing: -0.045em; line-height: 1; font-variant-numeric: tabular-nums">{{copomDays}}</span><span style="font-size: 18px; color: #c2c2c2">{{copomWord}}</span></div>
 <p style="margin: 6px 0 0; font-size: 14px; color: #c2c2c2">{{copomWhen}}</p>
 </div>
 <div class="pm-glass-dark" style="border-radius: 18px; padding: 16px; display: flex; flex-direction: column; gap: 10px">
@@ -396,6 +396,30 @@
 </template>
 </div>
 
+<template data-if="economiaCardsOk">
+<div class="pm-cab" style="align-items: center">
+<span style="font-size: 13px; color: #c2c2c2; letter-spacing: .02em">Câmbio, atividade e contas públicas</span>
+<button type="button" class="{{aj.atividade.cls}}" onClick="{{aj.atividade.toggle}}" aria-expanded="{{aj.atividade.aberto}}" aria-label="O que são estes indicadores?">?</button>
+</div>
+<template data-if="aj.atividade.on"><p class="pm-glass-dark pm-explica" style="margin-top: -8px">{{aj.atividade.txt}}</p></template>
+<div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 16px; margin-top: -6px">
+<template data-for="econCards" data-as="k">
+<article class="pm-glass pm-rise pm-lift" style="border-radius: 24px; padding: 20px; display: flex; flex-direction: column; gap: 10px; min-width: 0; {{k.cardStyle}}">
+<div style="display: flex; justify-content: space-between; align-items: center; gap: 8px">
+<span style="font-size: 13px; color: #c2c2c2; letter-spacing: .02em">{{k.label}}</span>
+<span class="pm-glass" style="width: 30px; height: 30px; flex: 0 0 auto; border-radius: 9999px; display: flex; align-items: center; justify-content: center"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" style="stroke-width: 1.7; stroke-linecap: round; stroke-linejoin: round" aria-hidden="true"><path d="{{k.icon}}"></path></svg></span>
+</div>
+<div class="pm-conta" style="font-size: 34px; font-weight: 500; letter-spacing: -0.035em; line-height: 1; font-variant-numeric: tabular-nums">{{k.display}}</div>
+<div style="font-size: 13px; color: #c2c2c2; min-height: 40px">{{k.note}}</div>
+<svg class="pm-wipe" viewBox="0 0 200 40" preserveAspectRatio="none" style="width: 100%; height: 40px; display: block; margin-top: auto" aria-hidden="true">
+<path d="{{k.area}}" fill="{{k.color}}" style="opacity: .12"></path>
+<path d="{{k.line}}" fill="none" stroke="{{k.color}}" style="stroke-width: 2; vector-effect: non-scaling-stroke; stroke-linecap: round; stroke-linejoin: round"></path>
+</svg>
+</article>
+</template>
+</div>
+</template>
+
 <div class="pm-grade">
 <template data-if="medoOk">
 <article class="pm-glass pm-rise pm-card" aria-labelledby="t-medo" style="gap: 12px; animation-delay: 760ms">
@@ -474,12 +498,12 @@
 <button type="button" class="{{aj.mundo.cls}}" onClick="{{aj.mundo.toggle}}" aria-expanded="{{aj.mundo.aberto}}" aria-label="Por que comparar?">?</button>
 </div>
 <template data-if="aj.mundo.on"><p class="pm-glass-dark pm-explica">{{aj.mundo.txt}}</p></template>
-<div style="display: flex; align-items: baseline; gap: 10px"><span style="font-size: 64px; font-weight: 500; letter-spacing: -0.045em; line-height: 1">{{mundoPos}}</span><span style="font-size: 16px; color: #c2c2c2">{{mundoTitulo}}</span></div>
+<div style="display: flex; align-items: baseline; gap: 10px"><span class="pm-conta" style="font-size: 64px; font-weight: 500; letter-spacing: -0.045em; line-height: 1">{{mundoPos}}</span><span style="font-size: 16px; color: #c2c2c2">{{mundoTitulo}}</span></div>
 <div style="display: flex; flex-direction: column; gap: 10px">
 <template data-for="mundoLinhas" data-as="ml">
 <div style="display: flex; flex-direction: column; gap: 4px">
 <div style="display: flex; justify-content: space-between; font-size: 14px"><span>{{ml.nome}}</span><span style="font-variant-numeric: tabular-nums">{{ml.valor}}</span></div>
-<div style="height: 8px; border-radius: 9999px; background: rgba(255,255,255,.08)"><div style="{{ml.style}}"></div></div>
+<div style="height: 8px; border-radius: 9999px; background: rgba(255,255,255,.08)"><div class="pm-fill" style="{{ml.style}}"></div></div>
 </div>
 </template>
 </div>
@@ -645,7 +669,7 @@
 <div style="display: flex; flex-direction: column; gap: 6px">
 <div style="display: flex; justify-content: space-between; gap: 8px; font-size: 14px"><span>{{r.nome}}</span><span class="pm-num" style="font-weight: 500">{{r.valor}}</span></div>
 <div style="position: relative; height: 8px; border-radius: 9999px; background: rgba(255,255,255,.08)">
-<div style="{{r.faixaStyle}}"></div>
+<div class="pm-fill" style="{{r.faixaStyle}}"></div>
 <div style="{{reunioesHojeStyle}}"></div>
 <div style="{{r.dotStyle}}"></div>
 </div>
@@ -668,8 +692,8 @@
 </div>
 <template data-if="aj.tesouro.on"><p class="pm-glass-dark pm-explica">{{aj.tesouro.txt}}</p></template>
 <div style="display: flex; gap: 24px; flex-wrap: wrap">
-<div style="display: flex; flex-direction: column"><span style="font-size: 34px; font-weight: 500; letter-spacing: -0.035em; color: #8fb0ff" class="pm-num">{{tesReal}}</span><span style="font-size: 13px; color: #c2c2c2">juro real de mercado, ao ano</span></div>
-<div style="display: flex; flex-direction: column"><span style="font-size: 34px; font-weight: 500; letter-spacing: -0.035em; color: #f0b37a" class="pm-num">{{tesImplicita}}</span><span style="font-size: 13px; color: #c2c2c2">inflação implícita, ao ano</span></div>
+<div style="display: flex; flex-direction: column"><span style="font-size: 34px; font-weight: 500; letter-spacing: -0.035em; color: #8fb0ff" class="pm-num pm-conta">{{tesReal}}</span><span style="font-size: 13px; color: #c2c2c2">juro real de mercado, ao ano</span></div>
+<div style="display: flex; flex-direction: column"><span style="font-size: 34px; font-weight: 500; letter-spacing: -0.035em; color: #f0b37a" class="pm-num pm-conta">{{tesImplicita}}</span><span style="font-size: 13px; color: #c2c2c2">inflação implícita, ao ano</span></div>
 </div>
 <svg viewBox="0 0 1180 222" style="width: 100%; height: auto; display: block; overflow: visible" role="img" aria-label="{{tesAria}}">
 <template data-for="tes.ticks" data-as="t">
@@ -712,7 +736,7 @@
 </template>
 <div class="pm-secao pm-rise">
 <h2 class="pm-h2 pm-h2-secao">Contexto econômico</h2>
-<p class="pm-sub">Juros na história, inflação em detalhe, atividade, emprego, contas públicas e o mundo</p>
+<p class="pm-sub">A Selic na história e a inflação em detalhe</p>
 </div>
 
 <template data-if="selicLinhaOk">
@@ -739,7 +763,7 @@
 </article>
 <article class="pm-glass pm-rise pm-card" aria-labelledby="t-ciclo" style="flex: 1 1 300px; gap: 12px; animation-delay: 160ms">
 <h2 id="t-ciclo" class="pm-h2">{{cicloTitulo}}</h2>
-<span style="font-size: 56px; font-weight: 500; letter-spacing: -0.045em; line-height: 1" class="pm-num">{{cicloValor}}</span>
+<span style="font-size: 56px; font-weight: 500; letter-spacing: -0.045em; line-height: 1" class="pm-num pm-conta">{{cicloValor}}</span>
 <p class="pm-cap">{{cicloTxt}}</p>
 <span style="font-size: 13px; color: #c2c2c2; letter-spacing: .02em; margin-top: 4px">Últimas mudanças</span>
 <template data-for="decisoesRecentes" data-as="d">
@@ -766,7 +790,7 @@
 <template data-for="gruposLista" data-as="g">
 <div style="display: flex; flex-direction: column; gap: 4px">
 <div style="display: flex; justify-content: space-between; gap: 8px; font-size: 14px"><span>{{g.nome}} <span style="font-size: 12px; color: #c2c2c2">· {{g.peso}}</span></span><span class="pm-num" style="font-weight: 500">{{g.doze}}</span></div>
-<div style="height: 8px; border-radius: 9999px; background: rgba(255,255,255,.08)"><div style="{{g.barStyle}}"></div></div>
+<div style="height: 8px; border-radius: 9999px; background: rgba(255,255,255,.08)"><div class="pm-fill" style="{{g.barStyle}}"></div></div>
 <span style="font-size: 11px; color: #c2c2c2">{{g.mes}}</span>
 </div>
 </template>
@@ -807,53 +831,6 @@
 </template>
 </div>
 
-<template data-if="economiaCardsOk">
-<div class="pm-cab" style="align-items: center">
-<span style="font-size: 13px; color: #c2c2c2; letter-spacing: .02em">Atividade, emprego, contas públicas e câmbio</span>
-<button type="button" class="{{aj.atividade.cls}}" onClick="{{aj.atividade.toggle}}" aria-expanded="{{aj.atividade.aberto}}" aria-label="O que são estes indicadores?">?</button>
-</div>
-<template data-if="aj.atividade.on"><p class="pm-glass-dark pm-explica" style="margin-top: -8px">{{aj.atividade.txt}}</p></template>
-<div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 16px; margin-top: -6px">
-<template data-for="econCards" data-as="k">
-<article class="pm-glass pm-rise" style="border-radius: 24px; padding: 20px; display: flex; flex-direction: column; gap: 10px; min-width: 0; {{k.cardStyle}}">
-<div style="display: flex; justify-content: space-between; align-items: center; gap: 8px">
-<span style="font-size: 13px; color: #c2c2c2; letter-spacing: .02em">{{k.label}}</span>
-<span class="pm-glass" style="width: 30px; height: 30px; flex: 0 0 auto; border-radius: 9999px; display: flex; align-items: center; justify-content: center"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" style="stroke-width: 1.7; stroke-linecap: round; stroke-linejoin: round" aria-hidden="true"><path d="{{k.icon}}"></path></svg></span>
-</div>
-<div style="font-size: 34px; font-weight: 500; letter-spacing: -0.035em; line-height: 1; font-variant-numeric: tabular-nums">{{k.display}}</div>
-<div style="font-size: 13px; color: #c2c2c2; min-height: 40px">{{k.note}}</div>
-<svg viewBox="0 0 200 40" preserveAspectRatio="none" style="width: 100%; height: 40px; display: block; margin-top: auto" aria-hidden="true">
-<path d="{{k.area}}" fill="{{k.color}}" style="opacity: .12"></path>
-<path class="pm-fade" d="{{k.line}}" fill="none" stroke="{{k.color}}" style="stroke-width: 2; vector-effect: non-scaling-stroke; stroke-linecap: round; stroke-linejoin: round"></path>
-</svg>
-</article>
-</template>
-</div>
-</template>
-
-<template data-if="mercadosMundoOk">
-<article class="pm-glass pm-rise pm-card" aria-labelledby="t-mm" style="animation-delay: 300ms">
-<div class="pm-cab">
-<div>
-<h2 id="t-mm" class="pm-h2">Brasil x EUA</h2>
-<p class="pm-sub">Diferencial de juros e referências do mercado internacional</p>
-</div>
-<button type="button" class="{{aj.cambio.cls}}" onClick="{{aj.cambio.toggle}}" aria-expanded="{{aj.cambio.aberto}}" aria-label="O que é o diferencial?">?</button>
-</div>
-<template data-if="aj.cambio.on"><p class="pm-glass-dark pm-explica">{{aj.cambio.txt}}</p></template>
-<div class="pm-linha" style="align-items: center">
-<div style="display: flex; flex-direction: column; flex: 1 1 220px"><span style="font-size: 56px; font-weight: 500; letter-spacing: -0.045em; line-height: 1; color: #8fb0ff" class="pm-num">{{difTxt}}</span><span style="font-size: 13px; color: #c2c2c2; margin-top: 6px">{{difCaption}}</span></div>
-<div style="display: flex; flex-direction: column; flex: 2 1 320px">
-<template data-for="mundoRows" data-as="r">
-<div class="pm-row" style="display: flex; justify-content: space-between; gap: 10px; padding: 8px 4px; border-top: 1px solid rgba(229,229,229,.10)">
-<div><div style="font-size: 14px; font-weight: 500">{{r.nome}}</div><div style="font-size: 12px; color: #c2c2c2">{{r.nota}}</div></div>
-<span class="pm-num" style="font-size: 15px; white-space: nowrap">{{r.valor}}</span>
-</div>
-</template>
-</div>
-</div>
-</article>
-</template>
 </section>
 </template>
 
@@ -933,80 +910,6 @@
 <div class="pm-rise">
 <h1 id="t-met" class="pm-h1">Metodologia</h1>
 <p style="margin: 8px 0 0; font-size: 15px; color: #c2c2c2">De onde vêm os números e como cada um é calculado</p>
-</div>
-<div class="pm-secao pm-rise">
-<h2 class="pm-h2 pm-h2-secao">Ferramentas</h2>
-<p class="pm-sub">Compare a bolsa com a renda fixa e simule quanto rende o seu dinheiro</p>
-</div>
-<div class="pm-linha">
-<template data-if="comparacaoOk">
-<article class="pm-glass pm-rise pm-card" aria-labelledby="t-comp" style="flex: 2 1 560px; animation-delay: 820ms">
-<div class="pm-cab">
-<div>
-<h2 id="t-comp" class="pm-h2">Bolsa x renda fixa em 10 anos</h2>
-<p class="pm-sub">{{compSub}}</p>
-</div>
-<div class="pm-cab-dir">
-<div class="pm-glass-dark pm-segs" role="group" aria-label="Como comparar">
-<template data-for="compSegs" data-as="sg"><button type="button" class="{{sg.cls}}" onClick="{{sg.pick}}" aria-pressed="{{sg.on}}">{{sg.label}}</button></template>
-</div>
-<button type="button" class="{{aj.comparacao.cls}}" onClick="{{aj.comparacao.toggle}}" aria-expanded="{{aj.comparacao.aberto}}" aria-label="Como ler este gráfico?">?</button>
-</div>
-</div>
-<template data-if="aj.comparacao.on"><p class="pm-glass-dark pm-explica">{{aj.comparacao.txt}}</p></template>
-<svg viewBox="0 0 760 252" style="width: 100%; height: auto; display: block; overflow: visible" role="img" aria-label="{{compAria}}">
-<template data-for="comp.ticks" data-as="t">
-<line x1="52" x2="690" y1="{{t.y}}" y2="{{t.y}}" stroke="rgba(255,255,255,.07)" style="stroke-width: 1"></line>
-<text x="44" y="{{t.ty}}" fill="#c2c2c2" style="font-size: 12px; text-anchor: end">{{t.label}}</text>
-</template>
-<template data-for="comp.xlabels" data-as="xl"><text x="{{xl.x}}" y="246" fill="#c2c2c2" style="font-size: 12px; text-anchor: middle">{{xl.label}}</text></template>
-<template data-for="comp.linhas" data-as="ln">
-<path id="{{ln.id}}" class="{{ln.cls}}" pathLength="1" d="{{ln.d}}" fill="none" stroke="{{ln.cor}}" style="stroke-width: {{ln.largura}}; stroke-linecap: round; stroke-linejoin: round; {{ln.dash}}"></path>
-<circle cx="{{ln.lastX}}" cy="{{ln.lastY}}" r="4" fill="{{ln.cor}}" stroke="#0a0a0a" style="stroke-width: 2"></circle>
-<text x="{{ln.labelX}}" y="{{ln.labelY}}" fill="{{ln.cor}}" style="font-size: 12px; font-weight: 500">{{ln.lastTxt}}</text>
-</template>
-</svg>
-<div class="pm-leg">
-<span><span style="width: 16px; height: 0; border-top: 2.5px solid #8fb0ff"></span>Ibovespa</span>
-<span><span style="width: 16px; height: 0; border-top: 2.5px solid #ededed"></span>CDI</span>
-</div>
-<p class="pm-cap">{{compCaption}}</p>
-</article>
-</template>
-
-<template data-if="calculadoraOk">
-<article class="pm-glass pm-rise pm-card" aria-labelledby="t-calc" style="flex: 1 1 300px; animation-delay: 840ms">
-<div class="pm-cab">
-<div>
-<h2 id="t-calc" class="pm-h2">Quanto rende meu dinheiro</h2>
-<p class="pm-sub">Com as taxas de hoje, já descontado o IR</p>
-</div>
-<button type="button" class="{{aj.calculadora.cls}}" onClick="{{aj.calculadora.toggle}}" aria-expanded="{{aj.calculadora.aberto}}" aria-label="Como a conta é feita?">?</button>
-</div>
-<template data-if="aj.calculadora.on"><p class="pm-glass-dark pm-explica">{{aj.calculadora.txt}}</p></template>
-<div style="display: flex; flex-direction: column; gap: 6px">
-<label for="pm-calc-valor" style="font-size: 13px; color: #c2c2c2">Valor aplicado (R$)</label>
-<div class="pm-glass-dark pm-field"><span style="color: #c2c2c2">R$</span><input id="pm-calc-valor" class="pm-num-input" type="text" inputmode="numeric" value="{{calcValor}}" onInput="{{onCalcValor}}"></div>
-</div>
-<div class="pm-glass-dark pm-segs" role="group" aria-label="Prazo" style="align-self: flex-start">
-<template data-for="calcPrazos" data-as="sg"><button type="button" class="{{sg.cls}}" onClick="{{sg.pick}}" aria-pressed="{{sg.on}}">{{sg.label}}</button></template>
-</div>
-<div aria-live="polite" style="display: flex; flex-direction: column; gap: 12px">
-<template data-for="calcLinhas" data-as="cl">
-<div style="display: flex; flex-direction: column; gap: 4px">
-<div style="display: flex; justify-content: space-between; gap: 8px; font-size: 14px"><span style="font-weight: 500">{{cl.nome}}</span><span class="pm-num" style="font-weight: 500">{{cl.final}}</span></div>
-<div style="height: 8px; border-radius: 9999px; background: rgba(255,255,255,.08)"><div style="{{cl.barStyle}}"></div></div>
-<div style="display: flex; justify-content: space-between; gap: 8px; flex-wrap: wrap; font-size: 12px; color: #c2c2c2"><span>{{cl.nota}}</span><span class="pm-num">{{cl.ganho}}</span></div>
-</div>
-</template>
-</div>
-<p style="margin: 0; font-size: 12px; color: #c2c2c2">{{calcNota}}</p>
-</article>
-</template>
-</div>
-
-<div class="pm-secao">
-<h2 class="pm-h2 pm-h2-secao">Fontes e método</h2>
 </div>
 <div class="pm-linha">
 <article class="pm-glass pm-rise pm-card" aria-labelledby="t-src" style="flex: 3 1 520px; gap: 12px; animation-delay: 100ms">
@@ -1093,6 +996,7 @@
 <script src="js/secoes/economia.js"></script>
 <script src="js/secoes/agenda.js"></script>
 <script src="js/secoes/metodo.js"></script>
+<script src="js/movimento.js"></script>
 <script src="js/painel.js"></script>
 </body>
 </html>

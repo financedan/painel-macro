@@ -25,7 +25,7 @@
 
   const NOMES_FONTES = {
     selic_e_ipca: 'Selic e IPCA', inflacao_mensal: 'IPCA do mês e núcleos', grupos_ipca: 'IPCA por grupo', focus: 'Boletim Focus',
-    ibovespa: 'Ibovespa', comparacao: 'Bolsa x renda fixa', economia: 'Economia', mundo: 'Mundo', tesouro: 'Tesouro Direto',
+    ibovespa: 'Ibovespa', economia: 'Dólar, atividade e dívida', tesouro: 'Tesouro Direto',
   };
 
   // ---------- agenda: Copom, feriados e eventos do manual.json + Focus toda segunda
@@ -82,8 +82,7 @@
         agendaMes: 0, day: hoje.getDate(),
         checks: P.ler('pm-checks-' + F.coleta_ate, [false, false, false, false, false]),
         explica: false, ajuda: {},
-        comp: 'ibov', histInd: 'IPCA', histAno: 1,
-        calcValor: 10000, calcMeses: 24,
+        histInd: 'IPCA', histAno: 1,
         name: salvo || '', nameDraft: salvo || '', askName: salvo === null, primeiraVez: salvo === null, nomePendente: false,  // primeira visita abre na saudação
         vistos: P.ler('pm-alertas-vistos', []),
       };
@@ -234,7 +233,7 @@
 
       // avisos de dado velho: fonte que falhou na última coleta ou coleta parada há dias
       const fontes = this.D.fontes || {};
-      const falhas = Object.keys(fontes).filter((k) => !fontes[k].ok).map((k) => {
+      const falhas = Object.keys(fontes).filter((k) => !fontes[k].ok && NOMES_FONTES[k]).map((k) => {  // só fontes que aparecem no painel
         const quando = fontes[k].atualizado_em ? ' (último dado bom em ' + P.dataHoraBR(fontes[k].atualizado_em).ddmm + ')' : '';
         return (NOMES_FONTES[k] || k) + quando;
       });
@@ -315,6 +314,7 @@
       window.painel = painel;
       const app = document.getElementById('app');
       app.innerHTML = '';  // tira a tela de carregamento
+      painel.depoisDeDesenhar = (raiz) => { if (P.movimento) P.movimento.observar(raiz); };
       Motor.montar(app, document.getElementById('modelo'), painel);
       painel.ligarEventosGlobais();
       if (painel.state.askName) painel.focarNome();
