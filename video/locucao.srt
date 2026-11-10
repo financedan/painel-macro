@@ -1,79 +1,83 @@
 1
 00:00:00,600 --> 00:00:04,800
-Selic em 13,75%. Inflação de 4,58% em 12 meses.
+Juros de 13,75%. Inflação de 4,58%, acima do teto da meta.
 
 2
 00:00:05,000 --> 00:00:09,500
-O que esses números dizem sobre o Brasil agora?
+Você sabe o que esses números dizem sobre o seu dinheiro?
 
 3
-00:00:10,300 --> 00:00:14,400
-O Painel Macro Brasil reúne juros, inflação, expectativas e bolsa em um só lugar, com dados oficiais.
+00:00:10,300 --> 00:00:12,400
+Este é o Painel Macro Brasil. Dados oficiais, em um só lugar.
 
 4
-00:00:14,700 --> 00:00:17,300
-Na visão geral, os números do dia.
+00:00:12,700 --> 00:00:14,500
+Ele te recebe pelo nome…
 
 5
-00:00:18,000 --> 00:00:20,400
-São cinco abas, da visão geral à metodologia.
+00:00:15,000 --> 00:00:18,200
+e os números ganham vida na sua frente.
 
 6
-00:00:20,800 --> 00:00:25,000
-E cada bloco mostra de onde vêm os dados.
+00:00:18,400 --> 00:00:20,400
+Quatro abas: visão geral, expectativas, agenda e metodologia.
 
 7
-00:00:25,600 --> 00:00:29,300
-O juro real, a Selic descontada a inflação, está em 8,77%. No ranking de 40 países, o Brasil é o primeiro.
+00:00:20,800 --> 00:00:25,000
+Dezenove blocos de informação. Todos com fonte oficial.
 
 8
-00:00:29,600 --> 00:00:31,600
-Em 2020, ele chegou a ficar negativo.
+00:00:25,600 --> 00:00:29,300
+O juro real está em 8,77%. O Brasil lidera o ranking mundial, entre 40 países.
 
 9
-00:00:32,200 --> 00:00:37,500
-A inflação de 12 meses está em 4,58%, acima do teto da meta.
+00:00:29,600 --> 00:00:31,600
+Mas em 2020 ele ficou negativo.
 
 10
-00:00:38,200 --> 00:00:43,500
-Em uma semana, o mercado elevou a Selic esperada para o fim de 2027 de 11,75% para 12,50%.
+00:00:32,200 --> 00:00:37,500
+A inflação de 12 meses chegou a 4,58% e estourou o teto da meta.
 
 11
-00:00:44,200 --> 00:00:47,200
-O Ibovespa está 19,4% abaixo da máxima histórica, de outubro.
+00:00:38,200 --> 00:00:43,500
+Em uma semana, o mercado desistiu de cortar a Selic em 2026: a aposta subiu de 13,50% para 13,75%.
 
 12
-00:00:47,600 --> 00:00:50,000
-E a volatilidade está maior que em 98% dos pregões desde 2000.
+00:00:44,200 --> 00:00:47,200
+O Ibovespa está 17,6% abaixo do recorde de outubro.
 
 13
-00:00:50,500 --> 00:00:54,000
-No painel, você navega pelas abas,
+00:00:47,600 --> 00:00:50,000
+E a bolsa está nervosa: oscila mais que em 98% dos pregões desde 2000.
 
 14
-00:00:54,600 --> 00:00:58,300
-escolhe o indicador e o ano,
+00:00:50,500 --> 00:00:54,000
+Um clique e você está nas expectativas do mercado.
 
 15
-00:00:58,600 --> 00:01:01,900
-muda o período,
+00:00:54,600 --> 00:00:58,300
+Troque o indicador, mude o ano e veja a aposta mudar.
 
 16
-00:01:02,200 --> 00:01:06,100
-e compara a bolsa com o CDI em reais, sem a inflação ou em dólar.
+00:00:58,600 --> 00:01:01,900
+Volte no tempo, até 2017.
 
 17
-00:01:06,400 --> 00:01:10,100
-O modo explicativo mostra o que cada bloco significa e de onde vêm os dados.
+00:01:02,200 --> 00:01:06,100
+E se a Selic cair? Simule e veja o juro real mudar.
 
 18
-00:01:10,800 --> 00:01:15,900
-Os dados estão disponíveis.
+00:01:06,400 --> 00:01:10,100
+Ficou com dúvida? Toque no ponto de interrogação e entenda cada número.
 
 19
-00:01:16,200 --> 00:01:20,500
-Explore os indicadores, compare períodos e tire suas próprias conclusões.
+00:01:10,800 --> 00:01:15,900
+Dados oficiais, atualizados todo dia útil.
 
 20
+00:01:16,200 --> 00:01:20,500
+Explore, compare e tire suas próprias conclusões.
+
+21
 00:01:21,000 --> 00:01:24,500
 Painel Macro Brasil.
