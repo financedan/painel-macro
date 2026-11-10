@@ -113,14 +113,12 @@
       if (this.atualizar) this.atualizar();
     }
 
-    // números sobem do zero só na primeira entrada (e nunca com "menos movimento")
+    // números sobem do zero toda vez que a Visão geral abre
     animateIn() {
       if (this._raf) cancelAnimationFrame(this._raf);
-      if (this.props.movimento === false || this.animou) { this.setState({ p: 1 }); return; }
-      this.animou = true;
       const inicio = performance.now();
       const passo = (agora) => {
-        const t = Math.min(1, (agora - inicio) / 1400);
+        const t = Math.min(1, (agora - inicio) / 2200);
         this.setState({ p: t });
         if (t < 1) this._raf = requestAnimationFrame(passo);
       };
@@ -243,7 +241,7 @@
       if (falhas.length) avisos.push('Não foi possível atualizar na última coleta: ' + falhas.join('; ') + '. O painel mostra o último dado disponível.');
 
       const vals = {
-        rootClass: this.props.movimento !== false ? 'pm-root' : 'pm-root pm-still',
+        rootClass: this.props.movimento !== false ? 'pm-root' : 'pm-root pm-suave',
         nav: nav, views: VIEWS.length,
         isVisao: s.view === 'visao', isFocus: s.view === 'expectativas', isEconomia: s.view === 'economia', isAgenda: s.view === 'agenda', isMetodo: s.view === 'metodologia',
         askName: s.askName, showPanel: !s.askName,

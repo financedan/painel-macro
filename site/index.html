@@ -215,7 +215,7 @@
 <rect x="{{b.x}}" y="{{b.y}}" width="{{b.w}}" height="{{b.h}}" rx="10" fill="#8fb0ff" style="opacity: .45; filter: blur(12px)"></rect>
 </template>
 <rect class="{{b.cls}}" x="{{b.x}}" y="{{b.y}}" width="{{b.w}}" height="{{b.h}}" rx="10" fill="{{b.fill}}" stroke="rgba(255,255,255,.38)" style="{{b.style}}" tabindex="0" role="button" aria-label="{{b.aria}}" onMouseEnter="{{b.enter}}" onClick="{{b.enter}}" onFocus="{{b.enter}}"></rect>
-<text class="pm-fade" x="{{b.cx}}" y="{{b.ly}}" fill="#ededed" style="{{b.labelStyle}}">{{b.valueTxt}}</text>
+<text class="pm-fade pm-conta" x="{{b.cx}}" y="{{b.ly}}" fill="#ededed" style="{{b.labelStyle}}">{{b.valueTxt}}</text>
 <text x="{{b.cx}}" y="280" fill="#c2c2c2" style="font-size: 12px; text-anchor: middle">{{b.year}}</text>
 </g>
 </template>
@@ -323,7 +323,7 @@
 <div style="position: relative; height: 10px; border-radius: 9999px; background: rgba(255,255,255,.08)">
 <div style="position: absolute; top: 0; bottom: 0; left: 25%; width: 50%; border-radius: 9999px; background: rgba(237,237,237,.16)"></div>
 <div style="position: absolute; top: -3px; bottom: -3px; left: 50%; width: 2px; margin-left: -1px; background: rgba(237,237,237,.7)"></div>
-<div class="pm-rise" style="{{an.dotStyle}}"></div>
+<div class="pm-desliza" style="{{an.dotStyle}}"></div>
 </div>
 </div>
 </template>
@@ -360,7 +360,7 @@
 <template data-for="ibovBars" data-as="b">
 <g>
 <rect class="{{b.cls}}" x="{{b.x}}" y="{{b.y}}" width="{{b.w}}" height="{{b.h}}" rx="10" fill="{{b.fill}}" stroke="rgba(255,255,255,.38)" style="{{b.style}}" tabindex="0" role="button" aria-label="{{b.aria}}" onMouseEnter="{{b.enter}}" onClick="{{b.enter}}" onFocus="{{b.enter}}"></rect>
-<text class="pm-fade" x="{{b.cx}}" y="{{b.ly}}" fill="#ededed" style="{{b.labelStyle}}">{{b.valueTxt}}</text>
+<text class="pm-fade pm-conta" x="{{b.cx}}" y="{{b.ly}}" fill="#ededed" style="{{b.labelStyle}}">{{b.valueTxt}}</text>
 <text x="{{b.cx}}" y="280" fill="#c2c2c2" style="font-size: 12px; text-anchor: middle">{{b.year}}</text>
 </g>
 </template>
@@ -482,7 +482,7 @@
 </div>
 <div style="position: relative; height: 8px; border-radius: 9999px; background: rgba(255,255,255,.10)">
 <div style="{{simNeutroStyle}}"></div>
-<div style="{{simMarkerStyle}}"></div>
+<div class="pm-desliza" style="{{simMarkerStyle}}"></div>
 </div>
 <div style="position: relative; height: 16px; font-size: 11px; color: #c2c2c2"><span style="position: absolute; left: 0">−5%</span><span style="{{simNeutroLabelStyle}}">{{simNeutroLabel}}</span><span style="position: absolute; right: 0">15%</span></div>
 <p class="pm-cap">{{simDesc}}</p>
@@ -671,7 +671,7 @@
 <div style="position: relative; height: 8px; border-radius: 9999px; background: rgba(255,255,255,.08)">
 <div class="pm-fill" style="{{r.faixaStyle}}"></div>
 <div style="{{reunioesHojeStyle}}"></div>
-<div style="{{r.dotStyle}}"></div>
+<div class="pm-desliza" style="{{r.dotStyle}}"></div>
 </div>
 <span style="font-size: 11px; color: #c2c2c2">{{r.sub}}</span>
 </div>
