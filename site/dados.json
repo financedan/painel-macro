@@ -1,5 +1,5 @@
 {
-  "atualizado_em": "2026-11-09T22:36-03:00",
+  "atualizado_em": "2026-11-09T22:40-03:00",
   "selic": {
     "valor": 13.75,
     "data": "2026-11-09",
@@ -7418,31 +7418,31 @@
   "fontes": {
     "selic_e_ipca": {
       "ok": true,
-      "atualizado_em": "2026-11-09T22:36-03:00"
+      "atualizado_em": "2026-11-09T22:40-03:00"
     },
     "inflacao_mensal": {
       "ok": true,
-      "atualizado_em": "2026-11-09T22:36-03:00"
+      "atualizado_em": "2026-11-09T22:40-03:00"
     },
     "grupos_ipca": {
       "ok": true,
-      "atualizado_em": "2026-11-09T22:36-03:00"
+      "atualizado_em": "2026-11-09T22:40-03:00"
     },
     "focus": {
       "ok": true,
-      "atualizado_em": "2026-11-09T22:36-03:00"
+      "atualizado_em": "2026-11-09T22:40-03:00"
     },
     "ibovespa": {
       "ok": true,
-      "atualizado_em": "2026-11-09T22:36-03:00"
+      "atualizado_em": "2026-11-09T22:40-03:00"
     },
     "comparacao": {
       "ok": true,
-      "atualizado_em": "2026-11-09T22:36-03:00"
+      "atualizado_em": "2026-11-09T22:40-03:00"
     },
     "economia": {
       "ok": true,
-      "atualizado_em": "2026-11-09T22:36-03:00"
+      "atualizado_em": "2026-11-09T22:40-03:00"
     },
     "mundo": {
       "ok": false,
@@ -7451,7 +7451,7 @@
     },
     "tesouro": {
       "ok": true,
-      "atualizado_em": "2026-11-09T22:36-03:00"
+      "atualizado_em": "2026-11-09T22:40-03:00"
     }
   },
   "erros": [
