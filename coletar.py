@@ -3,13 +3,12 @@ coletar.py — busca os dados do Painel Macro Brasil e salva em site/dados.json
 
 Fontes (todas gratuitas, sem chave):
   - Banco Central, SGS ......... Selic (432), IPCA 12m (13522), IPCA do mês (433), núcleos do IPCA (EX0, EX3, MS, DP, P55),
-                                 CDI (12), dólar (1), TR (7811), IBC-Br (24364), desemprego (24369),
+                                 dólar (1), TR (7811), IBC-Br (24364), desemprego (24369),
                                  dívida bruta (13762), IGP-M (189)
   - Banco Central, Olinda ...... Boletim Focus (anuais, inflação 12 meses e Selic por reunião)
   - IBGE, SIDRA ................ IPCA por grupo (tabela 7060)
   - Tesouro Transparente ....... taxas do Tesouro Direto (juro real de mercado e inflação implícita)
   - B3 ......................... Ibovespa (estatísticas oficiais do índice)
-  - FRED (Fed de St. Louis) .... Fed funds, Treasuries de 3 meses e 10 anos, Brent (EIA), inflação dos EUA (BLS)
 
 Também gera: site/leituras.json (a partir de leituras/*.md), site/resumos.json, site/feed.xml,
 site/img/og.png (prévia de link com os números do dia) e as meta tags do site/index.html.
@@ -24,7 +23,6 @@ import csv
 import io
 import json
 import math
-import os
 import re
 import sys
 import time
@@ -479,42 +477,6 @@ def fim_de_mes(pares):
     return saida
 
 
-def coletar_comparacao():
-    """Ibovespa (B3) x CDI (BC) em 10 anos (base 100), e o Ibovespa em dólar e descontada a inflação."""
-    print("Bolsa x renda fixa (B3 + Banco Central)...")
-    inicio = inicio_10_anos()
-    cdi = serie_sgs(12, inicio)  # % ao dia
-    dolar = fim_de_mes(serie_sgs(1, inicio))
-    ipca = {mes_txt(d): v for d, v in serie_sgs(433, inicio)}
-    ibov = fim_de_mes(sem_pregao_em_andamento(ibovespa_b3()))
-
-    indice_cdi, fator = {}, 1.0
-    for d, v in cdi:
-        fator *= 1 + v / 100
-        indice_cdi[mes_txt(d)] = fator
-
-    meses = sorted(m for m in ibov if m in indice_cdi and m in dolar and m >= mes_txt(inicio))
-    if len(meses) < 24:
-        raise RuntimeError("Poucos meses em comum entre Ibovespa, CDI e dólar.")
-    base = meses[0]
-    indice_ipca, f = {}, 1.0
-    for m in meses[1:]:
-        f *= 1 + ipca.get(m, 0) / 100
-        indice_ipca[m] = f
-    indice_ipca[base] = 1.0
-
-    serie = []
-    for m in meses:
-        serie.append({
-            "mes": m,
-            "ibov": arredondar(ibov[m] / ibov[base] * 100, 1),
-            "cdi": arredondar(indice_cdi[m] / indice_cdi[base] * 100, 1),
-            "ibov_real": arredondar(ibov[m] / ibov[base] / indice_ipca[m] * 100, 1),
-            "ibov_dolar": arredondar((ibov[m] / dolar[m]) / (ibov[base] / dolar[base]) * 100, 1),
-        })
-    return {"comparacao": {"base": base, "serie": serie, "cdi_hoje": cdi[-1][1], "cdi_data": cdi[-1][0].isoformat()}}
-
-
 def coletar_economia():
     print("Economia real (Banco Central)...")
     hoje = hoje_br()
@@ -545,69 +507,6 @@ def coletar_economia():
             "tr_mes": {"mes": mes_txt(tr[-1][0]), "valor": tr[-1][1]},
         }
     }
-
-
-# ---------------------------------------------------------------- EUA e petróleo (fonte: FRED, Federal Reserve de St. Louis)
-FRED_API = "https://api.stlouisfed.org/fred/series/observations"   # API oficial (precisa da chave FRED_API_KEY)
-FRED_CSV = "https://fred.stlouisfed.org/graph/fredgraph.csv"        # reserva: download de gráfico do site
-SERIES_FRED = {
-    "fed_funds": ("DFF", "Fed funds efetiva (Federal Reserve)"),
-    "tbill3m": ("DGS3MO", "Título do Tesouro americano de 3 meses (U.S. Treasury)"),
-    "treasury10": ("DGS10", "Título do Tesouro americano de 10 anos (U.S. Treasury)"),
-    "brent": ("DCOILBRENTEU", "Petróleo Brent, preço à vista (EIA)"),
-}
-
-
-def serie_fred_api(codigo, inicio, chave):
-    """Busca a série na API oficial do FRED. A chave nunca aparece nas mensagens de erro."""
-    params = {"series_id": codigo, "observation_start": inicio.isoformat(), "file_type": "json", "api_key": chave}
-    ultimo = ""
-    for tentativa in range(3):
-        try:
-            r = requests.get(FRED_API, params=params, headers=CABECALHO, timeout=60)
-            if r.status_code == 200:
-                return [(date.fromisoformat(o["date"]), float(o["value"]))
-                        for o in r.json().get("observations", []) if o.get("value") not in (None, "", ".")]
-            ultimo = f"HTTP {r.status_code}"
-        except Exception as erro:
-            ultimo = type(erro).__name__
-        print(f"  API do FRED, tentativa {tentativa + 1} falhou ({codigo}): {ultimo}")
-        if tentativa < 2:
-            time.sleep(2 ** (tentativa + 1))
-    raise RuntimeError(f"A API do FRED não respondeu para {codigo} ({ultimo}).")
-
-
-def serie_fred(codigo, inicio):
-    chave = os.environ.get("FRED_API_KEY", "").strip()
-    pares = []
-    if chave:
-        try:
-            pares = serie_fred_api(codigo, inicio, chave)
-        except RuntimeError as erro:
-            print(f"  {erro} Tentando o download do site do FRED.")
-    if not pares:
-        texto = baixar(FRED_CSV, {"id": codigo, "cosd": inicio.isoformat()}, como="texto")
-        for linha in texto.strip().splitlines()[1:]:
-            dia, _, valor = linha.partition(",")
-            if valor and valor != ".":
-                pares.append((date.fromisoformat(dia), float(valor)))
-    if not pares:
-        raise RuntimeError(f"O FRED não devolveu dados de {codigo}.")
-    return pares
-
-
-def coletar_mundo():
-    print("EUA e petróleo (FRED)...")
-    hoje = hoje_br()
-    saida = {}
-    for chave, (codigo, nome) in SERIES_FRED.items():
-        d, v = serie_fred(codigo, hoje - timedelta(days=30))[-1]
-        saida[chave] = {"valor": arredondar(v), "data": d.isoformat(), "serie": codigo, "nome": nome}
-    cpi = serie_fred("CPIAUCSL", hoje - timedelta(days=500))
-    (d_ant, v_ant), (d_cpi, v_cpi) = cpi[-13], cpi[-1]
-    saida["inflacao_eua"] = {"valor": arredondar((v_cpi / v_ant - 1) * 100), "mes": mes_txt(d_cpi), "serie": "CPIAUCSL",
-                             "nome": "Inflação ao consumidor dos EUA em 12 meses (CPI, BLS)"}
-    return {"mundo": saida}
 
 
 # ---------------------------------------------------------------- Tesouro Direto
@@ -674,10 +573,8 @@ def validar(dados):
     checar("ibovespa", lambda: dados["ibovespa"]["fechamento"] > 1000
            and len(dados["ibovespa"]["ultimos_dias"]) >= 6
            and len(dados["ibovespa"]["por_ano"]) >= 10, "Ibovespa com dados insuficientes")
-    checar("comparacao", lambda: len(dados["comparacao"]["serie"]) >= 24, "Comparação curta")
     checar("tesouro", lambda: 0 < dados["tesouro"]["atual"]["real"] < 20, "Taxa real fora de 0–20%")
     checar("economia", lambda: 1 < dados["economia"]["dolar"]["valor"] < 20, "Dólar fora de R$ 1–20")
-    checar("mundo", lambda: 0 <= dados["mundo"]["fed_funds"]["valor"] < 20, "Fed funds fora de 0–20%")
     return problemas
 
 
@@ -872,9 +769,7 @@ COLETORES = [
     (coletar_grupos_ipca, ["ipca_grupos"]),
     (coletar_focus, ["focus"]),
     (coletar_ibovespa, ["ibovespa"]),
-    (coletar_comparacao, ["comparacao"]),
     (coletar_economia, ["economia"]),
-    (coletar_mundo, ["mundo"]),
     (coletar_tesouro, ["tesouro"]),
 ]
 

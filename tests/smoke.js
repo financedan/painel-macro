@@ -75,7 +75,16 @@ const checar = (cond, msg) => { console.log((cond ? '  ok   ' : '  FALHOU ') + m
   checar((await p.$$('article.pm-glass')).length >= 14, 'visão geral tem os blocos principais');
   checar(await p.isVisible('nav.pm-topnav') && await p.isVisible('nav.pm-dock'), 'no computador: abas no topo e barra lateral (layout original)');
   checar((await p.$$('nav.pm-topnav a')).length === 4, 'quatro abas: Visão geral, Expectativas, Agenda e Metodologia');
-  checar(!(await p.$('#t-comp')) && !(await p.$('#t-calc')), 'visão geral sem os blocos que foram para outras abas');
+  checar(!(await p.$('#t-comp')) && !(await p.$('#t-calc')) && !(await p.$('#t-mm')), 'sem Bolsa x CDI, calculadora e Brasil x EUA');
+  const econ = await p.$$eval('main article', (as) => as.map((a) => a.textContent));
+  checar(['Dólar (PTAX)', 'Atividade (IBC-Br)', 'Dívida bruta'].every((n) => econ.some((x) => x.includes(n))), 'visão geral tem dólar, atividade e dívida bruta');
+  checar(!econ.some((x) => x.includes('Desocupação (PNAD)') || x.includes('IGP-M em 12 meses')), 'sem desocupação e IGP-M');
+  // animação ao rolar: bloco no fim da página espera fora da tela e aparece quando chega nela
+  const ultimo = 'article[aria-labelledby="t-note"]';
+  checar(await p.$eval(ultimo, (a) => a.classList.contains('js-revela') && !a.classList.contains('js-visto')), 'bloco fora da tela espera a rolagem para animar');
+  await p.$eval(ultimo, (a) => a.scrollIntoView()); await p.waitForTimeout(600);
+  checar(await p.$eval(ultimo, (a) => a.classList.contains('js-visto')), 'bloco aparece ao rolar até ele');
+  await p.evaluate(() => window.scrollTo(0, 0));
 
   // alertas: abre, fecha com Esc e com clique fora; selo some depois de visto
   await p.click('button[aria-label^="Alertas"][aria-controls]'); await espera(p);
@@ -111,11 +120,6 @@ const checar = (cond, msg) => { console.log((cond ? '  ok   ' : '  FALHOU ') + m
   checar(!/NaN|undefined|null/.test(corpo), 'nenhum NaN/undefined/null na visão geral');
   checar(/último corte em 16\/09/.test(corpo), 'data do último corte da Selic é 16/09 (corrigida)');
 
-  // calculadora (fica na Metodologia)
-  await p.click('nav.pm-topnav a[href="#metodologia"]'); await espera(p);
-  await p.fill('#pm-calc-valor', '5000'); await espera(p);
-  checar((await p.textContent('#t-calc >> xpath=ancestor::article')).includes('R$ 5.'), 'calculadora recalcula com o valor digitado');
-  await p.click('nav.pm-topnav a[href="#visao"]'); await espera(p);
 
   // navegação por endereço e botão Voltar
   // fontes ficam na Metodologia e no rodapé, não dentro dos blocos
@@ -129,10 +133,10 @@ const checar = (cond, msg) => { console.log((cond ? '  ok   ' : '  FALHOU ') + m
     checar(!/NaN|undefined|null/.test(txt), 'nenhum NaN/undefined/null em #' + v);
   }
   await p.click('nav.pm-topnav a[href="#expectativas"]'); await espera(p);
-  checar(!!(await p.$('#t-sl')) && !!(await p.$('#t-grp')) && !!(await p.$('#t-mm')), 'conteúdo da antiga aba Economia está em Expectativas');
+  checar(!!(await p.$('#t-sl')) && !!(await p.$('#t-grp')) && !(await p.$('#t-mm')), 'Selic na história e IPCA por grupo em Expectativas, sem Brasil x EUA');
   await p.click('nav.pm-topnav a[href="#metodologia"]'); await espera(p);
-  checar(!!(await p.$('#t-comp')) && !!(await p.$('#t-calc')), 'bolsa x CDI e calculadora estão na Metodologia');
-  checar((await p.$$('article[aria-labelledby="t-refs"] a[href^="http"]')).length >= 20, 'Metodologia lista todas as fontes com link');
+  checar(!(await p.$('#t-comp')) && !(await p.$('#t-calc')) && !/Ferramentas/.test(await p.textContent('main')), 'Metodologia sem a seção Ferramentas');
+  checar((await p.$$('article[aria-labelledby="t-refs"] a[href^="http"]')).length >= 15, 'Metodologia lista todas as fontes com link');
   await p.goto(base + '#economia'); await espera(p);
   checar(await p.isVisible('#t-focus'), 'link antigo #economia abre Expectativas');
   checar(!/yahoo|yfinance/i.test(await p.content()), 'nenhuma referência ao Yahoo no site');
@@ -192,15 +196,13 @@ const checar = (cond, msg) => { console.log((cond ? '  ok   ' : '  FALHOU ') + m
   console.log('Fonte faltando');
   srv.close();
   const dados = JSON.parse(fs.readFileSync(path.join(RAIZ, 'dados.json'), 'utf8'));
-  delete dados.tesouro; delete dados.comparacao; delete dados.economia;
+  delete dados.tesouro; delete dados.economia;
   dados.fontes = Object.assign({}, dados.fontes, { tesouro: { ok: false, atualizado_em: '2026-11-01T19:00-03:00', erro: 'teste' } });
   const srv2 = await servidor({ '/dados.json': JSON.stringify(dados) });
   ({ ctx, p } = await nova());
   await p.goto('http://localhost:' + srv2.address().port + '/', { waitUntil: 'networkidle' });
   checar(await p.isVisible('#t-overview'), 'painel abre mesmo sem algumas fontes');
-  await p.goto('http://localhost:' + srv2.address().port + '/#metodologia'); await p.waitForSelector('#t-met');
-  checar(!(await p.isVisible('#t-comp')) && await p.isVisible('#t-src'), 'bloco sem dados some, sem quebrar o resto');
-  await p.goto('http://localhost:' + srv2.address().port + '/'); await p.waitForSelector('#t-overview');
+  checar(!(await p.$('text=Dólar (PTAX)')) && await p.isVisible('#t-bars'), 'bloco sem dados some, sem quebrar o resto');
   checar(await p.isVisible('text=Não foi possível atualizar na última coleta'), 'avisa a fonte que falhou');
   await ctx.close();
   srv2.close();

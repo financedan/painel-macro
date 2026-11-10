@@ -91,8 +91,11 @@
   }
 
   function atualizarNo(velho, novo) {
+    // classes "js-..." são postas pelo movimento.js (ex.: bloco já revelado) e sobrevivem ao redesenho
+    const js = velho.classList ? Array.from(velho.classList).filter((c) => c.startsWith('js-')) : [];
     for (const at of Array.from(velho.attributes)) if (!novo.hasAttribute(at.name)) velho.removeAttribute(at.name);
     for (const at of Array.from(novo.attributes)) if (velho.getAttribute(at.name) !== at.value) velho.setAttribute(at.name, at.value);
+    js.forEach((c) => velho.classList.add(c));
     velho.__on = novo.__on;
     for (const tipo in novo.__on) ouvir(velho, tipo);
     if (novo.localName === 'input') {
@@ -123,6 +126,7 @@
         const nova = document.createElement('div');
         filhos(modelo).forEach((f) => montar(f, valores, nova));
         comparar(raiz, nova);
+        if (componente.depoisDeDesenhar) componente.depoisDeDesenhar(raiz);
       };
       componente.atualizar = () => {
         if (!agendado) { agendado = true; requestAnimationFrame(desenhar); }

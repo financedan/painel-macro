@@ -20,10 +20,10 @@ As duas versões usam frames reais do painel e os mesmos dados da captura.
 
 | Aba | Conteúdo |
 |---|---|
-| Visão geral | Selic, IPCA, juro real, juro real esperado, Focus, Ibovespa; juro real por ano, próximo Copom, inflação contra a meta (com contador da meta contínua), ancoragem, Ibovespa por ano, últimos pregões, volatilidade, simulador, Brasil no mundo, leitura da semana |
-| Expectativas | Boletim Focus com a faixa de respostas, trajetória do juro real (com o ex-ante), histórico semanal, Selic por reunião, Tesouro IPCA+ e inflação implícita, perguntas; e o contexto econômico: Selic desde 2017, IPCA por grupo, núcleos, dólar, IBC-Br, desocupação, dívida, IGP-M, Brasil x EUA |
+| Visão geral | Selic, IPCA, juro real, juro real esperado, Focus, Ibovespa; juro real por ano, próximo Copom, inflação contra a meta (com contador da meta contínua), ancoragem, Ibovespa por ano, últimos pregões, dólar, atividade (IBC-Br) e dívida bruta, volatilidade, simulador, Brasil no mundo, leitura da semana |
+| Expectativas | Boletim Focus com a faixa de respostas, trajetória do juro real (com o ex-ante), histórico semanal, Selic por reunião, Tesouro IPCA+ e inflação implícita, perguntas; e o contexto econômico: Selic desde 2017, IPCA por grupo e núcleos |
 | Agenda | Copom, atas, Focus e feriados, com navegação entre meses e exportação para a sua agenda (.ics) |
-| Metodologia | Ferramentas (bolsa x CDI em 10 anos e calculadora de rendimento), fontes com o status da última coleta e links, fórmulas, juro neutro, glossário, como citar e download dos dados em CSV |
+| Metodologia | Fontes com o status da última coleta e links, fórmulas, juro neutro, glossário, como citar e download dos dados em CSV |
 
 Cada bloco tem um botão **?** com uma explicação simples. As fontes de cada indicador ficam na aba Metodologia e no rodapé.
 
@@ -36,7 +36,7 @@ site/manual.json (você edita) ────────────────�
 leituras/AAAA-MM-DD.md (você escreve) → site/leituras.json ───┘
 ```
 
-- `coletar.py` busca os dados só em fontes oficiais: Banco Central (SGS e Focus), IBGE (SIDRA), B3 (Ibovespa), Tesouro Transparente e FRED, do Federal Reserve de St. Louis (EUA e petróleo).
+- `coletar.py` busca os dados só em fontes oficiais: Banco Central (SGS e Focus), IBGE (SIDRA), B3 (Ibovespa) e Tesouro Transparente.
   Se uma fonte falhar, mantém o último dado bom dela, e o site avisa o visitante que aquele dado pode estar defasado.
   Antes de salvar, confere se os números fazem sentido (ex.: Selic entre 0 e 40%).
 - O robô também gera a imagem de prévia do link (`site/img/og.png`, com os números do dia), o `feed.xml` e as meta tags.
@@ -73,16 +73,14 @@ as fontes. Os testes falham se um dado manual não tiver link.
 
 | Informação | Fonte |
 |---|---|
-| Selic, IPCA, núcleos, CDI, dólar, TR, IBC-Br, desocupação, dívida, IGP-M | Banco Central, SGS (IBGE e FGV via BC) |
+| Selic, IPCA, núcleos, dólar, IBC-Br e dívida bruta | Banco Central, SGS (IPCA do IBGE via BC) |
 | Expectativas | Banco Central, Boletim Focus (API Olinda) |
 | IPCA por grupo | IBGE, SIDRA tabela 7060 |
 | Ibovespa | B3 (estatísticas oficiais do índice) |
 | Juro real de mercado e inflação implícita | Tesouro Nacional, Tesouro Transparente |
-| Juros dos EUA, inflação dos EUA, Brent | FRED (Federal Reserve, U.S. Treasury, BLS, EIA) |
 | Juro neutro de 5,00% e definição de Selic real ex-ante | BC, Relatório de Política Monetária, set/2026, p. 80 |
 | Média dos núcleos (EX0, EX3, MS, DP, P55) | BC, RPM set/2026, p. 36, e Nota Técnica nº 57 |
 | Meta e meta contínua | BC (histórico das metas) e Decreto nº 12.079/2024 |
-| Poupança, IR e custódia | Lei nº 12.703/2012, Lei nº 11.033/2004 e B3 (tarifação do Tesouro Direto) |
 | Calendário do Copom e feriados | BC (calendário do Copom) e B3 (calendário de negociação) |
 | Ranking mundial de juro real | Moneyou, via Agência Brasil |
 
@@ -111,12 +109,6 @@ mostra um resumo automático do Focus.
 
 1. **Settings → Pages → Build and deployment → Source: GitHub Actions.**
 2. Pronto: o workflow `Publicar site` publica a pasta `site/` a cada mudança na `main` e depois de cada coleta.
-
-### Chave do FRED (EUA e petróleo)
-
-O robô usa a API oficial do FRED com a chave grátis salva no segredo `FRED_API_KEY`
-(**Settings → Secrets and variables → Actions**; a chave sai em fredaccount.stlouisfed.org → API Keys).
-Sem a chave, ele tenta o download de gráfico do site do FRED, que costuma não responder a robôs.
 
 ### Avisos no Telegram (opcional)
 

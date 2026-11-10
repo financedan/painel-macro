@@ -7,9 +7,9 @@
   const TITULOS = {
     kpis: 'Selic, IPCA e juro real', juroReal: 'Juro real', neutro: 'Juro neutro', copom: 'Copom', focus: 'Boletim Focus', meta: 'Meta de inflação',
     ancoragem: 'Ancoragem', ibov: 'Ibovespa', medo: 'Volatilidade', simulador: 'Fórmula de Fisher', mundo: 'Juro real no mundo', leitura: 'Leitura da semana',
-    comparacao: 'Bolsa x CDI', calculadora: 'Calculadora de rendimento', tesouro: 'Tesouro IPCA+ e inflação implícita', exante: 'Ex-ante e ex-post',
+    tesouro: 'Tesouro IPCA+ e inflação implícita', exante: 'Ex-ante e ex-post',
     reunioes: 'Focus por reunião', historico: 'Histórico do Focus', grupos: 'Grupos do IPCA', nucleos: 'Núcleos de inflação', selicLinha: 'Ciclos da Selic',
-    atividade: 'IBC-Br, desemprego e dívida', cambio: 'Diferencial de juros',
+    atividade: 'Dólar, IBC-Br e dívida bruta',
   };
 
   S.metodo = (c) => {
@@ -25,10 +25,8 @@
       ['IPCA por grupo', f('grupos'), 'Mensal', D.ipca_grupos ? P.mesLongo(D.ipca_grupos.mes) : '—', 'grupos_ipca'],
       ['Expectativas de mercado', f('focus', 'focusApi'), 'Semanal', 'Coleta até ' + dt(D.focus.coleta_ate), 'focus'],
       ['Ibovespa e volatilidade', f('ibov'), 'Diária', P.fmtPts(c.B.fechamento) + ' pontos em ' + P.ddmmaaaa(c.ibovData), 'ibovespa'],
-      ['CDI e dólar', f('cdi', 'dolar'), 'Diária', D.comparacao ? 'CDI até ' + dt(D.comparacao.cdi_data) : '—', 'comparacao'],
-      ['Atividade, desocupação, dívida, IGP-M e TR', f('ibcbr', 'desemprego', 'divida', 'igpm', 'tr'), 'Mensal', D.economia ? 'Dólar ' + P.reais(D.economia.dolar.valor) + ' em ' + P.ddmm(P.dia(D.economia.dolar.data)) : '—', 'economia'],
+      ['Dólar, atividade e dívida', f('dolar', 'ibcbr', 'divida'), 'Diária e mensal', D.economia ? 'Dólar ' + P.reais(D.economia.dolar.valor) + ' em ' + P.ddmm(P.dia(D.economia.dolar.data)) : '—', 'economia'],
       ['Tesouro Direto', f('tesouro'), 'Diária', D.tesouro ? 'Taxas de ' + dt(D.tesouro.atual.data) : '—', 'tesouro'],
-      ['EUA e petróleo', f('fedFunds', 'tbill', 'treasury10', 'brent', 'cpiEua'), 'Diária e mensal', D.mundo && D.mundo.fed_funds ? 'Fed funds em ' + dt(D.mundo.fed_funds.data) : '—', 'mundo'],
       ['Calendário do Copom', [{ t: M.copom_fonte.texto, url: M.copom_fonte.url, sep: false, alvo: '_blank' }], 'Manual', 'Conferido em ' + dt(M.copom_fonte.conferido_em), null],
       ['Feriados e dias sem pregão', [{ t: 'B3, calendário de negociação', url: M.feriados_fonte.url, sep: false, alvo: '_blank' }], 'Manual', 'Conferido em ' + dt(M.feriados_fonte.conferido_em) + '; 2027 previsto', null],
       ['Taxa de juros real neutra', [{ t: 'BCB, RPM set/2026, p. 80', url: M.neutro.fonte.url, sep: false, alvo: '_blank' }], 'Manual', P.pct(c.neutro) + ' · conferido em ' + dt(M.neutro.fonte.conferido_em), null],
@@ -44,13 +42,12 @@
       volMetodo: vol ? 'Desvio-padrão dos retornos logarítmicos diários dos últimos ' + vol.janela + ' pregões do Ibovespa (B3), multiplicado por √252. As faixas usam a mediana e o percentil 90 da própria série desde 2000; não há limite oficial de "turbulência".' : '',
       glossarioLista: Object.keys(P.glossario).map((k) => ({ titulo: TITULOS[k] || k, texto: P.glossario[k].texto, fontes: P.glossario[k].fontes })),
       diffs: [
-        'Toda informação com fonte e link, direto do BC, IBGE, B3, Tesouro e Fed',
+        'Toda informação com fonte e link, direto do BC, IBGE, B3 e Tesouro',
         'Juro real pela fórmula exata de Fisher, ex-post e ex-ante (método do BC)',
         'Juro real de mercado (Tesouro IPCA+) e inflação implícita',
         'Inflação contra a meta, com contador da meta contínua',
         'Focus semana a semana, por reunião e com a faixa de respostas',
         'Contagem para o Copom e o que o mercado espera',
-        'Bolsa x renda fixa e calculadora de rendimento',
         'Dados atualizados sozinhos todo dia útil, com aviso quando uma fonte falha',
       ].map((t, i) => ({ text: t, n: String(i + 1).padStart(2, '0') })),
       sobreTxt: 'Projeto de estudo de ' + M.autor.nomeCompleto + ' para acompanhar juros, inflação e expectativas no Brasil em um só lugar, com as contas explicadas. Os dados são públicos e o código é aberto.',
@@ -70,7 +67,6 @@
           P.csv('focus-historico.csv', ['indicador', 'ano', 'coleta', 'mediana'], linhas);
         } },
         { label: 'Ibovespa por ano', go: () => P.csv('ibovespa-anual.csv', ['ano', 'fechamento', 'retorno_pct'], c.B.por_ano.map((r) => [r.ano, r.fechamento, r.retorno])) },
-        { label: 'Bolsa x CDI (base 100)', go: () => P.csv('bolsa-x-cdi.csv', ['mes', 'ibovespa', 'cdi', 'ibovespa_real', 'ibovespa_dolar'], (D.comparacao ? D.comparacao.serie : []).map((x) => [x.mes, x.ibov, x.cdi, x.ibov_real, x.ibov_dolar])) },
       ],
     };
   };
