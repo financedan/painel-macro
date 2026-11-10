@@ -1,5 +1,5 @@
 {
-  "atualizado_em": "2026-11-09T22:40-03:00",
+  "atualizado_em": "2026-11-09T23:37-03:00",
   "selic": {
     "valor": 13.75,
     "data": "2026-11-09",
@@ -6585,19 +6585,19 @@
   "mundo": {
     "fed_funds": {
       "valor": 3.88,
-      "data": "2026-11-05",
+      "data": "2026-11-06",
       "serie": "DFF",
       "nome": "Fed funds efetiva (Federal Reserve)"
     },
     "tbill3m": {
-      "valor": 4.17,
-      "data": "2026-11-05",
+      "valor": 4.19,
+      "data": "2026-11-06",
       "serie": "DGS3MO",
       "nome": "Título do Tesouro americano de 3 meses (U.S. Treasury)"
     },
     "treasury10": {
-      "valor": 4.84,
-      "data": "2026-11-05",
+      "valor": 4.86,
+      "data": "2026-11-06",
       "serie": "DGS10",
       "nome": "Título do Tesouro americano de 10 anos (U.S. Treasury)"
     },
@@ -7418,43 +7418,40 @@
   "fontes": {
     "selic_e_ipca": {
       "ok": true,
-      "atualizado_em": "2026-11-09T22:40-03:00"
+      "atualizado_em": "2026-11-09T23:37-03:00"
     },
     "inflacao_mensal": {
       "ok": true,
-      "atualizado_em": "2026-11-09T22:40-03:00"
+      "atualizado_em": "2026-11-09T23:37-03:00"
     },
     "grupos_ipca": {
       "ok": true,
-      "atualizado_em": "2026-11-09T22:40-03:00"
+      "atualizado_em": "2026-11-09T23:37-03:00"
     },
     "focus": {
       "ok": true,
-      "atualizado_em": "2026-11-09T22:40-03:00"
+      "atualizado_em": "2026-11-09T23:37-03:00"
     },
     "ibovespa": {
       "ok": true,
-      "atualizado_em": "2026-11-09T22:40-03:00"
+      "atualizado_em": "2026-11-09T23:37-03:00"
     },
     "comparacao": {
       "ok": true,
-      "atualizado_em": "2026-11-09T22:40-03:00"
+      "atualizado_em": "2026-11-09T23:37-03:00"
     },
     "economia": {
       "ok": true,
-      "atualizado_em": "2026-11-09T22:40-03:00"
+      "atualizado_em": "2026-11-09T23:37-03:00"
     },
     "mundo": {
-      "ok": false,
-      "atualizado_em": "2026-11-07T14:23-03:00",
-      "erro": "Não consegui baixar https://fred.stlouisfed.org/graph/fredgraph.csv"
+      "ok": true,
+      "atualizado_em": "2026-11-09T23:37-03:00"
     },
     "tesouro": {
       "ok": true,
-      "atualizado_em": "2026-11-09T22:40-03:00"
+      "atualizado_em": "2026-11-09T23:37-03:00"
     }
   },
-  "erros": [
-    "mundo: Não consegui baixar https://fred.stlouisfed.org/graph/fredgraph.csv"
-  ]
+  "erros": []
 }
