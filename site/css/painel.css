@@ -44,6 +44,22 @@ to{stroke-dashoffset:0}
 @keyframes pm-wipe{from{clip-path:inset(0 100% 0 0)}
 to{clip-path:inset(0 0 0 0)}
 }
+.pm-pop{animation:pm-pop .9s cubic-bezier(.34,1.7,.5,1) .35s backwards}
+@keyframes pm-pop{from{opacity:0;transform:scale(.3)}
+to{opacity:1;transform:scale(1)}
+}
+.pm-lado{animation:pm-lado .8s cubic-bezier(.16,.84,.24,1) backwards}
+@keyframes pm-lado{from{opacity:0;transform:translateX(-28px)}
+to{opacity:1;transform:none}
+}
+.pm-cortina{animation:pm-cortina 1.6s cubic-bezier(.45,0,.2,1) .3s backwards}
+@keyframes pm-cortina{from{clip-path:inset(0 0 100% 0)}
+to{clip-path:inset(0 0 0 0)}
+}
+.pm-sobe{transform-origin:50% 100%;animation:pm-sobe 1.4s cubic-bezier(.34,1.3,.64,1) .3s backwards}
+@keyframes pm-sobe{from{transform:scaleY(0)}
+to{transform:scaleY(1)}
+}
 .pm-fill{transform-origin:0 50%;animation:pm-fill 1.2s cubic-bezier(.16,.84,.24,1) .25s backwards}
 @keyframes pm-fill{from{transform:scaleX(0)}
 to{transform:scaleX(1)}

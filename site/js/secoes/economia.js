@@ -101,9 +101,9 @@
     const ult = (h) => h[h.length - 1];
     const ha12 = (h) => h[Math.max(0, h.length - 13)];
     const defs = [
-      { label: 'Dólar (PTAX)', display: P.reais(E.dolar.valor), note: P.ddmm(P.dia(E.dolar.data)) + ' · ' + P.comSinal((E.dolar.valor / ha12(E.dolar.historico).valor - 1) * 100) + '% em 12 meses', arr: E.dolar.historico.map((x) => x.valor), color: OSSO, icon: P.icones.trend },
-      { label: 'Atividade (IBC-Br)', display: P.comSinal(ult(E.ibcbr.historico).valor) + '%', note: P.maiuscula(P.mesLongo(ult(E.ibcbr.historico).mes)) + ' · 12 meses contra os 12 anteriores', arr: E.ibcbr.historico.map((x) => x.valor), color: AZUL, icon: P.icones.pulse },
-      { label: 'Dívida bruta', display: P.pct(ult(E.divida.historico).valor, 1), note: '% do PIB · ' + P.mesLongo(ult(E.divida.historico).mes) + ' · ' + P.comSinal(ult(E.divida.historico).valor - ha12(E.divida.historico).valor) + ' p.p. em 12 meses', arr: E.divida.historico.map((x) => x.valor), color: AMBAR, icon: P.icones.percent },
+      { label: 'Dólar (PTAX)', display: P.reais(E.dolar.valor), note: P.ddmm(P.dia(E.dolar.data)) + ' · ' + P.comSinal((E.dolar.valor / ha12(E.dolar.historico).valor - 1) * 100) + '% em 12 meses', arr: E.dolar.historico.map((x) => x.valor), color: OSSO, icon: P.icones.trend, numCls: 'pm-conta', sparkCls: '' },
+      { label: 'Atividade (IBC-Br)', display: P.comSinal(ult(E.ibcbr.historico).valor) + '%', note: P.maiuscula(P.mesLongo(ult(E.ibcbr.historico).mes)) + ' · 12 meses contra os 12 anteriores', arr: E.ibcbr.historico.map((x) => x.valor), color: AZUL, icon: P.icones.pulse, numCls: '', sparkCls: 'pm-wipe' },
+      { label: 'Dívida bruta', display: P.pct(ult(E.divida.historico).valor, 1), note: '% do PIB · ' + P.mesLongo(ult(E.divida.historico).mes) + ' · ' + P.comSinal(ult(E.divida.historico).valor - ha12(E.divida.historico).valor) + ' p.p. em 12 meses', arr: E.divida.historico.map((x) => x.valor), color: AMBAR, icon: P.icones.percent, numCls: 'pm-pop', sparkCls: 'pm-sobe' },
     ];
     return {
       econCards: defs.map((k, i) => Object.assign({ cardStyle: 'animation-delay: ' + (120 + i * 90) + 'ms' }, k, spark(k.arr))),

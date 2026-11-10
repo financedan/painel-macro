@@ -23,7 +23,7 @@
     const sinal = /^[-−]/.test(modelo) ? '−' : /^\+/.test(modelo) ? '+' : '';
     return sinal + s;
   }
-  function contar(el, atraso) {
+  function contar(el, atraso, regressiva) {
     if (contados.has(el)) return;
     contados.add(el);
     const no = el.firstChild;
@@ -33,6 +33,7 @@
     const alvo = Number(m[0].replace(/[−]/g, '-').replace(/\./g, '').replace(',', '.'));
     if (!isFinite(alvo) || alvo === 0) return;
     const antes = final.slice(0, m.index), depois = final.slice(m.index + m[0].length);
+    const de = regressiva ? Math.max(alvo * 3, alvo + 60) : 0;   // regressiva: desce de um número maior até o valor
     const dur = 1800;
     let inicio = 0, escrito = null;
     const passo = (agora) => {
@@ -40,12 +41,12 @@
       if (!inicio) inicio = agora + atraso;
       const t = Math.max(0, Math.min(1, (agora - inicio) / dur));
       const e = 1 - Math.pow(1 - t, 4);
-      escrito = t >= 1 ? final : antes + formatar(alvo * e, m[0]) + depois;
+      escrito = t >= 1 ? final : antes + formatar(de + (alvo - de) * e, m[0]) + depois;
       no.nodeValue = escrito;
       if (t < 1) requestAnimationFrame(passo);
       else { el.classList.add('js-brilho'); setTimeout(() => el.classList.remove('js-brilho'), 900); }
     };
-    no.nodeValue = antes + formatar(0, m[0]) + depois;
+    no.nodeValue = antes + formatar(de, m[0]) + depois;
     escrito = no.nodeValue;
     requestAnimationFrame(passo);
   }
@@ -54,6 +55,7 @@
     el.classList.add('js-visto');
     const atraso = imediato ? 350 : 120;
     el.querySelectorAll('.pm-conta').forEach((n, i) => contar(n, atraso + i * 90));
+    el.querySelectorAll('.pm-regressiva').forEach((n) => contar(n, atraso, true));
     if (el.classList.contains('pm-conta')) contar(el, atraso);
   }
 

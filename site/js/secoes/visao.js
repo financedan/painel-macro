@@ -364,7 +364,7 @@
       ibovWeekRows: ult.map((w, i) => ({
         day: P.ddmm(P.dia(w.data)) + ' · ' + P.SEMANA[P.dia(w.data).getDay()], pts: P.fmtPts(w.valor),
         note: i === 0 ? 'Ponto de partida' : P.comSinal((w.valor / ult[i - 1].valor - 1) * 100) + '% no dia',
-        rowStyle: 'display: flex; justify-content: space-between; gap: 10px; padding: 8px 4px; border-top: ' + (i ? '1px solid rgba(229,229,229,.10)' : '0'),
+        rowStyle: 'display: flex; justify-content: space-between; gap: 10px; padding: 8px 4px; animation-delay: ' + (300 + i * 110) + 'ms; border-top: ' + (i ? '1px solid rgba(229,229,229,.10)' : '0'),
       })),
       ibovWeekTxt: P.comSinal(semana) + '%',
       ibovWeekColor: 'font-size: 56px; font-weight: 500; letter-spacing: -0.045em; line-height: 1; font-variant-numeric: tabular-nums; color: ' + (semana < -3 ? AMBAR : OSSO),

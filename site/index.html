@@ -172,7 +172,7 @@
 <div style="font-size: 34px; font-weight: 500; letter-spacing: -0.035em; line-height: 1; font-variant-numeric: tabular-nums">{{k.display}}</div>
 <div style="font-size: 13px; color: #c2c2c2; min-height: 40px">{{k.note}}</div>
 <template data-if="k.hasSpark">
-<svg class="pm-wipe" viewBox="0 0 200 40" preserveAspectRatio="none" style="width: 100%; height: 40px; display: block; margin-top: auto; {{k.cardStyle}}" aria-hidden="true">
+<svg viewBox="0 0 200 40" preserveAspectRatio="none" style="width: 100%; height: 40px; display: block; margin-top: auto" aria-hidden="true">
 <path d="{{k.area}}" fill="{{k.color}}" style="opacity: .12"></path>
 <path d="{{k.line}}" fill="none" stroke="{{k.color}}" style="stroke-width: 2; vector-effect: non-scaling-stroke; stroke-linecap: round; stroke-linejoin: round"></path>
 </svg>
@@ -215,7 +215,7 @@
 <rect x="{{b.x}}" y="{{b.y}}" width="{{b.w}}" height="{{b.h}}" rx="10" fill="#8fb0ff" style="opacity: .45; filter: blur(12px)"></rect>
 </template>
 <rect class="{{b.cls}}" x="{{b.x}}" y="{{b.y}}" width="{{b.w}}" height="{{b.h}}" rx="10" fill="{{b.fill}}" stroke="rgba(255,255,255,.38)" style="{{b.style}}" tabindex="0" role="button" aria-label="{{b.aria}}" onMouseEnter="{{b.enter}}" onClick="{{b.enter}}" onFocus="{{b.enter}}"></rect>
-<text class="pm-fade pm-conta" x="{{b.cx}}" y="{{b.ly}}" fill="#ededed" style="{{b.labelStyle}}">{{b.valueTxt}}</text>
+<text class="pm-fade" x="{{b.cx}}" y="{{b.ly}}" fill="#ededed" style="{{b.labelStyle}}">{{b.valueTxt}}</text>
 <text x="{{b.cx}}" y="280" fill="#c2c2c2" style="font-size: 12px; text-anchor: middle">{{b.year}}</text>
 </g>
 </template>
@@ -236,7 +236,7 @@
 </div>
 <template data-if="aj.copom.on"><p class="pm-glass-dark pm-explica">{{aj.copom.txt}}</p></template>
 <div>
-<div style="display: flex; align-items: baseline; gap: 10px"><span class="pm-conta" style="font-size: 64px; font-weight: 500; letter-spacing: -0.045em; line-height: 1; font-variant-numeric: tabular-nums">{{copomDays}}</span><span style="font-size: 18px; color: #c2c2c2">{{copomWord}}</span></div>
+<div style="display: flex; align-items: baseline; gap: 10px"><span class="pm-regressiva" style="font-size: 64px; font-weight: 500; letter-spacing: -0.045em; line-height: 1; font-variant-numeric: tabular-nums">{{copomDays}}</span><span style="font-size: 18px; color: #c2c2c2">{{copomWord}}</span></div>
 <p style="margin: 6px 0 0; font-size: 14px; color: #c2c2c2">{{copomWhen}}</p>
 </div>
 <div class="pm-glass-dark" style="border-radius: 18px; padding: 16px; display: flex; flex-direction: column; gap: 10px">
@@ -385,7 +385,7 @@
 </svg>
 <div style="display: flex; flex-direction: column">
 <template data-for="ibovWeekRows" data-as="r">
-<div class="pm-row" style="{{r.rowStyle}}">
+<div class="pm-row pm-lado" style="{{r.rowStyle}}">
 <div style="min-width: 0"><div style="font-size: 14px; font-weight: 500">{{r.day}}</div><div style="font-size: 12px; color: #c2c2c2">{{r.note}}</div></div>
 <span style="font-size: 14px; font-variant-numeric: tabular-nums; white-space: nowrap">{{r.pts}}</span>
 </div>
@@ -409,9 +409,9 @@
 <span style="font-size: 13px; color: #c2c2c2; letter-spacing: .02em">{{k.label}}</span>
 <span class="pm-glass" style="width: 30px; height: 30px; flex: 0 0 auto; border-radius: 9999px; display: flex; align-items: center; justify-content: center"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" style="stroke-width: 1.7; stroke-linecap: round; stroke-linejoin: round" aria-hidden="true"><path d="{{k.icon}}"></path></svg></span>
 </div>
-<div class="pm-conta" style="font-size: 34px; font-weight: 500; letter-spacing: -0.035em; line-height: 1; font-variant-numeric: tabular-nums">{{k.display}}</div>
+<div class="{{k.numCls}}" style="font-size: 34px; font-weight: 500; letter-spacing: -0.035em; line-height: 1; font-variant-numeric: tabular-nums; transform-origin: 0 100%">{{k.display}}</div>
 <div style="font-size: 13px; color: #c2c2c2; min-height: 40px">{{k.note}}</div>
-<svg class="pm-wipe" viewBox="0 0 200 40" preserveAspectRatio="none" style="width: 100%; height: 40px; display: block; margin-top: auto" aria-hidden="true">
+<svg class="{{k.sparkCls}}" viewBox="0 0 200 40" preserveAspectRatio="none" style="width: 100%; height: 40px; display: block; margin-top: auto" aria-hidden="true">
 <path d="{{k.area}}" fill="{{k.color}}" style="opacity: .12"></path>
 <path d="{{k.line}}" fill="none" stroke="{{k.color}}" style="stroke-width: 2; vector-effect: non-scaling-stroke; stroke-linecap: round; stroke-linejoin: round"></path>
 </svg>
@@ -498,7 +498,7 @@
 <button type="button" class="{{aj.mundo.cls}}" onClick="{{aj.mundo.toggle}}" aria-expanded="{{aj.mundo.aberto}}" aria-label="Por que comparar?">?</button>
 </div>
 <template data-if="aj.mundo.on"><p class="pm-glass-dark pm-explica">{{aj.mundo.txt}}</p></template>
-<div style="display: flex; align-items: baseline; gap: 10px"><span class="pm-conta" style="font-size: 64px; font-weight: 500; letter-spacing: -0.045em; line-height: 1">{{mundoPos}}</span><span style="font-size: 16px; color: #c2c2c2">{{mundoTitulo}}</span></div>
+<div style="display: flex; align-items: baseline; gap: 10px"><span class="pm-pop" style="display: inline-block; font-size: 64px; font-weight: 500; letter-spacing: -0.045em; line-height: 1">{{mundoPos}}</span><span style="font-size: 16px; color: #c2c2c2">{{mundoTitulo}}</span></div>
 <div style="display: flex; flex-direction: column; gap: 10px">
 <template data-for="mundoLinhas" data-as="ml">
 <div style="display: flex; flex-direction: column; gap: 4px">
@@ -523,7 +523,7 @@
 <template data-for="leituraParagrafos" data-as="pg"><p style="margin: 0"><template data-for="pg.partes" data-as="pt"><template data-if="pt.b"><strong style="font-weight: 600">{{pt.t}}</strong></template><template data-if="pt.n">{{pt.t}}</template></template></p></template>
 </div>
 </template>
-<template data-if="leituraAuto"><p class="pm-glass-dark" style="margin: 0; border-radius: 16px; padding: 14px; font-size: 14px; line-height: 1.6; color: #ededed">{{leituraResumo}}</p></template>
+<template data-if="leituraAuto"><p class="pm-glass-dark pm-cortina" style="margin: 0; border-radius: 16px; padding: 14px; font-size: 14px; line-height: 1.6; color: #ededed">{{leituraResumo}}</p></template>
 <template data-if="leituraVazia"><p class="pm-glass-dark" style="margin: 0; border-radius: 16px; padding: 14px; font-size: 14px; color: #c2c2c2">A leitura desta semana sai depois do próximo Boletim Focus.</p></template>
 <div style="font-size: 12px; color: #c2c2c2">{{leituraRef}}</div>
 </article>
