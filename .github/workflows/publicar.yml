@@ -35,7 +35,7 @@ jobs:
       - name: Montar as leituras da semana (leituras/*.md)
         run: python coletar.py --so-leituras
       - uses: actions/configure-pages@v5
-      - uses: actions/upload-pages-artifact@v3
+      - uses: actions/upload-pages-artifact@v5
         with:
           path: site
       - id: deploy
