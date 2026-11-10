@@ -156,20 +156,29 @@
   }
   function desenharCursor(t) {
     const ks = cursor.chaves;
-    const vis = ks.length && t >= ks[0].t - 0.3 && t <= ks[ks.length - 1].fim;
-    if (!vis) { cursor.e.style.display = 'none'; cursor.r.style.display = 'none'; return; }
+    const esconder = () => { cursor.e.style.display = 'none'; cursor.r.style.display = 'none'; };
+    if (!ks.length || t < ks[0].t - 0.3) { esconder(); return; }
+    // o cursor aparece em trechos: cada trecho termina numa chave com "fim"
+    let ia = 0;
+    for (let i = 0; i < ks.length; i++) if (t >= ks[i].t) ia = i;
+    const fimDe = (i) => { let j = i; while (j < ks.length - 1 && ks[j].fim == null) j++; return j; };
+    let jf = fimDe(ia);
+    if (t > (ks[jf].fim ?? ks[jf].t)) {
+      const prox = ks[jf + 1];
+      if (prox && t >= prox.t - 0.3) { ia = jf + 1; jf = fimDe(ia); } else { esconder(); return; }
+    }
+    let ji = ia; while (ji > 0 && ks[ji - 1].fim == null) ji--;
     const pos = (k) => {
       if (!k.alvo) return [k.x, k.y];
       const p = naTela(k.id, ...centro(k.alvo));
       if (p) { k.ultima = p; return p; }
       return k.ultima || [W * 0.62, H * 0.72];  // tomada ainda não visível: última posição conhecida
     };
-    let a = ks[0], b = ks[0];
-    for (let i = 0; i < ks.length; i++) { if (t >= ks[i].t) { a = ks[i]; b = ks[i + 1] || ks[i]; } }
+    const a = ks[ia], b = a.fim == null && ia < jf ? ks[ia + 1] : a;
     const pa = pos(a), pb = pos(b);
     const p = b === a ? 1 : io(clamp((t - a.t) / Math.max(0.01, (b.t - a.t) * 0.85)));
     const x = pa[0] + (pb[0] - pa[0]) * p, y = pa[1] + (pb[1] - pa[1]) * p;
-    const op = Math.min(clamp((t - ks[0].t + 0.3) / 0.3), clamp((ks[ks.length - 1].fim - t) / 0.3));
+    const op = Math.min(clamp((t - ks[ji].t + 0.3) / 0.3), clamp(((ks[jf].fim ?? ks[jf].t) - t) / 0.3));
     const clique = cursor.cliques.find((c) => t >= c && t < c + 0.5);
     const aperta = clique != null && t < clique + 0.12 ? 0.86 : 1;
     Object.assign(cursor.e.style, { display: 'block', opacity: op, left: (x - 6) + 'px', top: (y - 4) + 'px', transform: 'scale(' + aperta + ')' });
@@ -194,6 +203,10 @@
       selic: D.selic.valor, ipca: D.ipca12m.valor, ipcaMes: D.ipca12m.mes, real: P.fisher(D.selic.valor, D.ipca12m.valor),
       ano1: anos[1], S1: S1.mediana, S1antes: antes(S1), I1: I1.mediana, coleta: P.dia(F.coleta_ate),
       idxSelic1: mov.findIndex((m) => m[0] === 'Selic' && m[1] === anos[1]),
+      movSelic: (() => {
+        const v = F.tabela.find((r) => r.indicador === 'Selic').valores.map((x) => Object.assign({ antes: antes(x) }, x)).filter((x) => x.variacao).sort((a, b) => Math.abs(b.variacao) - Math.abs(a.variacao))[0];
+        return v ? Object.assign({ idx: mov.findIndex((m) => m[0] === 'Selic' && m[1] === v.ano) }, v) : null;
+      })(),
       real2020: r2020 ? P.fisher(r2020.selic, r2020.ipca) : null,
       rank: M.ranking_mundo,
       ibov: B.fechamento, ibovData: P.dia(B.data), maxH: B.maxima_historica, distMax: (B.fechamento / B.maxima_historica.valor - 1) * 100,
@@ -289,33 +302,48 @@
     [0.9, 1.25, 1.6].forEach((x) => flash(x, 0.05));
     flash(5.9, 0.08);
 
-    item('Selic em ' + P.pct(N.selic) + '. Inflação de ' + P.pct(N.ipca) + ' em 12 meses, ' + (N.ipca > 4.5 ? 'acima do teto da meta.' : 'dentro da meta.'), 'texto', 5.0, 9.7, { left: '160px', top: '250px', width: '1500px', fontSize: '36px' });
-    item('O que os números dizem sobre o Brasil agora?', 'titulo', 5.9, 9.7, { left: '160px', top: '330px', width: '1500px' });
+    item('Juros de ' + P.pct(N.selic) + '. Inflação de ' + P.pct(N.ipca) + (N.ipca > 4.5 ? ', acima do teto da meta.' : '.'), 'texto', 5.0, 9.7, { left: '160px', top: '250px', width: '1500px', fontSize: '36px' });
+    item('Você sabe o que esses números dizem sobre o seu dinheiro?', 'titulo', 5.9, 9.7, { left: '160px', top: '330px', width: '1500px' });
 
     // ===================== CENA 2 · O PAINEL (10–25 s)
     item('<div class="icone vidro"><svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="#ededed" style="stroke-width:1.6;stroke-linecap:round;stroke-linejoin:round"><path d="' + ICONE + '"/></svg></div><div class="nome">Painel Macro Brasil</div>',
-      'marca', 10.2, 12.8, { left: '50%', top: '410px' }, { base: 'translateX(-50%)' }).base = 'translateX(-50%)';
+      'marca', 10.2, 12.5, { left: '50%', top: '410px' }, { base: 'translateX(-50%)' }).base = 'translateX(-50%)';
     flash(10.2, 0.1);
-    const pil = item('<span class="ponto"></span>Dados do Banco Central, IBGE, B3, Tesouro e Fed', 'pilula vidro', 10.8, 12.8, { left: '50%', top: '560px' });
+    const pil = item('<span class="ponto"></span>Dados oficiais: Banco Central, IBGE, B3 e Tesouro', 'pilula vidro', 10.8, 12.5, { left: '50%', top: '560px' });
     pil.base = 'translateX(-50%)';
 
-    const topo = tomada({ id: 'topo', t0: 12.5, t1: 20.6, fi: 0.8, frames: [{ t: 0, f: 'visao-topo' }],
-      cam: chaves('visao-topo', [{ t: 12.5, jan: 0.82, oy: 40 }, { t: 14.2, jan: 1, oy: 0 }, { t: 14.6 },
-        { t: 16.9, z: 1.06, x: centro(uniao(quadro('visao-topo').caixas.kpis))[0], y: centro(uniao(quadro('visao-topo').caixas.kpis))[1] },
-        { t: 17.5 }, { t: 19.0, z: 1.45, x: centro(uniao(quadro('visao-topo').caixas.nav))[0], y: centro(uniao(quadro('visao-topo').caixas.nav))[1], ay: 0.3 }]) });
-    quadro('visao-topo').caixas.kpis.forEach((c, i) => destaque('topo', 'visao-topo', c, 14.6 + i * 0.3, 14.6 + i * 0.3 + 0.55, { pad: 8, leve: true }));
-    destaque('topo', 'visao-topo', uniao(quadro('visao-topo').caixas.kpis), 16.5, 17.3, { pad: 12 });
-    topo.pulsos = [14.6, 16.5, 18.0];
-    legenda('Os números do dia: Selic, IPCA, juro real, Focus e Ibovespa', P.icones.bars, 14.9, 17.3);
-    quadro('visao-topo').caixas.nav.forEach((c, i) => destaque('topo', 'visao-topo', c, 18.0 + i * 0.32, 18.0 + i * 0.32 + 0.5, { pad: 6, pilula: true, leve: true }));
-    destaque('topo', 'visao-topo', uniao(quadro('visao-topo').caixas.nav), 19.65, 20.4, { pilula: true, pad: 10 });
-    legenda('5 abas: Visão geral · Expectativas · Economia · Agenda · Metodologia', P.icones.home, 18.1, 20.4);
+    // a) primeiro contato: a saudação pede o nome e o painel se monta na frente do público (sequência real)
+    criarCursor();
+    const K = cursor.chaves, CL = cursor.cliques;
+    const seqA = MF.sequencias['abertura'];
+    const tEntra = 14.6;
+    const sb = 'boasvindas', cardS = caixa(sb, 'card');
+    tomada({ id: 'saudacao', pulsos: [tEntra], t0: 12.3, t1: 18.4, fi: 0.8,
+      frames: [{ t: 0, f: sb }, { t: 13.15, f: 'boasvindas-dig', d: 0.2 }, { t: 13.6, f: 'boasvindas-nome', d: 0.2 }]
+        .concat(seqA.map((s) => ({ t: tEntra + 0.1 + s.ms / 1000, f: s.frame, d: 0.16 }))),
+      cam: chaves(sb, [{ t: 12.3, jan: 0.8, oy: 40, x: centro(cardS)[0], y: centro(cardS)[1] }, { t: 13.6, jan: 1, oy: 0, z: 1.18 }, { t: 14.5, z: 1.18 },
+        { t: 15.3, z: 1.0, x: 1600, y: 900 }]) });
+    K.push({ t: 13.3, x: 1250, y: 820 }, { t: 14.4, id: 'saudacao', alvo: caixa(sb, 'entrar') }, { t: 15.0, id: 'saudacao', alvo: caixa(sb, 'entrar'), fim: 15.3 });
+    CL.push(tEntra);
+    legenda('Ele te recebe pelo nome', P.icones.home, 12.7, 14.5);
+    legenda('E os números ganham vida na sua frente', P.icones.pulse, 15.0, 18.2);
+    const fa = seqA[seqA.length - 1].frame;
+    destaque('saudacao', fa, uniao(quadro(fa).caixas.kpis), 17.2, 18.2, { pad: 12 });
 
+    // b) as abas
+    const topo = tomada({ id: 'topo', t0: 18.2, t1: 20.6, fi: 0.5, frames: [{ t: 0, f: 'visao-topo' }],
+      cam: chaves('visao-topo', [{ t: 18.2, z: 1.0 }, { t: 19.2, z: 1.45, x: centro(uniao(quadro('visao-topo').caixas.nav))[0], y: centro(uniao(quadro('visao-topo').caixas.nav))[1], ay: 0.3 }]) });
+    quadro('visao-topo').caixas.nav.forEach((c, i) => destaque('topo', 'visao-topo', c, 18.7 + i * 0.3, 18.7 + i * 0.3 + 0.5, { pad: 6, pilula: true, leve: true }));
+    destaque('topo', 'visao-topo', uniao(quadro('visao-topo').caixas.nav), 19.9, 20.5, { pilula: true, pad: 10 });
+    topo.pulsos = [18.7, 19.9];
+    legenda('4 abas: Visão geral · Expectativas · Agenda · Metodologia', P.icones.home, 18.4, 20.4);
+
+    // c) a página inteira
     const pq = quadro('visao-pagina');
     const sP = W / pq.w;
     tomada({ id: 'pagina', t0: 20.2, t1: 25.4, fi: 0.5, frames: [{ t: 0, f: 'visao-pagina' }],
       cam: chaves('visao-pagina', [{ t: 20.2, ay: 0, y: 0 }, { t: 25.4, ay: 0, y: pq.h - H / sP }]) });
-    const cont = legenda('<b class="pm-c">1</b> blocos na visão geral. Cada um mostra de onde vêm os dados.', P.icones.book, 20.8, 25.2);
+    const cont = legenda('<b class="pm-c">1</b> blocos de informação. Todos com fonte oficial.', P.icones.book, 20.8, 25.2);
     cont.quadro = (t, it) => { const n = Math.max(1, Math.round(N.blocos * io(prog(t, 20.9, 24.6)))); const b = it.e.querySelector('.pm-c'); if (b.textContent !== String(n)) b.textContent = n; };
     varrer(20.15);
     atalho('Abrir a visão geral ↗', '../#visao', 20.8, 25.2);
@@ -325,20 +353,22 @@
     const fb = 'visao-barras', cardB = caixa(fb, 'card');
     const barrasTomada = tomada({ id: 'barras', t0: 25.0, t1: 31.8, frames: [{ t: 0, f: fb }, { t: 29.4, f: 'visao-barras-2020', d: 0.5 }],
       cam: chaves(fb, [{ t: 25, x: centro(cardB)[0], y: centro(cardB)[1], ax: 0.36 }, { t: 31.8, z: 1.1 }]) });
-    destaque('barras', fb, caixa(fb, 'barras', 9), 26.6, 29.3, { pad: 10 });
+    const nb = quadro(fb).caixas.barras.length;
+    destaque('barras', fb, caixa(fb, 'barras', nb - 1), 26.6, 29.3, { pad: 10 });
     barrasTomada.pulsos = [26.6, 29.5];
     destaque('barras', 'visao-barras-2020', uniao([caixa(fb, 'barras', 3), caixa('visao-barras-2020', 'chip')]), 29.7, 31.6, { pad: 10, leve: true });
     varrer(24.95);
-    slam(25.0, 26.2, P.pct(N.real), COR.azul, 'Juro real hoje', 'Selic de ' + P.pct(N.selic) + ' descontada a inflação de ' + P.pct(N.ipca));
+    const lider = N.rank.posicao_brasil === 1;
+    slam(25.0, 26.2, P.pct(N.real), COR.azul, 'Juro real hoje', lider ? 'O maior do mundo entre ' + N.rank.paises_no_ranking + ' países' : 'Selic de ' + P.pct(N.selic) + ' descontada a inflação de ' + P.pct(N.ipca));
     const rk = N.rank.paises, rkMax = Math.max(...rk.map((x) => x[1]));
     cartaoAnim({ olho: 'Juro real', de: 0, para: N.real, fmt: (v) => P.pct(v), t0: 26.05, t1: 29.3,
-      linhas: ['Selic de ' + P.pct(N.selic) + ' descontada a inflação de ' + P.pct(N.ipca) + '.'],
+      linhas: ['Selic de ' + P.pct(N.selic) + ' menos a inflação de ' + P.pct(N.ipca) + '.', lider ? 'O Brasil lidera o ranking mundial.' : 'O Brasil é o ' + N.rank.posicao_brasil + 'º do ranking mundial.'],
       extra: '<div class="mini"><div class="mini-rot"><span>Ranking de juro real · ' + N.rank.paises_no_ranking + ' países</span><span>' + N.rank.posicao_brasil + 'º</span></div>'
         + rk.map((x, i) => '<div class="mini-linha' + (x[0] === 'Brasil' ? ' br' : '') + '"><span>' + x[0] + '</span><span>' + P.pct(x[1]) + '</span></div><div class="mini-trilho"><i class="r' + i + (x[0] === 'Brasil' ? ' az' : '') + '"></i></div>').join('') + '</div>',
       anima: (t, e) => rk.forEach((x, i) => larg(e, '.r' + i, x[1] / rkMax * 100 * sai(prog(t, 26.5 + i * 0.12, 27.3 + i * 0.12)))),
-      fonte: 'BCB · IBGE · Moneyou via Agência Brasil (06/11/2026)' });
+      fonte: 'BCB · IBGE · Moneyou via Agência Brasil' });
     flash(29.4, 0.05);
-    cartaoItem(cartao('Em 2020', P.pct(N.real2020), ['O juro real foi negativo: a inflação passou da Selic.', 'Passe o mouse nas barras para ver a conta de cada ano.'], 'BCB · IBGE · cálculo do painel'), 29.6, 31.6);
+    cartaoItem(cartao('Mas em 2020…', P.pct(N.real2020), ['O juro real ficou negativo: a inflação passou da Selic.', 'Passe o mouse nas barras e veja a conta de cada ano.'], 'BCB · IBGE · cálculo do painel'), 29.6, 31.6);
     atalho('Ver no painel ↗', '../#visao', 26.0, 31.4, { right: '40px', top: '40px' });
 
     // b) inflação contra a meta
@@ -346,64 +376,64 @@
     const inflTomada = tomada({ id: 'inflacao', t0: 31.6, t1: 37.8, frames: [{ t: 0, f: fi }],
       cam: chaves(fi, [{ t: 31.6, x: centro(cardI)[0], y: centro(cardI)[1], ax: 0.36 }, { t: 37.8, z: 1.1 }]) });
     destaque('inflacao', fi, uniao([caixa(fi, 'ultimo'), [caixa(fi, 'ultimo')[0] - 40, caixa(fi, 'ultimo')[1] - 30, 160, 80]]), 33.0, 35.0, { pad: 8, pilula: true });
-    destaque('inflacao', fi, caixa(fi, 'contador'), 35.2, 37.6, { pad: 10, pilula: true });
+    if (quadro(fi).caixas.contador && quadro(fi).caixas.contador.length) destaque('inflacao', fi, caixa(fi, 'contador'), 35.2, 37.6, { pad: 10, pilula: true });
     atalho('Ver no painel ↗', '../#visao', 32.2, 37.4, { right: '40px', top: '40px' });
     varrer(31.55);
-    slam(31.6, 32.8, P.pct(N.ipca), COR.ambar, 'Inflação em 12 meses', N.ipca > 4.5 ? 'Acima do teto da meta de 4,5%' : 'Dentro da meta');
+    slam(31.6, 32.8, P.pct(N.ipca), COR.ambar, 'Inflação em 12 meses', N.ipca > 4.5 ? 'Estourou o teto da meta' : 'Dentro da meta');
     const pos6 = (v) => clamp(v / 6) * 100;
     cartaoAnim({ olho: 'Inflação', de: 0, para: N.ipca, fmt: (v) => P.pct(v), t0: 32.65, t1: 37.6,
-      linhas: ['IPCA em 12 meses até ' + P.mesLongo(N.ipcaMes) + (N.ipca > 4.5 ? ', acima do teto.' : '.'), 'Meta contínua: 6 meses seguidos fora da banda configuram descumprimento.'],
+      linhas: ['IPCA em 12 meses até ' + P.mesLongo(N.ipcaMes) + (N.ipca > 4.5 ? ', acima do teto de 4,5%.' : '.'), 'Seis meses seguidos fora da banda e a meta é descumprida. O painel conta para você.'],
       extra: '<div class="medidor"><div class="banda" style="left:' + pos6(1.5) + '%;width:' + (pos6(4.5) - pos6(1.5)) + '%"></div><div class="linha-v" style="left:' + pos6(3) + '%"></div><div class="marca-v" style="left:0;background:' + (N.ipca > 4.5 ? COR.ambar : COR.osso) + '"></div></div>'
         + '<div class="mini-rot"><span>0%</span><span>banda 1,5% a 4,5% · meta 3%</span><span>6%</span></div>',
       anima: (t, e) => { e.querySelector('.marca-v').style.left = (pos6(N.ipca) * sai(prog(t, 32.9, 34.0))).toFixed(2) + '%'; },
       fonte: 'IBGE via BCB · Decreto 12.079/2024' });
     inflTomada.pulsos = [33.0, 35.2];
 
-    // c) expectativas (Focus)
+    // c) expectativas (Focus): o maior movimento da Selic esperada na semana
     const fm2 = 'exp-mudancas', cardM = caixa(fm2, 'card');
     const mudTomada = tomada({ id: 'mudancas', t0: 37.6, t1: 43.8, frames: [{ t: 0, f: fm2 }],
       cam: chaves(fm2, [{ t: 37.6, x: centro(cardM)[0], y: centro(cardM)[1], ax: 0.66 }, { t: 43.8, z: 1.12 }]) });
-    if (N.idxSelic1 >= 0) destaque('mudancas', fm2, caixa(fm2, 'itens', N.idxSelic1), 38.9, 43.5, { pad: 8 });
+    const MS = N.movSelic || { ano: N.ano1, mediana: N.S1, antes: N.S1antes, idx: N.idxSelic1, variacao: N.S1 - N.S1antes };
+    if (MS.idx >= 0 && quadro(fm2).caixas.itens[MS.idx]) destaque('mudancas', fm2, caixa(fm2, 'itens', MS.idx), 38.9, 43.5, { pad: 8 });
     varrer(37.55);
-    slam(37.6, 38.8, P.comSinal(N.S1 - N.S1antes, 2) + ' p.p.', COR.azul, 'Em uma semana', 'Alta da Selic esperada pelo mercado para o fim de ' + N.ano1 + ' (Boletim Focus)');
-    cartaoAnim({ olho: 'Expectativas · Focus', de: N.S1antes, para: N.S1, fmt: (v) => P.pct(v), t0: 38.65, t1: 43.6, esq: true,
-      linhas: ['Selic esperada para o fim de ' + N.ano1 + '.', 'IPCA esperado para ' + N.ano1 + ': ' + P.pct(N.I1) + (N.I1 > 4.5 ? ', acima do teto.' : '.')],
-      extra: '<div class="de-para"><span>semana anterior ' + P.pct(N.S1antes) + '</span><span>→</span><b>' + P.pct(N.S1) + '</b></div>',
+    const semCorte = MS.ano === D.focus.anos[0] && MS.mediana >= N.selic;
+    slam(37.6, 38.8, P.comSinal(MS.variacao, 2) + ' p.p.', COR.azul, 'Em uma semana', semCorte ? 'o mercado desistiu de cortar a Selic em ' + MS.ano : 'mudou a Selic esperada para o fim de ' + MS.ano);
+    cartaoAnim({ olho: 'Expectativas · Focus', de: MS.antes, para: MS.mediana, fmt: (v) => P.pct(v), t0: 38.65, t1: 43.6, esq: true,
+      linhas: ['Selic esperada para o fim de ' + MS.ano + '.', semCorte ? 'Igual à de hoje: sem corte até o fim do ano.' : 'IPCA esperado para ' + N.ano1 + ': ' + P.pct(N.I1) + '.'],
+      extra: '<div class="de-para"><span>semana anterior ' + P.pct(MS.antes) + '</span><span>→</span><b>' + P.pct(MS.mediana) + '</b></div>',
       fonte: 'BCB · Boletim Focus (coleta até ' + P.ddmm(N.coleta) + ')' });
     mudTomada.pulsos = [38.9];
     atalho('Abrir Expectativas ↗', '../#expectativas', 38.4, 43.4, { right: '40px', bottom: '150px' });
 
-    // d) bolsa: distância da máxima e volatilidade
+    // d) bolsa: distância do recorde e volatilidade
     const fo = 'visao-ibov', cardO = caixa(fo, 'card');
     const ibovTomada = tomada({ id: 'ibov', t0: 43.6, t1: 47.4, frames: [{ t: 0, f: fo }],
       cam: chaves(fo, [{ t: 43.6, x: centro(cardO)[0], y: centro(cardO)[1], ax: 0.36 }, { t: 47.4, z: 1.08 }]) });
     destaque('ibov', fo, caixa(fo, 'legenda'), 44.6, 47.1, { pad: 10 });
     atalho('Ver no painel ↗', '../#visao', 44.2, 50.0, { right: '40px', top: '40px' });
     varrer(43.55);
-    slam(43.6, 44.8, P.comSinal(N.distMax) + '%', COR.ambar, 'Ibovespa', 'Abaixo da máxima histórica de ' + P.ddmmaaaa(P.dia(N.maxH.data)));
+    slam(43.6, 44.8, P.comSinal(N.distMax) + '%', COR.ambar, 'Ibovespa', 'Longe do recorde de ' + P.ddmmaaaa(P.dia(N.maxH.data)));
     const fr = N.ibov / N.maxH.valor * 100;
     cartaoAnim({ olho: 'Bolsa', de: 0, para: N.distMax, fmt: (v) => P.comSinal(v) + '%', t0: 44.65, t1: 47.2,
-      linhas: ['Ibovespa abaixo da máxima histórica.'],
-      extra: '<div class="mini"><div class="mini-rot"><span>' + P.ddmm(N.ibovData) + ': ' + P.fmtPts(N.ibov) + '</span><span>máxima ' + P.fmtPts(N.maxH.valor) + ' (' + P.ddmm(P.dia(N.maxH.data)) + ')</span></div><div class="mini-trilho" style="height:16px"><i class="f"></i></div></div>',
+      linhas: ['Quanto falta para o Ibovespa voltar ao topo.'],
+      extra: '<div class="mini"><div class="mini-rot"><span>' + P.ddmm(N.ibovData) + ': ' + P.fmtPts(N.ibov) + '</span><span>recorde ' + P.fmtPts(N.maxH.valor) + ' (' + P.ddmm(P.dia(N.maxH.data)) + ')</span></div><div class="mini-trilho" style="height:16px"><i class="f"></i></div></div>',
       anima: (t, e) => larg(e, '.f', 100 - (100 - fr) * sai(prog(t, 44.9, 45.9))),
       fonte: 'B3 · Ibovespa' });
     ibovTomada.pulsos = [44.6];
     const fmd = 'visao-medo';
     const medoTomada = tomada({ id: 'medo', t0: 47.2, t1: 50.4, fi: 0.5, frames: [{ t: 0, f: fmd }],
       cam: chaves(fmd, [{ t: 47.2, x: centro(caixa(fmd, 'medo'))[0], y: centro(caixa(fmd, 'medo'))[1], z: 1.25, ax: 0.32 }, { t: 50.4, z: 1.35 }]) });
-    destaque('medo', fmd, caixa(fmd, 'pill'), 48.0, 50.1, { pad: 8, pilula: true });
+    if (quadro(fmd).caixas.pill.length) destaque('medo', fmd, caixa(fmd, 'pill'), 48.0, 50.1, { pad: 8, pilula: true });
     varrer(47.15);
-    slam(47.2, 48.2, P.fmt(N.volPct, 0) + '%', COR.ambar, 'Volatilidade da bolsa', 'Maior que em ' + P.fmt(N.volPct, 0) + '% dos pregões desde 2000');
+    slam(47.2, 48.2, P.fmt(N.volPct, 0) + '%', COR.ambar, 'A bolsa está nervosa', 'Oscila mais que em ' + P.fmt(N.volPct, 0) + '% dos pregões desde 2000');
     cartaoAnim({ olho: 'Volatilidade', de: 0, para: N.vol, fmt: (v) => P.pct(v, 1), t0: 48.05, t1: 50.1,
-      linhas: ['Oscilações do Ibovespa em 21 pregões, ao ano.'],
+      linhas: ['Sobe e desce do Ibovespa em 21 pregões, ao ano.'],
       extra: '<div class="mini"><div class="mini-rot"><span>pregões desde 2000</span><span>maior que ' + P.fmt(N.volPct, 0) + '%</span></div><div class="mini-trilho" style="height:16px"><i class="p am"></i></div></div>',
       anima: (t, e) => larg(e, '.p', N.volPct * sai(prog(t, 48.3, 49.2))),
       fonte: 'B3 · cálculo do painel' });
     medoTomada.pulsos = [48.0];
 
     // ===================== CENA 4 · INTERATIVIDADE (50–70 s)
-    criarCursor();
-    const K = cursor.chaves, CL = cursor.cliques;
     // a) navegação entre abas (sequência real da página entrando)
     const seqNav = MF.sequencias['nav-exp'];
     const tNav = 51.9;
@@ -412,7 +442,7 @@
       cam: chaves('visao-topo', [{ t: 50, z: 1.0 }]) });
     K.push({ t: 50.4, x: 1500, y: 900 }, { t: 51.6, id: 'nav', alvo: caixa('visao-topo', 'nav', 1) }, { t: 53.9, id: 'nav', alvo: caixa('visao-topo', 'nav', 1) });
     CL.push(51.75);
-    legenda('Navegue pelas abas', P.icones.home, 50.5, 54.2);
+    legenda('Um clique e você está nas expectativas do mercado', P.icones.home, 50.5, 54.2);
     atalho('Experimente no painel ↗', '../#expectativas', 50.6, 54.2, { right: '40px', top: '40px' });
 
     // b) histórico do Focus: troca de indicador (linha desenhada de novo) e de ano
@@ -424,7 +454,7 @@
       cam: chaves(fh, [{ t: 54.2, x: centro(cardH)[0], y: centro(cardH)[1], z: 1.4 }]) });
     K.push({ t: 54.5, id: 'hist', alvo: caixa(fh, 'segs', 0) }, { t: 55.4, id: 'hist', alvo: caixa(fh, 'segs', 1) }, { t: 57.4, id: 'hist', alvo: caixa(fh, 'segs', 6) }, { t: 58.2, id: 'hist', alvo: caixa(fh, 'segs', 6) });
     CL.push(55.55, 57.6);
-    legenda('Escolha o indicador e o ano', P.icones.target, 54.6, 58.4);
+    legenda('Troque o indicador. Mude o ano. Veja a aposta do mercado mudar', P.icones.target, 54.6, 58.4);
     atalho('Experimente no painel ↗', '../#expectativas', 54.6, 58.4, { right: '40px', top: '40px' });
 
     // c) período do gráfico de inflação
@@ -434,36 +464,38 @@
       cam: chaves(fin, [{ t: 58.4, x: centro(cardI)[0], y: centro(cardI)[1] - 120, z: 1.35 }]) });
     K.push({ t: 58.7, id: 'periodo', alvo: caixa(fin, 'segs', 1) }, { t: 59.6, id: 'periodo', alvo: caixa(fin, 'segs', 2) }, { t: 61.8, id: 'periodo', alvo: caixa(fin, 'segs', 2) });
     CL.push(59.8);
-    legenda('Mude o período: 12 meses, 3 anos ou desde 2017', P.icones.calendar, 58.6, 62.0);
+    legenda('Volte no tempo: 12 meses, 3 anos ou desde 2017', P.icones.calendar, 58.6, 62.0);
     atalho('Experimente no painel ↗', '../#visao', 58.6, 62.0, { right: '40px', top: '40px' });
 
-    // d) bolsa x renda fixa: em reais, sem a inflação, em dólar
-    const fc = 'visao-comp-reais', cardC = caixa(fc, 'card');
+    // d) simulador: e se a Selic cair? (o controle foi arrastado de verdade na captura)
+    const fsm = 'sim-a', cardSm = caixa(fsm, 'card');
     varrer(61.95);
-    tomada({ id: 'comp', pulsos: [63.4, 65.1], t0: 62.0, t1: 66.4, fi: 0.5, frames: [{ t: 0, f: fc }, { t: 63.5, f: 'visao-comp-inflacao', d: 0.45 }, { t: 65.2, f: 'visao-comp-dolar', d: 0.45 }],
-      cam: chaves(fc, [{ t: 62.0, x: centro(cardC)[0], y: centro(cardC)[1], z: 1.42 }]) });
-    K.push({ t: 62.3, id: 'comp', alvo: caixa(fc, 'segs', 0) }, { t: 63.2, id: 'comp', alvo: caixa(fc, 'segs', 1) }, { t: 64.9, id: 'comp', alvo: caixa(fc, 'segs', 2) }, { t: 66.0, id: 'comp', alvo: caixa(fc, 'segs', 2) });
-    CL.push(63.4, 65.1);
-    legenda('Compare bolsa e CDI em reais, sem a inflação ou em dólar', P.icones.trend, 62.2, 66.2);
+    tomada({ id: 'sim', pulsos: [63.4, 65.1], t0: 62.0, t1: 66.4, fi: 0.5, frames: [{ t: 0, f: fsm }, { t: 63.5, f: 'sim-b', d: 0.35 }, { t: 65.2, f: 'sim-c', d: 0.35 }],
+      cam: chaves(fsm, [{ t: 62.0, x: centro(cardSm)[0], y: centro(cardSm)[1], z: 1.9, ay: 0.46 }]) });
+    K.push({ t: 62.3, id: 'sim', alvo: caixa(fsm, 'polegar') }, { t: 62.9, id: 'sim', alvo: caixa(fsm, 'polegar') }, { t: 63.5, id: 'sim', alvo: caixa('sim-b', 'polegar') },
+      { t: 64.6, id: 'sim', alvo: caixa('sim-b', 'polegar') }, { t: 65.2, id: 'sim', alvo: caixa('sim-c', 'polegar') }, { t: 66.0, id: 'sim', alvo: caixa('sim-c', 'polegar') });
+    CL.push(63.0, 64.7);
+    destaque('sim', 'sim-c', caixa('sim-c', 'resultado'), 65.4, 66.2, { pad: 10 });
+    legenda('E se a Selic cair? Simule e veja o juro real mudar', P.icones.trend, 62.2, 66.2);
     atalho('Experimente no painel ↗', '../#visao', 62.2, 66.2, { right: '40px', top: '40px' });
 
-    // e) modo explicativo: explicação e fonte em cada bloco
-    const fe = 'visao-explicativo';
+    // e) o "?" de cada bloco: explicação simples, sem jargão
+    const fe = 'visao-ajuda', cardE = caixa(fb, 'card');
     varrer(66.15);
-    tomada({ id: 'explica', pulsos: [67.2], t0: 66.2, t1: 70.4, fi: 0.5, frames: [{ t: 0, f: 'visao-topo' }, { t: 67.3, f: fe, d: 0.5 }],
-      cam: chaves('visao-topo', [{ t: 66.2, z: 1.2, x: 2400, y: 380, ay: 0.4 }, { t: 67.6, z: 1.0, x: 1600, y: 900, ay: 0.5 }]) });
-    K.push({ t: 66.4, x: 1200, y: 760 }, { t: 67.0, id: 'explica', alvo: caixa('visao-topo', 'explica'), fim: 67.9 });
+    tomada({ id: 'explica', pulsos: [67.2], t0: 66.2, t1: 70.4, fi: 0.5, frames: [{ t: 0, f: fb }, { t: 67.3, f: fe, d: 0.5 }],
+      cam: chaves(fb, [{ t: 66.2, x: centro(cardE)[0], y: caixa(fb, 'ajuda')[1] + 300, z: 1.25, ay: 0.4 }]) });
+    K.push({ t: 66.4, x: 1200, y: 760 }, { t: 67.0, id: 'explica', alvo: caixa(fb, 'ajuda'), fim: 67.9 });
     CL.push(67.2);
-    destaque('explica', fe, caixa(fe, 'fonte', 0), 68.6, 70.2, { pad: 6, leve: true });
-    legenda('Modo explicativo: o que cada bloco mostra e de onde vêm os dados', P.icones.book, 66.4, 70.2);
+    destaque('explica', fe, caixa(fe, 'explica'), 68.2, 70.2, { pad: 8, leve: true });
+    legenda('Ficou com dúvida? Toque no ? e entenda cada número', P.icones.book, 66.4, 70.2);
     atalho('Ver as fontes ↗', '../#metodologia', 66.4, 70.2, { right: '40px', top: '40px' });
 
     // ===================== CENA 5 · ENCERRAMENTO (70–85 s)
-    const mont = [['eco-topo', 330, -250], ['agenda', 520, 40], ['met-referencias', 360, 300]];
+    const mont = [['exp-contexto', 330, -250], ['agenda', 520, 40], ['met-referencias', 360, 300]];
     mont.forEach(([f, ox, oy], i) => tomada({ id: 'm' + i, t0: 70.3 + i * 0.25, t1: 80.8, fi: 0.9, frames: [{ t: 0, f }],
       cam: chaves(f, [{ t: 70.3, jan: 0.40, ox: ox + 40, oy: oy + 30 }, { t: 80.8, jan: 0.42, ox, oy }]) }));
-    item('Os dados estão disponíveis.', 'titulo', 70.8, 76.0, { left: '120px', top: '400px', width: '820px' });
-    item('Explore os indicadores, compare períodos e tire suas próprias conclusões.', 'titulo-m', 76.2, 80.6, { left: '120px', top: '360px', width: '860px' });
+    item('Dados oficiais. Atualizados todo dia útil.', 'titulo', 70.8, 76.0, { left: '120px', top: '400px', width: '820px' });
+    item('Explore, compare e tire suas próprias conclusões.', 'titulo-m', 76.2, 80.6, { left: '120px', top: '380px', width: '860px' });
 
     flash(80.9, 0.08);
     const fimMarca = item('<div class="icone vidro"><svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="#ededed" style="stroke-width:1.6;stroke-linecap:round;stroke-linejoin:round"><path d="' + ICONE + '"/></svg></div><div class="nome">Painel Macro Brasil</div>',
@@ -472,13 +504,13 @@
     const url = (M.site_url || '').replace(/^https?:\/\//, '').replace(/\/$/, '');
     const pu = item('<span class="ponto" style="background:#8fb0ff"></span>' + url, 'pilula vidro', 81.4, 85.5, { left: '50%', top: '520px' });
     pu.base = 'translateX(-50%)';
-    const fl = item('Fontes: Banco Central · IBGE · B3 · Tesouro Nacional · FRED · Dados de ' + P.ddmmaaaa(N.dataRef), 'fonte-linha', 81.8, 85.5, { left: '50%', top: '640px', fontSize: '20px', whiteSpace: 'nowrap' });
+    const fl = item('Fontes: Banco Central · IBGE · B3 · Tesouro Nacional · Dados de ' + P.ddmmaaaa(N.dataRef), 'fonte-linha', 81.8, 85.5, { left: '50%', top: '640px', fontSize: '20px', whiteSpace: 'nowrap' });
     fl.base = 'translateX(-50%)';
     atalho('Abrir o painel ↗', '../', 81.6, 999, { left: '50%', top: '730px' }).base = 'translateX(-110%)';
     atalho('Ver as fontes', '../#metodologia', 81.6, 999, { left: '50%', top: '730px' }, true).base = 'translateX(8%)';
 
     // faixa de cotações com dados reais do painel (estilo terminal), com o capítulo em curso à esquerda
-    const E = D.economia || {}, EUA = D.mundo || {}, T = D.tesouro, F0 = D.focus;
+    const E = D.economia || {}, T = D.tesouro, F0 = D.focus;
     const f0 = (ind, k) => F0.tabela.find((r) => r.indicador === ind).valores[k];
     const setaT = (v) => (v == null || v === 0 ? '' : (v > 0 ? '▲ ' : '▼ ') + P.fmt(Math.abs(v)));
     const ult6 = D.ibovespa.ultimos_dias.slice(-6);
@@ -489,11 +521,9 @@
       ['Ibovespa', P.fmtPts(N.ibov), COR.osso, P.comSinal((ult6[5].valor / ult6[0].valor - 1) * 100) + '% 5d'],
       E.dolar ? ['Dólar', P.reais(E.dolar.valor), COR.osso, ''] : null,
       E.ibcbr ? ['IBC-Br 12m', P.comSinal(E.ibcbr.historico[E.ibcbr.historico.length - 1].valor) + '%', COR.osso, ''] : null,
-      E.desemprego ? ['Desocupação', P.pct(E.desemprego.historico[E.desemprego.historico.length - 1].valor, 1), COR.osso, ''] : null,
       E.divida ? ['Dívida bruta', P.pct(E.divida.historico[E.divida.historico.length - 1].valor, 1), COR.osso, 'do PIB'] : null,
       T ? ['Tesouro IPCA+ ' + T.atual.venc_ipca.slice(0, 4), P.pct(T.atual.real), COR.azul, 'real'] : null,
       T ? ['Inflação implícita', P.pct(T.atual.implicita), COR.ambar, ''] : null,
-      EUA.fed_funds ? ['Fed funds', P.pct(EUA.fed_funds.valor), COR.osso, 'EUA'] : null,
     ].filter(Boolean);
     const fitaHtml = cot.map((c) => '<span class="q"><span class="r">' + c[0] + '</span><span class="v" style="color:' + c[2] + '">' + c[1] + '</span>' + (c[3] ? '<span class="d">' + c[3] + '</span>' : '') + '</span>').join('');
     item('<div class="cap"><span class="num">02/05</span><span class="nome">O painel</span></div><div class="janela-t"><div class="fita"><div class="copia">' + fitaHtml + '</div><div class="copia">' + fitaHtml + '</div><div class="copia">' + fitaHtml + '</div></div></div>',
