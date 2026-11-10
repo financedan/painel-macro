@@ -70,6 +70,8 @@
       }
       if (at.name === 'value' && no.localName === 'input') { valor = r.valor; continue; }
       if (at.name === 'checked' && no.localName === 'input') { marcado = !!r.valor; continue; }
+      // atributos aria-* precisam do texto "true"/"false" (leitores de tela não entendem atributo vazio)
+      if (at.name.startsWith('aria-') && typeof r.valor === 'boolean') { el.setAttribute(at.name, String(r.valor)); continue; }
       if (r.inteiro && (r.valor === false || r.valor == null)) continue;
       el.setAttribute(at.name, r.valor === true ? '' : String(r.valor));
     }

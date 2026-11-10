@@ -1,2 +1,2 @@
-requests
-yfinance
+requests==2.34.2
+pillow==13.0.0

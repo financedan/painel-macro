@@ -1,0 +1,79 @@
+1
+00:00:00,600 --> 00:00:04,800
+Selic em 13,75%. Inflação de 4,58% em 12 meses.
+
+2
+00:00:05,000 --> 00:00:09,500
+O que esses números dizem sobre o Brasil agora?
+
+3
+00:00:10,300 --> 00:00:14,400
+O Painel Macro Brasil reúne juros, inflação, expectativas e bolsa em um só lugar, com dados oficiais.
+
+4
+00:00:14,700 --> 00:00:17,300
+Na visão geral, os números do dia.
+
+5
+00:00:18,000 --> 00:00:20,400
+São cinco abas, da visão geral à metodologia.
+
+6
+00:00:20,800 --> 00:00:25,000
+E cada bloco mostra de onde vêm os dados.
+
+7
+00:00:25,600 --> 00:00:29,300
+O juro real, a Selic descontada a inflação, está em 8,77%. No ranking de 40 países, o Brasil é o primeiro.
+
+8
+00:00:29,600 --> 00:00:31,600
+Em 2020, ele chegou a ficar negativo.
+
+9
+00:00:32,200 --> 00:00:37,500
+A inflação de 12 meses está em 4,58%, acima do teto da meta.
+
+10
+00:00:38,200 --> 00:00:43,500
+Em uma semana, o mercado elevou a Selic esperada para o fim de 2027 de 11,75% para 12,50%.
+
+11
+00:00:44,200 --> 00:00:47,200
+O Ibovespa está 19,4% abaixo da máxima histórica, de outubro.
+
+12
+00:00:47,600 --> 00:00:50,000
+E a volatilidade está maior que em 98% dos pregões desde 2000.
+
+13
+00:00:50,500 --> 00:00:54,000
+No painel, você navega pelas abas,
+
+14
+00:00:54,600 --> 00:00:58,300
+escolhe o indicador e o ano,
+
+15
+00:00:58,600 --> 00:01:01,900
+muda o período,
+
+16
+00:01:02,200 --> 00:01:06,100
+e compara a bolsa com o CDI em reais, sem a inflação ou em dólar.
+
+17
+00:01:06,400 --> 00:01:10,100
+O modo explicativo mostra o que cada bloco significa e de onde vêm os dados.
+
+18
+00:01:10,800 --> 00:01:15,900
+Os dados estão disponíveis.
+
+19
+00:01:16,200 --> 00:01:20,500
+Explore os indicadores, compare períodos e tire suas próprias conclusões.
+
+20
+00:01:21,000 --> 00:01:24,500
+Painel Macro Brasil.

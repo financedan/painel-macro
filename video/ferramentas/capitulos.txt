@@ -1,0 +1,32 @@
+;FFMETADATA1
+title=Painel Macro Brasil
+
+[CHAPTER]
+TIMEBASE=1/1000
+START=0
+END=10000
+title=1. Introdução
+
+[CHAPTER]
+TIMEBASE=1/1000
+START=10000
+END=25000
+title=2. O painel
+
+[CHAPTER]
+TIMEBASE=1/1000
+START=25000
+END=50000
+title=3. Indicadores
+
+[CHAPTER]
+TIMEBASE=1/1000
+START=50000
+END=70000
+title=4. Interatividade
+
+[CHAPTER]
+TIMEBASE=1/1000
+START=70000
+END=85000
+title=5. Encerramento

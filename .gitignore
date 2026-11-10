@@ -1,1 +1,7 @@
 .venv/
+avisos.txt
+__pycache__/
+node_modules/
+video/saida/trilha.wav
+video/saida/*.mp4
+.pytest_cache/

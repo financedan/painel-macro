@@ -4,19 +4,38 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Painel Macro Brasil</title>
-<meta name="description" content="Juros, inflação e expectativas do mercado no Brasil, com dados do Banco Central atualizados automaticamente.">
+<!-- meta:inicio (gerado pelo coletar.py) -->
+<meta name="description" content="Selic 13,75% · IPCA 12 meses 4,58% · juro real 8,77% · Ibovespa 172.236 pontos. Dados do Banco Central, IBGE e B3, atualizados todo dia útil.">
 <meta property="og:title" content="Painel Macro Brasil">
-<meta property="og:description" content="Selic, IPCA, juro real, Boletim Focus e Ibovespa em um só painel, atualizado sozinho todo dia útil.">
-<meta property="og:image" content="img/fundo.jpg">
+<meta property="og:description" content="Selic 13,75% · IPCA 12 meses 4,58% · juro real 8,77% · Ibovespa 172.236 pontos.">
+<meta property="og:image" content="https://financedan.github.io/painel-macro/img/og.png">
+<meta property="og:url" content="https://financedan.github.io/painel-macro/">
+<meta name="twitter:card" content="summary_large_image">
+<!-- meta:fim -->
+<meta name="theme-color" content="#0a0a0a">
+<link rel="icon" href="img/icone.svg" type="image/svg+xml">
+<link rel="alternate" type="application/rss+xml" title="Painel Macro Brasil" href="feed.xml">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=DM+Sans:opsz,wght@9..40,400;9..40,500;9..40,600&amp;family=Geist:wght@400;500;600&amp;display=swap" rel="stylesheet">
 <link href="css/painel.css" rel="stylesheet">
 </head>
 <body>
-<div id="app"></div>
+<div id="app"><div class="pm-skel" aria-label="Carregando o painel"><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div></div></div>
 
-<!-- Modelo do painel: os {{campos}} são preenchidos pelo js/painel.js -->
+<!-- Tela de erro (usada pelo painel.js quando os dados não carregam) -->
+<template id="modelo-erro">
+<div style="min-height: 100vh; box-sizing: border-box; display: flex; align-items: center; justify-content: center; padding: 24px; background: #0a0a0a url(img/fundo.jpg) center/cover; color: #ededed; font-family: 'DM Sans', ui-sans-serif, system-ui, sans-serif">
+<div class="pm-glass pm-welcome-card" role="alert">
+<span style="font-size: 12px; font-weight: 500; letter-spacing: .12em; color: #f0b37a">PAINEL MACRO BRASIL</span>
+<h1 style="margin: 0; font-size: 32px; font-weight: 500; letter-spacing: -0.03em; line-height: 1.15">Os dados não carregaram</h1>
+<p data-msg style="margin: 0; font-size: 15px; line-height: 1.5; color: #c2c2c2"></p>
+<button type="button" class="pm-cta">Tentar de novo</button>
+</div>
+</div>
+</template>
+
+<!-- Modelo do painel: os {{campos}} são preenchidos pelos arquivos em js/secoes -->
 <template id="modelo">
 <div class="{{rootClass}}" style="position: relative; min-height: 100vh; color: #ededed; font-family: 'DM Sans', ui-sans-serif, system-ui, -apple-system, 'Segoe UI', sans-serif; font-size: 15px; line-height: 1.5; overflow-x: hidden; isolation: isolate">
 <div class="pm-bg" aria-hidden="true">
@@ -30,13 +49,13 @@
 <div class="pm-glass" style="width: 40px; height: 40px; border-radius: 9999px; display: flex; align-items: center; justify-content: center"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#ededed" style="stroke-width: 1.6; stroke-linecap: round; stroke-linejoin: round" aria-hidden="true"><path d="M3 17h18M6 17a6 6 0 0 1 12 0M12 5v2M5.6 7.6l1.4 1.4M18.4 7.6 17 9"></path></svg></div>
 <div style="display: flex; flex-direction: column; line-height: 1.25">
 <span style="font-size: 15px; font-weight: 500; letter-spacing: -0.01em">Painel Macro Brasil</span>
-<span style="font-size: 12px; color: #c2c2c2; display: flex; align-items: center; gap: 6px"><span class="pm-pulse" style="width: 6px; height: 6px; border-radius: 9999px; background: #ededed"></span>Dados do Banco Central</span>
+<span style="font-size: 12px; color: #c2c2c2; display: flex; align-items: center; gap: 6px"><span class="pm-pulse" style="width: 6px; height: 6px; border-radius: 9999px; background: #ededed"></span>Dados do Banco Central, IBGE e B3</span>
 </div>
 </div>
 <div style="flex: 1; display: flex; align-items: center; justify-content: center; padding: 32px 0">
 <form class="pm-glass pm-rise pm-welcome-card" aria-labelledby="t-welcome" onSubmit="{{saveName}}">
 <div style="display: flex; flex-direction: column; gap: 10px">
-<span style="font-size: 12px; font-weight: 500; letter-spacing: .12em; color: #f0b37a">ANTES DE COMEÇAR</span>
+<span style="font-size: 12px; font-weight: 500; letter-spacing: .12em; color: #f0b37a">SAUDAÇÃO</span>
 <h1 id="t-welcome" style="margin: 0; font-size: 38px; font-weight: 500; letter-spacing: -0.035em; line-height: 1.1">Como podemos te chamar?</h1>
 <p style="margin: 0; font-size: 15px; line-height: 1.5; color: #c2c2c2">Seu nome aparece na saudação do painel: Bom dia, Boa tarde ou Boa noite, conforme o horário.</p>
 </div>
@@ -52,8 +71,11 @@
 <span style="color: #c2c2c2">Prévia:</span><span style="font-weight: 500; min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap">{{namePreview}}</span>
 </div>
 <div style="display: flex; flex-direction: column; align-items: center; gap: 12px">
-<button type="submit" class="pm-cta">Entrar no painel<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" style="stroke-width: 2; stroke-linecap: round; stroke-linejoin: round" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"></path></svg></button>
-<button type="button" class="pm-link" onClick="{{skipName}}">Continuar sem nome</button>
+<button type="submit" class="pm-cta">Salvar e voltar ao painel<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" style="stroke-width: 2; stroke-linecap: round; stroke-linejoin: round" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"></path></svg></button>
+<div style="display: flex; gap: 8px; flex-wrap: wrap; justify-content: center">
+<button type="button" class="pm-link" onClick="{{cancelName}}">Cancelar</button>
+<template data-if="nameHasSaved"><button type="button" class="pm-link" onClick="{{removeName}}">Remover meu nome</button></template>
+</div>
 </div>
 <div style="display: flex; align-items: center; justify-content: center; gap: 8px; font-size: 12px; color: #c2c2c2">
 <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#c2c2c2" style="stroke-width: 1.6; stroke-linecap: round; stroke-linejoin: round" aria-hidden="true"><path d="M7 11V8a5 5 0 0 1 10 0v3M6 11h12v9H6z"></path></svg>Seu nome fica salvo só neste navegador.
@@ -62,6 +84,7 @@
 </div>
 </div>
 </template>
+
 <template data-if="showPanel">
 <header style="position: relative; z-index: 5; display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 12px; padding: 20px 24px 8px">
 <div class="pm-fade" style="display: flex; align-items: center; gap: 10px">
@@ -70,67 +93,77 @@
 </div>
 <div style="display: flex; flex-direction: column; line-height: 1.25">
 <span style="font-size: 15px; font-weight: 500; letter-spacing: -0.01em">Painel Macro Brasil</span>
-<span style="font-size: 12px; color: #c2c2c2; display: flex; align-items: center; gap: 6px"><span class="pm-pulse" style="width: 6px; height: 6px; border-radius: 9999px; background: #ededed"></span>Dados do Banco Central</span>
+<span style="font-size: 12px; color: #c2c2c2; display: flex; align-items: center; gap: 6px"><span class="pm-pulse" style="width: 6px; height: 6px; border-radius: 9999px; background: #ededed"></span>Dados do Banco Central, IBGE e B3</span>
 </div>
 </div>
 
-<nav class="pm-topnav pm-fade" aria-label="Seções do painel" style="display: flex; gap: 8px; justify-content: center; flex-wrap: nowrap">
+<nav class="pm-topnav pm-fade" aria-label="Seções do painel" style="display: flex; gap: 8px; justify-content: center; flex-wrap: wrap">
 <template data-for="nav" data-as="n">
-<button type="button" class="{{n.pillClass}}" onClick="{{n.go}}" aria-current="{{n.current}}">
+<a href="{{n.href}}" class="{{n.pillClass}}" onClick="{{n.go}}" aria-current="{{n.current}}">
 <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" style="stroke-width: 1.6; stroke-linecap: round; stroke-linejoin: round" aria-hidden="true"><path d="{{n.icon}}"></path></svg>{{n.label}}
-</button>
+</a>
 </template>
 </nav>
 
 <div style="display: flex; align-items: center; gap: 8px; position: relative">
-<button type="button" class="pm-pill" aria-label="Alertas" aria-expanded="{{notifOpen}}" onClick="{{toggleNotif}}" style="width: 40px; height: 40px; padding: 0; justify-content: center; position: relative">
+<button type="button" data-sino class="pm-pill" aria-label="{{alertLabel}}" aria-expanded="{{notifOpen}}" aria-controls="pm-alertas" onClick="{{toggleNotif}}" style="width: 40px; height: 40px; padding: 0; justify-content: center; position: relative">
 <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" style="stroke-width: 1.6; stroke-linecap: round; stroke-linejoin: round" aria-hidden="true"><path d="M6 9a6 6 0 1 1 12 0c0 6 2.5 7.5 2.5 7.5h-17S6 15 6 9M10 20a2 2 0 0 0 4 0"></path></svg>
-<span style="position: absolute; top: -3px; right: -3px; min-width: 18px; height: 18px; border-radius: 9999px; background: #ededed; color: #161616; font-size: 11px; font-weight: 600; display: flex; align-items: center; justify-content: center">{{alertCount}}</span>
+<template data-if="hasNewAlerts"><span aria-hidden="true" style="position: absolute; top: -3px; right: -3px; min-width: 18px; height: 18px; border-radius: 9999px; background: #ededed; color: #161616; font-size: 11px; font-weight: 600; display: flex; align-items: center; justify-content: center">{{alertCount}}</span></template>
 </button>
-<button type="button" class="pm-avatar" title="Trocar nome" aria-label="Trocar o nome da saudação" onClick="{{changeName}}"><template data-if="hasName">{{initials}}</template><template data-if="noName"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" style="stroke-width: 1.8; stroke-linecap: round; stroke-linejoin: round" aria-hidden="true"><path d="M12 12a4 4 0 1 0 0-8 4 4 0 0 0 0 8zM4 20a8 8 0 0 1 16 0"></path></svg></template></button>
+<button type="button" class="pm-avatar" title="Trocar nome" aria-label="Definir o nome da saudação" onClick="{{changeName}}"><template data-if="hasName">{{initials}}</template><template data-if="noName"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" style="stroke-width: 1.8; stroke-linecap: round; stroke-linejoin: round" aria-hidden="true"><path d="M12 12a4 4 0 1 0 0-8 4 4 0 0 0 0 8zM4 20a8 8 0 0 1 16 0"></path></svg></template></button>
 <template data-if="notifOpen">
-<div class="pm-glass-dark pm-rise" role="region" aria-label="Alertas" style="position: absolute; top: 52px; right: 0; width: 330px; max-width: calc(100vw - 48px); border-radius: 24px; padding: 18px; z-index: 10; display: flex; flex-direction: column; gap: 12px; animation-duration: .5s">
-<span style="font-size: 13px; color: #c2c2c2; letter-spacing: .02em">Alertas</span>
+<div id="pm-alertas" data-alertas class="pm-glass-dark pm-rise" role="region" aria-label="Alertas" style="position: absolute; top: 52px; right: 0; width: 340px; max-width: calc(100vw - 48px); border-radius: 24px; padding: 18px; z-index: 10; display: flex; flex-direction: column; gap: 12px; animation-duration: .5s">
+<span style="font-size: 13px; color: #c2c2c2; letter-spacing: .02em">Alertas<template data-if="hasNovidades"> · {{novidadesTitulo}}</template></span>
 <template data-for="alerts" data-as="a">
 <div style="display: flex; gap: 10px; align-items: flex-start">
 <span style="{{a.dotStyle}}"></span>
-<span style="font-size: 14px; color: #ededed">{{a.text}}</span>
+<span style="font-size: 14px; color: #ededed"><template data-if="a.novidade"><span class="pm-tag">novo</span></template>{{a.text}}</span>
 </div>
 </template>
+<span style="font-size: 12px; color: #c2c2c2">Esc ou clique fora para fechar</span>
 </div>
 </template>
 </div>
 </header>
 
 <div style="position: relative; z-index: 2; display: flex; flex-wrap: wrap; gap: 24px; padding: 16px 24px 40px; align-items: flex-start">
-<nav class="pm-dock pm-glass pm-fade" aria-label="Navegação lateral" style="position: relative; z-index: 6; flex: 0 0 auto; width: 56px; box-sizing: border-box; padding: 8px; border-radius: 9999px; display: flex; flex-direction: column; gap: 8px; align-items: center; margin-top: 88px">
+<nav class="pm-dock pm-glass pm-fade" aria-label="Navegação" style="position: relative; z-index: 6; flex: 0 0 auto; width: 56px; box-sizing: border-box; padding: 8px; border-radius: 9999px; display: flex; flex-direction: column; gap: 8px; align-items: center; margin-top: 88px">
 <template data-for="nav" data-as="n">
-<button type="button" class="{{n.dockClass}}" onClick="{{n.go}}" aria-label="{{n.label}}" aria-current="{{n.current}}">
+<a href="{{n.href}}" class="{{n.dockClass}}" onClick="{{n.go}}" aria-label="{{n.label}}" aria-current="{{n.current}}">
 <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" style="stroke-width: 1.6; stroke-linecap: round; stroke-linejoin: round" aria-hidden="true"><path d="{{n.icon}}"></path></svg>
 <span class="pm-tip pm-glass-dark" aria-hidden="true" style="padding: 6px 12px; border-radius: 9999px; font-size: 13px; color: #ededed">{{n.label}}</span>
-</button>
+</a>
 </template>
 </nav>
 
-<main style="flex: 999 1 560px; min-width: 0; display: flex; flex-direction: column; gap: 20px">
+<main class="pm-main" style="flex: 999 1 560px; min-width: 0; display: flex; flex-direction: column; gap: 20px">
 
-<template data-if="isOverview">
+<template data-if="hasAvisos">
+<div class="pm-glass-dark pm-fade" role="status" style="border-radius: 18px; display: flex; flex-direction: column; gap: 6px; padding: 4px 0">
+<template data-for="avisos" data-as="av"><div class="pm-aviso">{{av.t}}</div></template>
+</div>
+</template>
+
+<!-- ======================================================== VISÃO GERAL -->
+<template data-if="isVisao">
 <section aria-labelledby="t-overview" style="display: flex; flex-direction: column; gap: 20px">
 
 <div class="pm-rise" style="display: flex; flex-wrap: wrap; align-items: flex-end; justify-content: space-between; gap: 16px">
 <div style="min-width: 0">
-<h1 id="t-overview" style="margin: 0; font-size: 40px; font-weight: 500; letter-spacing: -0.035em; line-height: 1.1">{{greeting}}{{greetSuffix}}</h1>
+<h1 id="t-overview" class="pm-h1">{{greeting}}{{greetSuffix}}</h1>
 <p style="margin: 8px 0 0; font-size: 15px; color: #c2c2c2">{{subtitle}}</p>
 </div>
 <div style="display: flex; gap: 8px; flex-wrap: wrap">
-<span class="pm-pill" style="cursor: default">Próximo Copom: {{copomShort}}</span>
+<span class="pm-pill" style="cursor: default">{{copomShort}}</span>
 <a href="https://www.bcb.gov.br/publicacoes/focus" target="_blank" rel="noopener" style="display: inline-flex; align-items: center; gap: 6px; padding: 9px 16px; border-radius: 9999px; background: #ffffff; color: #161616; font-size: 14px; font-weight: 500; text-decoration: none">Abrir o Focus da semana<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" style="stroke-width: 2; stroke-linecap: round; stroke-linejoin: round" aria-hidden="true"><path d="M7 17 17 7M8 7h9v9"></path></svg></a>
 </div>
 </div>
 
+
+
 <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 16px">
 <template data-for="kpis" data-as="k">
-<article class="pm-glass pm-lift pm-rise" style="{{k.cardStyle}}">
+<article class="pm-glass pm-rise" style="border-radius: 24px; padding: 20px; display: flex; flex-direction: column; gap: 10px; min-width: 0; {{k.cardStyle}}">
 <div style="display: flex; justify-content: space-between; align-items: center; gap: 8px">
 <span style="font-size: 13px; color: #c2c2c2; letter-spacing: .02em">{{k.label}}</span>
 <span class="pm-glass" style="width: 30px; height: 30px; flex: 0 0 auto; border-radius: 9999px; display: flex; align-items: center; justify-content: center"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" style="stroke-width: 1.7; stroke-linecap: round; stroke-linejoin: round" aria-hidden="true"><path d="{{k.icon}}"></path></svg></span>
@@ -138,31 +171,36 @@
 <div style="font-size: 34px; font-weight: 500; letter-spacing: -0.035em; line-height: 1; font-variant-numeric: tabular-nums">{{k.display}}</div>
 <div style="font-size: 13px; color: #c2c2c2; min-height: 40px">{{k.note}}</div>
 <template data-if="k.hasSpark">
-<svg viewBox="0 0 200 40" preserveAspectRatio="none" style="width: 100%; height: 40px; display: block" aria-hidden="true">
+<svg viewBox="0 0 200 40" preserveAspectRatio="none" style="width: 100%; height: 40px; display: block; margin-top: auto" aria-hidden="true">
 <path d="{{k.area}}" fill="{{k.color}}" style="opacity: .12"></path>
 <path class="pm-fade" d="{{k.line}}" fill="none" stroke="{{k.color}}" style="stroke-width: 2; vector-effect: non-scaling-stroke; stroke-linecap: round; stroke-linejoin: round"></path>
 </svg>
 </template>
 <template data-if="k.noSpark">
-<div class="pm-glass-dark" style="border-radius: 9999px; padding: 8px 12px; font-size: 13px; color: #ededed; text-align: center">{{k.foot}}</div>
+<div class="pm-glass-dark" style="border-radius: 9999px; padding: 8px 12px; font-size: 13px; color: #ededed; text-align: center; margin-top: auto">{{k.foot}}</div>
 </template>
 </article>
 </template>
 </div>
 
-<div style="display: flex; flex-wrap: wrap; gap: 16px">
-<article class="pm-glass pm-rise" aria-labelledby="t-bars" style="flex: 2 1 560px; min-width: 0; box-sizing: border-box; border-radius: 24px; padding: 24px; display: flex; flex-direction: column; gap: 14px; animation-delay: 420ms">
-<div style="display: flex; flex-wrap: wrap; justify-content: space-between; gap: 12px; align-items: flex-start">
+<div class="pm-linha">
+<template data-if="barrasOk">
+<article class="pm-glass pm-rise pm-card" aria-labelledby="t-bars" style="flex: 2 1 560px; animation-delay: 420ms">
+<div class="pm-cab">
 <div>
-<h2 id="t-bars" style="margin: 0; font-family: Geist, 'DM Sans', sans-serif; font-size: 20px; font-weight: 500; letter-spacing: -0.01em">Juro real ao fim de cada ano</h2>
-<p style="margin: 4px 0 0; font-size: 14px; color: #c2c2c2">Selic do fim do ano descontada a inflação de 12 meses (fórmula de Fisher) · {{barsNowTxt}}</p>
+<h2 id="t-bars" class="pm-h2">Juro real ao fim de cada ano</h2>
+<p class="pm-sub">Selic do fim do ano descontada a inflação de 12 meses (fórmula de Fisher) · {{barsNowTxt}}</p>
 </div>
-<div class="pm-glass-dark" style="border-radius: 9999px; padding: 8px 14px; font-size: 13px; color: #ededed; font-variant-numeric: tabular-nums">{{barDetail}}</div>
+<div class="pm-cab-dir">
+<div class="pm-glass-dark pm-chip">{{barDetail}}</div>
+<button type="button" class="{{aj.juroReal.cls}}" onClick="{{aj.juroReal.toggle}}" aria-expanded="{{aj.juroReal.aberto}}" aria-label="O que é juro real?">?</button>
 </div>
-<div style="display: flex; flex-wrap: wrap; gap: 16px; font-size: 13px; color: #c2c2c2">
-<span style="display: inline-flex; align-items: center; gap: 6px"><span style="width: 12px; height: 12px; border-radius: 4px; background: rgba(237,237,237,.32); border: 1px solid rgba(255,255,255,.4)"></span>Juro real no ano</span>
-<span style="display: inline-flex; align-items: center; gap: 6px"><span style="width: 12px; height: 12px; border-radius: 4px; background: #8fb0ff"></span>Hoje</span>
-<span style="display: inline-flex; align-items: center; gap: 6px"><span style="width: 16px; height: 0; border-top: 2px dashed rgba(240,179,122,.9)"></span>Juro neutro de referência ({{neutroTxt}})</span>
+</div>
+<template data-if="aj.juroReal.on"><p class="pm-glass-dark pm-explica">{{aj.juroReal.txt}} {{aj.neutro.txt}}</p></template>
+<div class="pm-leg">
+<span><span style="width: 12px; height: 12px; border-radius: 4px; background: rgba(237,237,237,.32); border: 1px solid rgba(255,255,255,.4)"></span>Juro real no ano</span>
+<span><span style="width: 12px; height: 12px; border-radius: 4px; background: #8fb0ff"></span>Hoje (* ano em curso)</span>
+<span><span style="width: 16px; height: 0; border-top: 2px dashed rgba(240,179,122,.9)"></span>Juro neutro de referência ({{neutroTxt}})</span>
 </div>
 <svg viewBox="0 0 760 292" style="width: 100%; height: auto; display: block; overflow: visible" role="img" aria-label="Gráfico de barras do juro real ao fim de cada ano, de {{barsFrom}} a {{barsTo}}">
 <template data-for="barTicks" data-as="t">
@@ -175,33 +213,39 @@
 <template data-if="b.isNow">
 <rect x="{{b.x}}" y="{{b.y}}" width="{{b.w}}" height="{{b.h}}" rx="10" fill="#8fb0ff" style="opacity: .45; filter: blur(12px)"></rect>
 </template>
-<rect class="{{b.cls}}" x="{{b.x}}" y="{{b.y}}" width="{{b.w}}" height="{{b.h}}" rx="10" fill="{{b.fill}}" stroke="rgba(255,255,255,.38)" style="{{b.style}}" onMouseEnter="{{b.enter}}" onClick="{{b.enter}}"></rect>
+<rect class="{{b.cls}}" x="{{b.x}}" y="{{b.y}}" width="{{b.w}}" height="{{b.h}}" rx="10" fill="{{b.fill}}" stroke="rgba(255,255,255,.38)" style="{{b.style}}" tabindex="0" role="button" aria-label="{{b.aria}}" onMouseEnter="{{b.enter}}" onClick="{{b.enter}}" onFocus="{{b.enter}}"></rect>
 <text class="pm-fade" x="{{b.cx}}" y="{{b.ly}}" fill="#ededed" style="{{b.labelStyle}}">{{b.valueTxt}}</text>
 <text x="{{b.cx}}" y="280" fill="#c2c2c2" style="font-size: 12px; text-anchor: middle">{{b.year}}</text>
 </g>
 </template>
 <line x1="56" x2="736" y1="{{neutroY}}" y2="{{neutroY}}" stroke="rgba(240,179,122,.9)" style="stroke-width: 1.5; stroke-dasharray: 6 6"></line>
 </svg>
-<p style="margin: 0; font-size: 13px; color: #c2c2c2">Passe o mouse nas barras para ver a conta de cada ano. Em 2020 e 2021 o juro real ficou negativo: a inflação passou da Selic.</p>
+<p class="pm-cap">{{barsCaption}}</p>
 </article>
+</template>
 
-<article class="pm-glass pm-rise" aria-labelledby="t-copom" style="flex: 1 1 300px; min-width: 0; box-sizing: border-box; border-radius: 24px; padding: 24px; display: flex; flex-direction: column; gap: 16px; animation-delay: 520ms">
+<template data-if="copomOk">
+<article class="pm-glass pm-rise pm-card" aria-labelledby="t-copom" style="flex: 1 1 300px; gap: 16px; animation-delay: 520ms">
 <div style="display: flex; justify-content: space-between; align-items: center; gap: 8px">
-<h2 id="t-copom" style="margin: 0; font-family: Geist, 'DM Sans', sans-serif; font-size: 20px; font-weight: 500; letter-spacing: -0.01em">Próximo Copom</h2>
+<h2 id="t-copom" class="pm-h2">Próximo Copom</h2>
+<div class="pm-cab-dir">
 <span class="pm-glass-dark" style="border-radius: 9999px; padding: 6px 12px; font-size: 13px">Selic hoje {{selicTxt}}</span>
+<button type="button" class="{{aj.copom.cls}}" onClick="{{aj.copom.toggle}}" aria-expanded="{{aj.copom.aberto}}" aria-label="O que é o Copom?">?</button>
 </div>
+</div>
+<template data-if="aj.copom.on"><p class="pm-glass-dark pm-explica">{{aj.copom.txt}}</p></template>
 <div>
 <div style="display: flex; align-items: baseline; gap: 10px"><span style="font-size: 64px; font-weight: 500; letter-spacing: -0.045em; line-height: 1; font-variant-numeric: tabular-nums">{{copomDays}}</span><span style="font-size: 18px; color: #c2c2c2">{{copomWord}}</span></div>
 <p style="margin: 6px 0 0; font-size: 14px; color: #c2c2c2">{{copomWhen}}</p>
 </div>
 <div class="pm-glass-dark" style="border-radius: 18px; padding: 16px; display: flex; flex-direction: column; gap: 10px">
-<span style="font-size: 13px; color: #c2c2c2">O que o mercado precifica</span>
+<span style="font-size: 13px; color: #c2c2c2">O que o mercado espera</span>
 <div style="display: flex; align-items: center; gap: 14px; flex-wrap: wrap">
 <div style="display: flex; flex-direction: column"><span style="font-size: 24px; font-weight: 500; letter-spacing: -0.03em">{{selicTxt}}</span><span style="font-size: 12px; color: #c2c2c2">Selic hoje</span></div>
 <svg width="28" height="14" viewBox="0 0 28 14" fill="none" stroke="#c2c2c2" style="stroke-width: 1.6; stroke-linecap: round; stroke-linejoin: round" aria-hidden="true"><path d="M2 7h23M19 2l6 5-6 5"></path></svg>
 <div style="display: flex; flex-direction: column"><span style="font-size: 24px; font-weight: 500; letter-spacing: -0.03em; color: #8fb0ff">{{copomFocusTxt}}</span><span style="font-size: 12px; color: #c2c2c2">{{copomFocusLabel}}</span></div>
 </div>
-<p style="margin: 0; font-size: 13px; color: #c2c2c2">{{copomPricing}}</p>
+<p class="pm-cap">{{copomPricing}}</p>
 </div>
 <div style="display: flex; flex-direction: column; gap: 8px">
 <span style="font-size: 13px; color: #c2c2c2; letter-spacing: .02em">Próximos eventos</span>
@@ -214,21 +258,27 @@
 </template>
 </div>
 </article>
+</template>
 </div>
 
-<div style="display: flex; flex-wrap: wrap; gap: 16px">
-<article class="pm-glass pm-rise" aria-labelledby="t-infl" style="flex: 2 1 560px; min-width: 0; box-sizing: border-box; border-radius: 24px; padding: 24px; display: flex; flex-direction: column; gap: 14px; animation-delay: 620ms">
-<div style="display: flex; flex-wrap: wrap; justify-content: space-between; gap: 12px; align-items: flex-start">
+<div class="pm-linha">
+<template data-if="inflacaoOk">
+<article class="pm-glass pm-rise pm-card" aria-labelledby="t-infl" style="flex: 2 1 560px; animation-delay: 620ms">
+<div class="pm-cab">
 <div>
-<h2 id="t-infl" style="margin: 0; font-family: Geist, 'DM Sans', sans-serif; font-size: 20px; font-weight: 500; letter-spacing: -0.01em">Inflação contra a meta</h2>
-<p style="margin: 4px 0 0; font-size: 14px; color: #c2c2c2">IPCA em 12 meses, com a meta e a banda de tolerância de cada ano</p>
+<h2 id="t-infl" class="pm-h2">Inflação contra a meta</h2>
+<p class="pm-sub">IPCA em 12 meses, com a meta e a banda de tolerância de cada ano</p>
 </div>
-<div class="pm-glass-dark" role="group" aria-label="Período do gráfico" style="display: flex; gap: 4px; padding: 4px; border-radius: 9999px">
+<div class="pm-cab-dir">
+<div class="pm-glass-dark pm-segs" role="group" aria-label="Período do gráfico">
 <template data-for="segs" data-as="sg">
 <button type="button" class="{{sg.cls}}" onClick="{{sg.pick}}" aria-pressed="{{sg.on}}">{{sg.label}}</button>
 </template>
 </div>
+<button type="button" class="{{aj.meta.cls}}" onClick="{{aj.meta.toggle}}" aria-expanded="{{aj.meta.aberto}}" aria-label="Como funciona a meta?">?</button>
 </div>
+</div>
+<template data-if="aj.meta.on"><p class="pm-glass-dark pm-explica">{{aj.meta.txt}}</p></template>
 <svg viewBox="0 0 760 262" style="width: 100%; height: auto; display: block; overflow: visible" role="img" aria-label="Gráfico de linha do IPCA em 12 meses com a banda da meta de inflação">
 <path d="{{infl.band}}" fill="rgba(237,237,237,.10)"></path>
 <path d="{{infl.center}}" fill="none" stroke="rgba(237,237,237,.45)" style="stroke-width: 1; stroke-dasharray: 4 5"></path>
@@ -239,23 +289,33 @@
 <template data-for="infl.xlabels" data-as="xl">
 <text x="{{xl.x}}" y="252" fill="#c2c2c2" style="font-size: 12px; text-anchor: middle">{{xl.label}}</text>
 </template>
-<path class="pm-draw" pathLength="1" d="{{infl.line}}" fill="none" stroke="#f0b37a" style="stroke-width: 2.5; stroke-linecap: round; stroke-linejoin: round"></path>
+<path id="{{infl.id}}" class="pm-draw" pathLength="1" d="{{infl.line}}" fill="none" stroke="#f0b37a" style="stroke-width: 2.5; stroke-linecap: round; stroke-linejoin: round"></path>
 <circle class="pm-fade" cx="{{infl.lastX}}" cy="{{infl.lastY}}" r="5" fill="#f0b37a" stroke="#0a0a0a" style="stroke-width: 2; animation-delay: 1.4s"></circle>
 <text class="pm-fade" x="{{infl.labelX}}" y="{{infl.labelY}}" fill="#ededed" style="font-size: 13px; font-weight: 500; animation-delay: 1.5s">{{infl.lastTxt}}</text>
 </svg>
-<div style="display: flex; flex-wrap: wrap; gap: 16px; font-size: 13px; color: #c2c2c2">
-<span style="display: inline-flex; align-items: center; gap: 6px"><span style="width: 16px; height: 0; border-top: 2.5px solid #f0b37a"></span>IPCA 12 meses</span>
-<span style="display: inline-flex; align-items: center; gap: 6px"><span style="width: 16px; height: 0; border-top: 1px dashed rgba(237,237,237,.7)"></span>Centro da meta</span>
-<span style="display: inline-flex; align-items: center; gap: 6px"><span style="width: 14px; height: 10px; border-radius: 3px; background: rgba(237,237,237,.18)"></span>Banda de tolerância (±1,5 p.p.)</span>
+<div class="pm-leg">
+<span><span style="width: 16px; height: 0; border-top: 2.5px solid #f0b37a"></span>IPCA 12 meses</span>
+<span><span style="width: 16px; height: 0; border-top: 1px dashed rgba(237,237,237,.7)"></span>Centro da meta</span>
+<span><span style="width: 14px; height: 10px; border-radius: 3px; background: rgba(237,237,237,.18)"></span>Banda de tolerância (±1,5 p.p.)</span>
 </div>
-<p style="margin: 0; font-size: 13px; color: #c2c2c2">{{inflCaption}}</p>
+<div class="pm-glass-dark" style="border-radius: 18px; padding: 12px 14px; display: flex; flex-wrap: wrap; align-items: center; gap: 10px">
+<span style="{{metaContadorStyle}}">{{metaContador}}</span>
+<span style="font-size: 13px; color: #c2c2c2; flex: 1 1 240px">{{metaContadorCaption}}</span>
+</div>
+<p class="pm-cap">{{inflCaption}}</p>
 </article>
+</template>
 
-<article class="pm-glass pm-rise" aria-labelledby="t-anc" style="flex: 1 1 300px; min-width: 0; box-sizing: border-box; border-radius: 24px; padding: 24px; display: flex; flex-direction: column; gap: 16px; animation-delay: 700ms">
+<template data-if="ancoragemOk">
+<article class="pm-glass pm-rise pm-card" aria-labelledby="t-anc" style="flex: 1 1 300px; gap: 16px; animation-delay: 700ms">
+<div class="pm-cab">
 <div>
-<h2 id="t-anc" style="margin: 0; font-family: Geist, 'DM Sans', sans-serif; font-size: 20px; font-weight: 500; letter-spacing: -0.01em">Termômetro de ancoragem</h2>
-<p style="margin: 4px 0 0; font-size: 14px; color: #c2c2c2">Quão longe as expectativas estão da meta de 3%</p>
+<h2 id="t-anc" class="pm-h2">Termômetro de ancoragem</h2>
+<p class="pm-sub">Quão longe as expectativas estão da meta de 3%</p>
 </div>
+<button type="button" class="{{aj.ancoragem.cls}}" onClick="{{aj.ancoragem.toggle}}" aria-expanded="{{aj.ancoragem.aberto}}" aria-label="O que é ancoragem?">?</button>
+</div>
+<template data-if="aj.ancoragem.on"><p class="pm-glass-dark pm-explica">{{aj.ancoragem.txt}}</p></template>
 <template data-for="anchors" data-as="an">
 <div style="display: flex; flex-direction: column; gap: 8px">
 <div style="display: flex; justify-content: space-between; font-size: 14px"><span style="color: #c2c2c2">{{an.label}}</span><span style="font-weight: 500; font-variant-numeric: tabular-nums">{{an.valueTxt}}</span></div>
@@ -267,23 +327,28 @@
 </div>
 </template>
 <div style="display: flex; justify-content: space-between; font-size: 12px; color: #c2c2c2"><span>0%</span><span>Meta 3%</span><span>6%</span></div>
-<p style="margin: 0; font-size: 13px; color: #c2c2c2">{{ancCaption}}</p>
+<p class="pm-cap">{{ancCaption}}</p>
 </article>
+</template>
 </div>
 
-<div style="display: flex; flex-wrap: wrap; gap: 16px">
-<article class="pm-glass pm-rise" aria-labelledby="t-ibov" style="flex: 2 1 560px; min-width: 0; box-sizing: border-box; border-radius: 24px; padding: 24px; display: flex; flex-direction: column; gap: 14px; animation-delay: 740ms">
-<div style="display: flex; flex-wrap: wrap; justify-content: space-between; gap: 12px; align-items: flex-start">
+<div class="pm-linha">
+<template data-if="ibovAnosOk">
+<article class="pm-glass pm-rise pm-card" aria-labelledby="t-ibov" style="flex: 2 1 560px; animation-delay: 740ms">
+<div class="pm-cab">
 <div>
-<h2 id="t-ibov" style="margin: 0; font-family: Geist, 'DM Sans', sans-serif; font-size: 20px; font-weight: 500; letter-spacing: -0.01em">Ibovespa: retorno em cada ano</h2>
-<p style="margin: 4px 0 0; font-size: 14px; color: #c2c2c2">Variação entre o último pregão de cada ano · {{ibovSubNow}}</p>
+<h2 id="t-ibov" class="pm-h2">Ibovespa: retorno em cada ano</h2>
+<p class="pm-sub">Variação entre o último pregão de cada ano · {{ibovSubNow}}</p>
 </div>
-<div class="pm-glass-dark" style="border-radius: 9999px; padding: 8px 14px; font-size: 13px; color: #ededed; font-variant-numeric: tabular-nums">{{ibovDetail}}</div>
+<div class="pm-cab-dir">
+<div class="pm-glass-dark pm-chip">{{ibovDetail}}</div>
+<button type="button" class="{{aj.ibov.cls}}" onClick="{{aj.ibov.toggle}}" aria-expanded="{{aj.ibov.aberto}}" aria-label="O que é o Ibovespa?">?</button>
 </div>
-<div style="display: flex; flex-wrap: wrap; gap: 16px; font-size: 13px; color: #c2c2c2">
-<span style="display: inline-flex; align-items: center; gap: 6px"><span style="width: 12px; height: 12px; border-radius: 4px; background: rgba(237,237,237,.32); border: 1px solid rgba(255,255,255,.4)"></span>Ano de alta</span>
-<span style="display: inline-flex; align-items: center; gap: 6px"><span style="width: 12px; height: 12px; border-radius: 4px; background: rgba(143,176,255,.55)"></span>Ano de queda</span>
-<span style="display: inline-flex; align-items: center; gap: 6px"><span style="width: 12px; height: 12px; border-radius: 4px; background: #f0b37a"></span>{{ibovNowLegend}}</span>
+</div>
+<template data-if="aj.ibov.on"><p class="pm-glass-dark pm-explica">{{aj.ibov.txt}}</p></template>
+<div class="pm-leg">
+<span><span style="width: 12px; height: 12px; border-radius: 4px; background: rgba(237,237,237,.32); border: 1px solid rgba(255,255,255,.4)"></span>Anos anteriores</span>
+<span><span style="width: 12px; height: 12px; border-radius: 4px; background: #8fb0ff"></span>{{ibovNowLegend}}</span>
 </div>
 <svg viewBox="0 0 760 292" style="width: 100%; height: auto; display: block; overflow: visible" role="img" aria-label="Gráfico de barras do retorno anual do Ibovespa de {{ibovFrom}} a {{ibovTo}}">
 <template data-for="ibovTicks" data-as="t">
@@ -293,25 +358,27 @@
 <line x1="56" x2="736" y1="{{ibovZeroY}}" y2="{{ibovZeroY}}" stroke="rgba(255,255,255,.35)" style="stroke-width: 1"></line>
 <template data-for="ibovBars" data-as="b">
 <g>
-<rect class="{{b.cls}}" x="{{b.x}}" y="{{b.y}}" width="{{b.w}}" height="{{b.h}}" rx="10" fill="{{b.fill}}" stroke="rgba(255,255,255,.38)" style="{{b.style}}" onMouseEnter="{{b.enter}}" onClick="{{b.enter}}"></rect>
+<rect class="{{b.cls}}" x="{{b.x}}" y="{{b.y}}" width="{{b.w}}" height="{{b.h}}" rx="10" fill="{{b.fill}}" stroke="rgba(255,255,255,.38)" style="{{b.style}}" tabindex="0" role="button" aria-label="{{b.aria}}" onMouseEnter="{{b.enter}}" onClick="{{b.enter}}" onFocus="{{b.enter}}"></rect>
 <text class="pm-fade" x="{{b.cx}}" y="{{b.ly}}" fill="#ededed" style="{{b.labelStyle}}">{{b.valueTxt}}</text>
 <text x="{{b.cx}}" y="280" fill="#c2c2c2" style="font-size: 12px; text-anchor: middle">{{b.year}}</text>
 </g>
 </template>
 </svg>
-<p style="margin: 0; font-size: 13px; color: #c2c2c2">{{ibovCaption}}</p>
+<p class="pm-cap">{{ibovCaption}}</p>
 </article>
+</template>
 
-<article class="pm-glass pm-rise" aria-labelledby="t-elei" style="flex: 1 1 300px; min-width: 0; box-sizing: border-box; border-radius: 24px; padding: 24px; display: flex; flex-direction: column; gap: 12px; animation-delay: 800ms">
+<template data-if="pregoesOk">
+<article class="pm-glass pm-rise pm-card" aria-labelledby="t-pregoes" style="flex: 1 1 300px; gap: 12px; animation-delay: 800ms">
 <div>
-<h2 id="t-elei" style="margin: 0; font-family: Geist, 'DM Sans', sans-serif; font-size: 20px; font-weight: 500; letter-spacing: -0.01em">Últimos pregões</h2>
-<p style="margin: 4px 0 0; font-size: 14px; color: #c2c2c2">Ibovespa em pontos, fechamento de cada pregão</p>
+<h2 id="t-pregoes" class="pm-h2">Últimos pregões</h2>
+<p class="pm-sub">Ibovespa em pontos, fechamento de cada pregão</p>
 </div>
-<div style="display: flex; align-items: baseline; gap: 10px"><span style="font-size: 56px; font-weight: 500; letter-spacing: -0.045em; line-height: 1; color: #f0b37a; font-variant-numeric: tabular-nums">{{ibovFallTxt}}</span><span style="font-size: 15px; color: #c2c2c2">em cinco pregões</span></div>
+<div style="display: flex; align-items: baseline; gap: 10px"><span style="{{ibovWeekColor}}">{{ibovWeekTxt}}</span><span style="font-size: 15px; color: #c2c2c2">em cinco pregões</span></div>
 <svg viewBox="0 0 320 150" style="width: 100%; height: auto; display: block; overflow: visible" role="img" aria-label="{{ibovWeekAria}}">
-<path class="pm-draw" pathLength="1" d="{{ibovWeekLine}}" fill="none" stroke="#f0b37a" style="stroke-width: 2.5; stroke-linecap: round; stroke-linejoin: round"></path>
+<path class="pm-draw" pathLength="1" d="{{ibovWeekLine}}" fill="none" stroke="#ededed" style="stroke-width: 2.5; stroke-linecap: round; stroke-linejoin: round"></path>
 <template data-for="ibovWeekDots" data-as="p">
-<circle cx="{{p.x}}" cy="{{p.y}}" r="4" fill="#f0b37a" stroke="#0a0a0a" style="stroke-width: 2"></circle>
+<circle cx="{{p.x}}" cy="{{p.y}}" r="4" fill="#ededed" stroke="#0a0a0a" style="stroke-width: 2"></circle>
 <text x="{{p.x}}" y="146" fill="#c2c2c2" style="font-size: 11.5px; text-anchor: middle">{{p.label}}</text>
 </template>
 </svg>
@@ -323,19 +390,22 @@
 </div>
 </template>
 </div>
-<p style="margin: 0; font-size: 13px; color: #c2c2c2">{{ibovWeekCaption}}</p>
+<p class="pm-cap">{{ibovWeekCaption}}</p>
 </article>
+</template>
 </div>
 
-<div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 16px">
-<article class="pm-glass pm-rise" aria-labelledby="t-medo" style="border-radius: 24px; padding: 24px; display: flex; flex-direction: column; gap: 12px; min-width: 0; animation-delay: 760ms">
+<div class="pm-grade">
+<template data-if="medoOk">
+<article class="pm-glass pm-rise pm-card" aria-labelledby="t-medo" style="gap: 12px; animation-delay: 760ms">
 <div style="display: flex; justify-content: space-between; align-items: flex-start; gap: 8px">
 <div>
-<h2 id="t-medo" style="margin: 0; font-family: Geist, 'DM Sans', sans-serif; font-size: 20px; font-weight: 500; letter-spacing: -0.01em">Índice do medo</h2>
-<p style="margin: 4px 0 0; font-size: 14px; color: #c2c2c2">S&amp;P/B3 Ibovespa VIX · volatilidade esperada</p>
+<h2 id="t-medo" class="pm-h2">Medo na bolsa</h2>
+<p class="pm-sub">Volatilidade do Ibovespa em 21 pregões, ao ano, comparada com o histórico desde 2000</p>
 </div>
-<span style="{{medoPillStyle}}">{{medoZone}}</span>
+<div class="pm-cab-dir"><span style="{{medoPillStyle}}">{{medoZone}}</span><button type="button" class="{{aj.medo.cls}}" onClick="{{aj.medo.toggle}}" aria-expanded="{{aj.medo.aberto}}" aria-label="O que é volatilidade?">?</button></div>
 </div>
+<template data-if="aj.medo.on"><p class="pm-glass-dark pm-explica">{{aj.medo.txt}}</p></template>
 <svg viewBox="0 0 280 186" style="width: 100%; max-width: 320px; height: auto; display: block; margin: 0 auto; overflow: visible" role="img" aria-label="{{medoAria}}">
 <path d="{{medoArcCalm}}" fill="none" stroke="rgba(237,237,237,.30)" style="stroke-width: 14; stroke-linecap: butt"></path>
 <path d="{{medoArcWarn}}" fill="none" stroke="rgba(240,179,122,.55)" style="stroke-width: 14; stroke-linecap: butt"></path>
@@ -345,40 +415,40 @@
 </template>
 <line x1="140" y1="140" x2="{{medoNeedleX}}" y2="{{medoNeedleY}}" stroke="#ededed" style="stroke-width: 3; stroke-linecap: round"></line>
 <circle cx="140" cy="140" r="7" fill="#ededed"></circle>
-<template data-if="medoRecordShow">
-<circle cx="{{medoRecX}}" cy="{{medoRecY}}" r="4" fill="#0a0a0a" stroke="#f0b37a" style="stroke-width: 2"></circle>
-</template>
 <text x="140" y="182" fill="#ededed" style="font-size: 30px; font-weight: 500; text-anchor: middle; letter-spacing: -0.03em; font-variant-numeric: tabular-nums">{{medoValueTxt}}</text>
 </svg>
-<div style="display: flex; justify-content: space-between; gap: 8px; font-size: 13px"><span style="color: #c2c2c2">Recorde em {{medoRecData}}</span><span style="font-variant-numeric: tabular-nums">{{medoRecTxt}}</span></div>
-<svg viewBox="0 0 280 96" style="width: 100%; height: auto; display: block; overflow: visible" role="img" aria-label="{{medoLineAria}}">
+<svg viewBox="0 0 280 100" style="width: 100%; height: auto; display: block; overflow: visible" role="img" aria-label="{{medoLineAria}}">
 <line x1="16" x2="264" y1="{{medoLine30}}" y2="{{medoLine30}}" stroke="rgba(240,179,122,.6)" style="stroke-width: 1; stroke-dasharray: 4 4"></line>
-<text x="264" y="{{medoLine30Txt}}" fill="#c2c2c2" style="font-size: 10.5px; text-anchor: end">30 = turbulência</text>
+<text x="16" y="{{medoLine30Txt}}" fill="#c2c2c2" style="font-size: 10.5px">{{medoLinhaTxt}}</text>
 <path class="pm-draw" pathLength="1" d="{{medoPath}}" fill="none" stroke="#ededed" style="stroke-width: 2; stroke-linecap: round; stroke-linejoin: round"></path>
 <template data-for="medoPts" data-as="p">
+<template data-if="p.show">
 <circle cx="{{p.x}}" cy="{{p.y}}" r="3.5" fill="{{p.fill}}"></circle>
-<text x="{{p.x}}" y="92" fill="#c2c2c2" style="font-size: 10.5px; text-anchor: middle">{{p.label}}</text>
+<text x="{{p.x}}" y="96" fill="#c2c2c2" style="font-size: 10.5px; text-anchor: middle">{{p.label}}</text>
+</template>
 </template>
 </svg>
-<p style="margin: 0; font-size: 13px; color: #c2c2c2">{{medoComment}}</p>
-<p style="margin: 0; font-size: 12px; color: #c2c2c2">{{medoFoot}}</p>
+<p class="pm-cap">{{medoComment}}</p>
 </article>
+</template>
 
-<article class="pm-glass pm-rise" aria-labelledby="t-sim" style="border-radius: 24px; padding: 24px; display: flex; flex-direction: column; gap: 14px; min-width: 0; animation-delay: 780ms">
+<template data-if="simuladorOk">
+<article class="pm-glass pm-rise pm-card" aria-labelledby="t-sim" style="animation-delay: 780ms">
 <div style="display: flex; justify-content: space-between; align-items: flex-start; gap: 8px">
 <div>
-<h2 id="t-sim" style="margin: 0; font-family: Geist, 'DM Sans', sans-serif; font-size: 20px; font-weight: 500; letter-spacing: -0.01em">Simulador de juro real</h2>
-<p style="margin: 4px 0 0; font-size: 14px; color: #c2c2c2">Mexa na Selic e na inflação e veja o efeito</p>
+<h2 id="t-sim" class="pm-h2">Simulador de juro real</h2>
+<p class="pm-sub">Mexa na Selic e na inflação e veja o efeito</p>
 </div>
-<button type="button" class="pm-pill" onClick="{{resetSim}}" style="padding: 6px 12px; font-size: 13px">Dados atuais</button>
+<div class="pm-cab-dir"><button type="button" class="pm-pill" onClick="{{resetSim}}" style="padding: 6px 12px; font-size: 13px">Dados atuais</button><button type="button" class="{{aj.simulador.cls}}" onClick="{{aj.simulador.toggle}}" aria-expanded="{{aj.simulador.aberto}}" aria-label="Como funciona?">?</button></div>
 </div>
+<template data-if="aj.simulador.on"><p class="pm-glass-dark pm-explica">{{aj.simulador.txt}}</p></template>
 <div style="display: flex; flex-direction: column; gap: 6px">
 <div style="display: flex; justify-content: space-between; font-size: 14px"><label for="pm-sim-selic" style="color: #c2c2c2">Selic</label><span style="font-variant-numeric: tabular-nums">{{simSelicTxt}}</span></div>
-<input id="pm-sim-selic" class="pm-range" type="range" min="2" max="16" step="0.25" value="{{simSelic}}" onChange="{{onSelic}}">
+<input id="pm-sim-selic" class="pm-range" type="range" min="2" max="16" step="0.25" value="{{simSelic}}" aria-valuetext="{{simSelicTxt}}" onChange="{{onSelic}}">
 </div>
 <div style="display: flex; flex-direction: column; gap: 6px">
 <div style="display: flex; justify-content: space-between; font-size: 14px"><label for="pm-sim-ipca" style="color: #c2c2c2">Inflação (IPCA 12 meses)</label><span style="font-variant-numeric: tabular-nums">{{simIpcaTxt}}</span></div>
-<input id="pm-sim-ipca" class="pm-range" type="range" min="0" max="12" step="0.1" value="{{simIpca}}" onChange="{{onIpca}}">
+<input id="pm-sim-ipca" class="pm-range" type="range" min="0" max="12" step="0.01" value="{{simIpca}}" aria-valuetext="{{simIpcaTxt}}" onChange="{{onIpca}}">
 </div>
 <div class="pm-glass-dark" style="border-radius: 18px; padding: 16px; display: flex; flex-direction: column; gap: 10px">
 <div style="display: flex; justify-content: space-between; align-items: baseline; gap: 8px; flex-wrap: wrap">
@@ -389,54 +459,72 @@
 <div style="{{simNeutroStyle}}"></div>
 <div style="{{simMarkerStyle}}"></div>
 </div>
-<p style="margin: 0; font-size: 13px; color: #c2c2c2">{{simDesc}}</p>
+<div style="position: relative; height: 16px; font-size: 11px; color: #c2c2c2"><span style="position: absolute; left: 0">−5%</span><span style="{{simNeutroLabelStyle}}">{{simNeutroLabel}}</span><span style="position: absolute; right: 0">15%</span></div>
+<p class="pm-cap">{{simDesc}}</p>
 <p style="margin: 0; font-size: 12px; color: #c2c2c2">Subtração simples daria {{simSimpleTxt}}, um erro de {{simErrTxt}}</p>
 </div>
 </article>
+</template>
 
-<article class="pm-glass pm-lift pm-rise" aria-labelledby="t-world" style="border-radius: 24px; padding: 24px; display: flex; flex-direction: column; gap: 12px; min-width: 0; animation-delay: 860ms">
-<h2 id="t-world" style="margin: 0; font-family: Geist, 'DM Sans', sans-serif; font-size: 20px; font-weight: 500; letter-spacing: -0.01em">Brasil no mundo</h2>
-<div style="display: flex; align-items: baseline; gap: 10px"><span style="font-size: 64px; font-weight: 500; letter-spacing: -0.045em; line-height: 1">2º</span><span style="font-size: 16px; color: #c2c2c2">maior juro real do mundo</span></div>
+<template data-if="mundoOk">
+<article class="pm-glass pm-rise pm-card" aria-labelledby="t-world" style="gap: 12px; animation-delay: 860ms">
+<div style="display: flex; justify-content: space-between; align-items: flex-start; gap: 8px">
+<h2 id="t-world" class="pm-h2">Brasil no mundo</h2>
+<button type="button" class="{{aj.mundo.cls}}" onClick="{{aj.mundo.toggle}}" aria-expanded="{{aj.mundo.aberto}}" aria-label="Por que comparar?">?</button>
+</div>
+<template data-if="aj.mundo.on"><p class="pm-glass-dark pm-explica">{{aj.mundo.txt}}</p></template>
+<div style="display: flex; align-items: baseline; gap: 10px"><span style="font-size: 64px; font-weight: 500; letter-spacing: -0.045em; line-height: 1">{{mundoPos}}</span><span style="font-size: 16px; color: #c2c2c2">{{mundoTitulo}}</span></div>
 <div style="display: flex; flex-direction: column; gap: 10px">
+<template data-for="mundoLinhas" data-as="ml">
 <div style="display: flex; flex-direction: column; gap: 4px">
-<div style="display: flex; justify-content: space-between; font-size: 14px"><span>Rússia</span><span style="font-variant-numeric: tabular-nums">9,67%</span></div>
-<div style="height: 8px; border-radius: 9999px; background: rgba(255,255,255,.08)"><div style="width: 100%; height: 100%; border-radius: 9999px; background: rgba(237,237,237,.45)"></div></div>
+<div style="display: flex; justify-content: space-between; font-size: 14px"><span>{{ml.nome}}</span><span style="font-variant-numeric: tabular-nums">{{ml.valor}}</span></div>
+<div style="height: 8px; border-radius: 9999px; background: rgba(255,255,255,.08)"><div style="{{ml.style}}"></div></div>
 </div>
-<div style="display: flex; flex-direction: column; gap: 4px">
-<div style="display: flex; justify-content: space-between; font-size: 14px"><span>Brasil</span><span style="font-variant-numeric: tabular-nums">9,33%</span></div>
-<div style="height: 8px; border-radius: 9999px; background: rgba(255,255,255,.08)"><div style="width: 96.5%; height: 100%; border-radius: 9999px; background: #8fb0ff"></div></div>
+</template>
 </div>
-</div>
-<p style="margin: 0; font-size: 13px; color: #c2c2c2">Ranking de maio de 2026, logo após o corte da Selic para 14,50%. Levantamento MoneYou e Lev Intelligence.</p>
+<p class="pm-cap">{{mundoCaption}}</p>
 </article>
+</template>
 
-<article class="pm-glass pm-rise" aria-labelledby="t-note" style="border-radius: 24px; padding: 24px; display: flex; flex-direction: column; gap: 12px; min-width: 0; animation-delay: 940ms">
+<template data-if="leituraOk">
+<article class="pm-glass pm-rise pm-card" aria-labelledby="t-note" style="gap: 12px; animation-delay: 940ms">
 <div style="display: flex; justify-content: space-between; align-items: center; gap: 8px">
-<h2 id="t-note" style="margin: 0; font-family: Geist, 'DM Sans', sans-serif; font-size: 20px; font-weight: 500; letter-spacing: -0.01em">Leitura da semana</h2>
-<span style="font-size: 12px; color: #c2c2c2">Análise do autor</span>
+<h2 id="t-note" class="pm-h2">Leitura da semana</h2>
+<span style="font-size: 12px; color: #c2c2c2">{{leituraTag}}</span>
 </div>
-<p style="margin: 0; font-size: 14px; color: #c2c2c2">O que mudou no Focus e o que isso diz sobre os juros?</p>
-<template data-if="hasLeitura"><p class="pm-glass-dark" style="margin: 0; border-radius: 16px; padding: 14px; font-size: 15px; line-height: 1.6; color: #ededed; white-space: pre-line">{{leituraTexto}}</p></template>
-<template data-if="noLeitura"><p class="pm-glass-dark" style="margin: 0; border-radius: 16px; padding: 14px; font-size: 14px; color: #c2c2c2">A leitura desta semana sai depois do próximo Boletim Focus.</p></template>
+<p style="margin: 0; font-size: 14px; color: #c2c2c2">{{leituraTitulo}}</p>
+<template data-if="leituraAutor">
+<div class="pm-glass-dark" style="border-radius: 16px; padding: 14px; display: flex; flex-direction: column; gap: 10px; font-size: 15px; line-height: 1.6; color: #ededed">
+<template data-for="leituraParagrafos" data-as="pg"><p style="margin: 0"><template data-for="pg.partes" data-as="pt"><template data-if="pt.b"><strong style="font-weight: 600">{{pt.t}}</strong></template><template data-if="pt.n">{{pt.t}}</template></template></p></template>
+</div>
+</template>
+<template data-if="leituraAuto"><p class="pm-glass-dark" style="margin: 0; border-radius: 16px; padding: 14px; font-size: 14px; line-height: 1.6; color: #ededed">{{leituraResumo}}</p></template>
+<template data-if="leituraVazia"><p class="pm-glass-dark" style="margin: 0; border-radius: 16px; padding: 14px; font-size: 14px; color: #c2c2c2">A leitura desta semana sai depois do próximo Boletim Focus.</p></template>
 <div style="font-size: 12px; color: #c2c2c2">{{leituraRef}}</div>
 </article>
+</template>
 </div>
 
 </section>
 </template>
 
+<!-- ======================================================== EXPECTATIVAS -->
 <template data-if="isFocus">
 <section aria-labelledby="t-focus" style="display: flex; flex-direction: column; gap: 20px">
 <div class="pm-rise">
-<h1 id="t-focus" style="margin: 0; font-size: 40px; font-weight: 500; letter-spacing: -0.035em; line-height: 1.1">Expectativas do mercado</h1>
+<h1 id="t-focus" class="pm-h1">Expectativas do mercado</h1>
 <p style="margin: 8px 0 0; font-size: 15px; color: #c2c2c2">{{focusSub}}</p>
 </div>
 
-<article class="pm-glass pm-rise" aria-labelledby="t-table" style="border-radius: 24px; padding: 24px; display: flex; flex-direction: column; gap: 14px; animation-delay: 100ms">
-<div style="display: flex; flex-wrap: wrap; justify-content: space-between; gap: 8px; align-items: baseline">
-<h2 id="t-table" style="margin: 0; font-family: Geist, 'DM Sans', sans-serif; font-size: 20px; font-weight: 500">Medianas e mudança na semana</h2>
+<article class="pm-glass pm-rise pm-card" aria-labelledby="t-table" style="animation-delay: 100ms">
+<div class="pm-cab" style="align-items: baseline">
+<h2 id="t-table" class="pm-h2">Medianas e mudança na semana</h2>
+<div class="pm-cab-dir">
 <span style="font-size: 13px; color: #c2c2c2">▲ subiu · ▼ caiu · = estável, em relação à coleta de {{focusPrevTxt}}</span>
+<button type="button" class="{{aj.focus.cls}}" onClick="{{aj.focus.toggle}}" aria-expanded="{{aj.focus.aberto}}" aria-label="O que é o Focus?">?</button>
 </div>
+</div>
+<template data-if="aj.focus.on"><p class="pm-glass-dark pm-explica">{{aj.focus.txt}}</p></template>
 <div style="overflow-x: auto">
 <table style="width: 100%; min-width: 560px; border-collapse: collapse; font-variant-numeric: tabular-nums">
 <thead>
@@ -450,21 +538,27 @@
 <tr class="pm-row" style="border-top: 1px solid rgba(229,229,229,.12)">
 <th scope="row" style="padding: 14px 12px; text-align: left; font-weight: 500"><div style="font-size: 15px">{{r.name}}</div><div style="font-size: 12px; color: #c2c2c2; font-weight: 400">{{r.unit}}</div></th>
 <template data-for="r.cells" data-as="c">
-<td style="padding: 14px 12px"><div style="font-size: 18px; font-weight: 500; letter-spacing: -0.02em">{{c.value}}</div><div style="font-size: 12px; color: #c2c2c2">{{c.delta}}</div></td>
+<td style="padding: 14px 12px"><div style="font-size: 18px; font-weight: 500; letter-spacing: -0.02em">{{c.value}}</div><div style="font-size: 12px; color: #c2c2c2">{{c.delta}}</div><div style="font-size: 11px; color: rgba(194,194,194,.8)">{{c.faixa}}</div></td>
 </template>
 </tr>
 </template>
 </tbody>
 </table>
 </div>
+<p style="margin: 0; font-size: 12px; color: #c2c2c2">Abaixo de cada mediana: a menor e a maior resposta, e quantas instituições responderam. Faixa larga = mercado dividido.</p>
 </article>
 
-<div style="display: flex; flex-wrap: wrap; gap: 16px">
-<article class="pm-glass pm-rise" aria-labelledby="t-traj" style="flex: 2 1 560px; min-width: 0; box-sizing: border-box; border-radius: 24px; padding: 24px; display: flex; flex-direction: column; gap: 14px; animation-delay: 200ms">
+<div class="pm-linha">
+<template data-if="trajetoriaOk">
+<article class="pm-glass pm-rise pm-card" aria-labelledby="t-traj" style="flex: 2 1 560px; animation-delay: 200ms">
+<div class="pm-cab">
 <div>
-<h2 id="t-traj" style="margin: 0; font-family: Geist, 'DM Sans', sans-serif; font-size: 20px; font-weight: 500">Trajetória esperada do juro real</h2>
-<p style="margin: 4px 0 0; font-size: 14px; color: #c2c2c2">A área entre a Selic e a inflação esperadas é o juro real que o mercado projeta</p>
+<h2 id="t-traj" class="pm-h2">Trajetória esperada do juro real</h2>
+<p class="pm-sub">A área entre a Selic e a inflação esperadas é o juro real que o mercado projeta</p>
 </div>
+<button type="button" class="{{aj.exante.cls}}" onClick="{{aj.exante.toggle}}" aria-expanded="{{aj.exante.aberto}}" aria-label="Ex-ante e ex-post">?</button>
+</div>
+<template data-if="aj.exante.on"><p class="pm-glass-dark pm-explica">{{aj.exante.txt}}</p></template>
 <svg viewBox="0 0 760 300" style="width: 100%; height: auto; display: block; overflow: visible" role="img" aria-label="Selic e IPCA esperados pelo Focus de hoje até {{focusLastYear}}, com o juro real entre as linhas">
 <template data-for="traj.ticks" data-as="t">
 <line x1="80" x2="690" y1="{{t.y}}" y2="{{t.y}}" stroke="rgba(255,255,255,.07)" style="stroke-width: 1"></line>
@@ -482,16 +576,18 @@
 <text x="{{p.x}}" y="292" fill="#c2c2c2" style="font-size: 12px; text-anchor: middle">{{p.label}}</text>
 </template>
 </svg>
-<div style="display: flex; flex-wrap: wrap; gap: 16px; font-size: 13px; color: #c2c2c2">
-<span style="display: inline-flex; align-items: center; gap: 6px"><span style="width: 16px; height: 0; border-top: 2.5px solid #ededed"></span>Selic</span>
-<span style="display: inline-flex; align-items: center; gap: 6px"><span style="width: 16px; height: 0; border-top: 2.5px solid #f0b37a"></span>IPCA</span>
-<span style="display: inline-flex; align-items: center; gap: 6px"><span style="width: 14px; height: 10px; border-radius: 3px; background: rgba(143,176,255,.35)"></span>Juro real</span>
+<div class="pm-leg">
+<span><span style="width: 16px; height: 0; border-top: 2.5px solid #ededed"></span>Selic</span>
+<span><span style="width: 16px; height: 0; border-top: 2.5px solid #f0b37a"></span>IPCA</span>
+<span><span style="width: 14px; height: 10px; border-radius: 3px; background: rgba(143,176,255,.35)"></span>Juro real</span>
 </div>
-<p style="margin: 0; font-size: 13px; color: #c2c2c2">{{trajCaption}}</p>
+<p class="pm-cap">{{trajCaption}}</p>
 </article>
+</template>
 
-<article class="pm-glass pm-rise" aria-labelledby="t-moves" style="flex: 1 1 300px; min-width: 0; box-sizing: border-box; border-radius: 24px; padding: 24px; display: flex; flex-direction: column; gap: 12px; animation-delay: 280ms">
-<h2 id="t-moves" style="margin: 0; font-family: Geist, 'DM Sans', sans-serif; font-size: 20px; font-weight: 500">O que mudou na semana</h2>
+<template data-if="mudancasOk">
+<article class="pm-glass pm-rise pm-card" aria-labelledby="t-moves" style="flex: 1 1 300px; gap: 12px; animation-delay: 280ms">
+<h2 id="t-moves" class="pm-h2">O que mudou na semana</h2>
 <template data-for="moves" data-as="m">
 <div class="pm-glass-dark pm-row" style="border-radius: 16px; padding: 12px 14px; display: flex; flex-direction: column; gap: 2px">
 <div style="display: flex; justify-content: space-between; gap: 8px; font-size: 14px"><span style="font-weight: 500">{{m.name}}</span><span style="font-variant-numeric: tabular-nums">{{m.change}}</span></div>
@@ -499,40 +595,293 @@
 </div>
 </template>
 </article>
+</template>
 </div>
 
-<article class="pm-glass pm-rise" aria-labelledby="t-q" style="border-radius: 24px; padding: 24px; display: flex; flex-direction: column; gap: 12px; animation-delay: 360ms">
-<div style="display: flex; flex-wrap: wrap; justify-content: space-between; gap: 8px; align-items: baseline">
-<h2 id="t-q" style="margin: 0; font-family: Geist, 'DM Sans', sans-serif; font-size: 20px; font-weight: 500">Perguntas para ler o Focus</h2>
+<div class="pm-linha">
+<template data-if="historicoOk">
+<article class="pm-glass pm-rise pm-card" aria-labelledby="t-hist" style="flex: 2 1 560px; animation-delay: 320ms">
+<div class="pm-cab">
+<div>
+<h2 id="t-hist" class="pm-h2">Como a expectativa evoluiu</h2>
+<p class="pm-sub">Mediana do Focus, semana a semana, no último ano</p>
+</div>
+<button type="button" class="{{aj.historico.cls}}" onClick="{{aj.historico.toggle}}" aria-expanded="{{aj.historico.aberto}}" aria-label="Como ler?">?</button>
+</div>
+<template data-if="aj.historico.on"><p class="pm-glass-dark pm-explica">{{aj.historico.txt}}</p></template>
+<div style="display: flex; flex-wrap: wrap; gap: 8px">
+<div class="pm-glass-dark pm-segs" role="group" aria-label="Indicador"><template data-for="histInds" data-as="sg"><button type="button" class="{{sg.cls}}" onClick="{{sg.pick}}" aria-pressed="{{sg.on}}">{{sg.label}}</button></template></div>
+<div class="pm-glass-dark pm-segs" role="group" aria-label="Ano"><template data-for="histAnos" data-as="sg"><button type="button" class="{{sg.cls}}" onClick="{{sg.pick}}" aria-pressed="{{sg.on}}">{{sg.label}}</button></template></div>
+</div>
+<svg viewBox="0 0 760 222" style="width: 100%; height: auto; display: block; overflow: visible" role="img" aria-label="{{histAria}}">
+<template data-for="hist.ticks" data-as="t">
+<line x1="64" x2="680" y1="{{t.y}}" y2="{{t.y}}" stroke="rgba(255,255,255,.07)" style="stroke-width: 1"></line>
+<text x="56" y="{{t.ty}}" fill="#c2c2c2" style="font-size: 12px; text-anchor: end">{{t.label}}</text>
+</template>
+<template data-if="histTemMeta"><line x1="64" x2="680" y1="{{histMetaY}}" y2="{{histMetaY}}" stroke="rgba(237,237,237,.45)" style="stroke-width: 1; stroke-dasharray: 4 5"></line></template>
+<template data-for="hist.xlabels" data-as="xl"><text x="{{xl.x}}" y="216" fill="#c2c2c2" style="font-size: 12px; text-anchor: middle">{{xl.label}}</text></template>
+<template data-for="hist.linhas" data-as="ln">
+<path id="{{ln.id}}" class="{{ln.cls}}" pathLength="1" d="{{ln.d}}" fill="none" stroke="{{ln.cor}}" style="stroke-width: {{ln.largura}}; stroke-linecap: round; stroke-linejoin: round; {{ln.dash}}"></path>
+<circle cx="{{ln.lastX}}" cy="{{ln.lastY}}" r="4.5" fill="{{ln.cor}}" stroke="#0a0a0a" style="stroke-width: 2"></circle>
+<text x="{{ln.labelX}}" y="{{ln.labelY}}" fill="#ededed" style="font-size: 13px; font-weight: 500">{{ln.lastTxt}}</text>
+</template>
+</svg>
+<p class="pm-cap">{{histCaption}}</p>
+</article>
+</template>
+
+<template data-if="reunioesOk">
+<article class="pm-glass pm-rise pm-card" aria-labelledby="t-reun" style="flex: 1 1 300px; gap: 12px; animation-delay: 360ms">
+<div class="pm-cab">
+<div>
+<h2 id="t-reun" class="pm-h2">Selic em cada reunião</h2>
+<p class="pm-sub">Mediana do Focus e a faixa de respostas</p>
+</div>
+<button type="button" class="{{aj.reunioes.cls}}" onClick="{{aj.reunioes.toggle}}" aria-expanded="{{aj.reunioes.aberto}}" aria-label="Como ler?">?</button>
+</div>
+<template data-if="aj.reunioes.on"><p class="pm-glass-dark pm-explica">{{aj.reunioes.txt}}</p></template>
+<template data-for="reunioesLista" data-as="r">
+<div style="display: flex; flex-direction: column; gap: 6px">
+<div style="display: flex; justify-content: space-between; gap: 8px; font-size: 14px"><span>{{r.nome}}</span><span class="pm-num" style="font-weight: 500">{{r.valor}}</span></div>
+<div style="position: relative; height: 8px; border-radius: 9999px; background: rgba(255,255,255,.08)">
+<div style="{{r.faixaStyle}}"></div>
+<div style="{{reunioesHojeStyle}}"></div>
+<div style="{{r.dotStyle}}"></div>
+</div>
+<span style="font-size: 11px; color: #c2c2c2">{{r.sub}}</span>
+</div>
+</template>
+<div style="display: flex; justify-content: space-between; font-size: 12px; color: #c2c2c2"><template data-for="reunioesEscala" data-as="e"><span>{{e.t}}</span></template></div>
+</article>
+</template>
+</div>
+
+<template data-if="tesouroOk">
+<article class="pm-glass pm-rise pm-card" aria-labelledby="t-tes" style="animation-delay: 400ms">
+<div class="pm-cab">
+<div>
+<h2 id="t-tes" class="pm-h2">O que os títulos públicos dizem</h2>
+<p class="pm-sub">Juro real de mercado (Tesouro IPCA+ {{tesVenc}}) e a inflação implícita nos preços · taxas de {{tesData}}</p>
+</div>
+<button type="button" class="{{aj.tesouro.cls}}" onClick="{{aj.tesouro.toggle}}" aria-expanded="{{aj.tesouro.aberto}}" aria-label="Como ler?">?</button>
+</div>
+<template data-if="aj.tesouro.on"><p class="pm-glass-dark pm-explica">{{aj.tesouro.txt}}</p></template>
+<div style="display: flex; gap: 24px; flex-wrap: wrap">
+<div style="display: flex; flex-direction: column"><span style="font-size: 34px; font-weight: 500; letter-spacing: -0.035em; color: #8fb0ff" class="pm-num">{{tesReal}}</span><span style="font-size: 13px; color: #c2c2c2">juro real de mercado, ao ano</span></div>
+<div style="display: flex; flex-direction: column"><span style="font-size: 34px; font-weight: 500; letter-spacing: -0.035em; color: #f0b37a" class="pm-num">{{tesImplicita}}</span><span style="font-size: 13px; color: #c2c2c2">inflação implícita, ao ano</span></div>
+</div>
+<svg viewBox="0 0 1180 222" style="width: 100%; height: auto; display: block; overflow: visible" role="img" aria-label="{{tesAria}}">
+<template data-for="tes.ticks" data-as="t">
+<line x1="48" x2="1100" y1="{{t.y}}" y2="{{t.y}}" stroke="rgba(255,255,255,.07)" style="stroke-width: 1"></line>
+<text x="40" y="{{t.ty}}" fill="#c2c2c2" style="font-size: 12px; text-anchor: end">{{t.label}}</text>
+</template>
+<template data-for="tes.xlabels" data-as="xl"><text x="{{xl.x}}" y="216" fill="#c2c2c2" style="font-size: 12px; text-anchor: middle">{{xl.label}}</text></template>
+<template data-for="tes.linhas" data-as="ln">
+<path id="{{ln.id}}" class="{{ln.cls}}" pathLength="1" d="{{ln.d}}" fill="none" stroke="{{ln.cor}}" style="stroke-width: {{ln.largura}}; stroke-linecap: round; stroke-linejoin: round; {{ln.dash}}"></path>
+<circle cx="{{ln.lastX}}" cy="{{ln.lastY}}" r="4" fill="{{ln.cor}}" stroke="#0a0a0a" style="stroke-width: 2"></circle>
+<text x="{{ln.labelX}}" y="{{ln.labelY}}" fill="{{ln.cor}}" style="font-size: 12px; font-weight: 500">{{ln.lastTxt}}</text>
+</template>
+</svg>
+<div class="pm-leg">
+<span><span style="width: 16px; height: 0; border-top: 2.5px solid #8fb0ff"></span>Juro real (Tesouro IPCA+)</span>
+<span><span style="width: 16px; height: 0; border-top: 2.5px solid #f0b37a"></span>Inflação implícita</span>
+</div>
+<p class="pm-cap">{{tesCaption}}</p>
+</article>
+</template>
+
+<template data-if="perguntasOk">
+<article class="pm-glass pm-rise pm-card" aria-labelledby="t-q" style="gap: 12px; animation-delay: 440ms">
+<div class="pm-cab" style="align-items: baseline">
+<h2 id="t-q" class="pm-h2">Perguntas para ler o Focus</h2>
 <span style="font-size: 13px; color: #c2c2c2; font-variant-numeric: tabular-nums">{{checksDone}}</span>
 </div>
-<div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 10px">
+<div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 10px; align-items: start">
 <template data-for="questions" data-as="q">
-<label class="pm-glass-dark pm-row" style="border-radius: 16px; padding: 12px 14px; display: flex; gap: 10px; align-items: flex-start; cursor: pointer; font-size: 14px">
+<div class="pm-glass-dark" style="border-radius: 16px; padding: 12px 14px; display: flex; flex-direction: column; gap: 8px">
+<label class="pm-row" style="display: flex; gap: 10px; align-items: flex-start; cursor: pointer; font-size: 14px; border-radius: 10px">
 <input class="pm-check" type="checkbox" checked="{{q.checked}}" onChange="{{q.toggle}}">
 <span>{{q.text}}</span>
 </label>
+<template data-if="q.show"><p class="pm-fade" style="margin: 0 0 0 28px; font-size: 13px; color: #b9ccff">Resposta do painel: {{q.resposta}}</p></template>
+</div>
 </template>
 </div>
 </article>
+</template>
+<div class="pm-secao pm-rise">
+<h2 class="pm-h2 pm-h2-secao">Contexto econômico</h2>
+<p class="pm-sub">Juros na história, inflação em detalhe, atividade, emprego, contas públicas e o mundo</p>
+</div>
+
+<template data-if="selicLinhaOk">
+<div class="pm-linha">
+<article class="pm-glass pm-rise pm-card" aria-labelledby="t-sl" style="flex: 2 1 560px; animation-delay: 100ms">
+<div class="pm-cab">
+<div>
+<h2 id="t-sl" class="pm-h2">A Selic e cada decisão do Copom</h2>
+<p class="pm-sub">Meta da Selic em degraus · azul: corte · laranja: alta</p>
+</div>
+<button type="button" class="{{aj.selicLinha.cls}}" onClick="{{aj.selicLinha.toggle}}" aria-expanded="{{aj.selicLinha.aberto}}" aria-label="Como ler?">?</button>
+</div>
+<template data-if="aj.selicLinha.on"><p class="pm-glass-dark pm-explica">{{aj.selicLinha.txt}}</p></template>
+<svg viewBox="0 0 760 262" style="width: 100%; height: auto; display: block; overflow: visible" role="img" aria-label="{{selicAria}}">
+<template data-for="selicTicks" data-as="t">
+<line x1="48" x2="700" y1="{{t.y}}" y2="{{t.y}}" stroke="rgba(255,255,255,.07)" style="stroke-width: 1"></line>
+<text x="40" y="{{t.ty}}" fill="#c2c2c2" style="font-size: 12px; text-anchor: end">{{t.label}}</text>
+</template>
+<template data-for="selicXlabels" data-as="xl"><text x="{{xl.x}}" y="252" fill="#c2c2c2" style="font-size: 12px; text-anchor: middle">{{xl.label}}</text></template>
+<path class="pm-draw" pathLength="1" d="{{selicPath}}" fill="none" stroke="#ededed" style="stroke-width: 2.5; stroke-linejoin: round"></path>
+<template data-for="selicMarcas" data-as="m"><circle class="pm-fade" cx="{{m.x}}" cy="{{m.y}}" r="3.5" fill="{{m.fill}}" style="animation-delay: 1.2s"></circle></template>
+<text x="{{selicLastX}}" y="{{selicLastLabelY}}" fill="#ededed" style="font-size: 13px; font-weight: 500">{{selicLastTxt}}</text>
+</svg>
+</article>
+<article class="pm-glass pm-rise pm-card" aria-labelledby="t-ciclo" style="flex: 1 1 300px; gap: 12px; animation-delay: 160ms">
+<h2 id="t-ciclo" class="pm-h2">{{cicloTitulo}}</h2>
+<span style="font-size: 56px; font-weight: 500; letter-spacing: -0.045em; line-height: 1" class="pm-num">{{cicloValor}}</span>
+<p class="pm-cap">{{cicloTxt}}</p>
+<span style="font-size: 13px; color: #c2c2c2; letter-spacing: .02em; margin-top: 4px">Últimas mudanças</span>
+<template data-for="decisoesRecentes" data-as="d">
+<div class="pm-row" style="display: flex; justify-content: space-between; gap: 10px; padding: 6px 4px; border-top: 1px solid rgba(229,229,229,.10); font-size: 14px">
+<div><div style="font-weight: 500">{{d.data}}</div><div style="font-size: 12px; color: #c2c2c2">{{d.mov}}</div></div>
+<span class="pm-num" style="white-space: nowrap">{{d.de}} → {{d.para}}</span>
+</div>
+</template>
+</article>
+</div>
+</template>
+
+<div class="pm-linha">
+<template data-if="gruposOk">
+<article class="pm-glass pm-rise pm-card" aria-labelledby="t-grp" style="flex: 1 1 400px; gap: 12px; animation-delay: 200ms">
+<div class="pm-cab">
+<div>
+<h2 id="t-grp" class="pm-h2">O que puxa a inflação</h2>
+<p class="pm-sub">IPCA por grupo em 12 meses · {{gruposMes}}</p>
+</div>
+<button type="button" class="{{aj.grupos.cls}}" onClick="{{aj.grupos.toggle}}" aria-expanded="{{aj.grupos.aberto}}" aria-label="Como ler?">?</button>
+</div>
+<template data-if="aj.grupos.on"><p class="pm-glass-dark pm-explica">{{aj.grupos.txt}}</p></template>
+<template data-for="gruposLista" data-as="g">
+<div style="display: flex; flex-direction: column; gap: 4px">
+<div style="display: flex; justify-content: space-between; gap: 8px; font-size: 14px"><span>{{g.nome}} <span style="font-size: 12px; color: #c2c2c2">· {{g.peso}}</span></span><span class="pm-num" style="font-weight: 500">{{g.doze}}</span></div>
+<div style="height: 8px; border-radius: 9999px; background: rgba(255,255,255,.08)"><div style="{{g.barStyle}}"></div></div>
+<span style="font-size: 11px; color: #c2c2c2">{{g.mes}}</span>
+</div>
+</template>
+<p class="pm-cap">{{gruposCaption}}</p>
+</article>
+</template>
+
+<template data-if="nucleosOk">
+<article class="pm-glass pm-rise pm-card" aria-labelledby="t-nuc" style="flex: 2 1 480px; animation-delay: 240ms">
+<div class="pm-cab">
+<div>
+<h2 id="t-nuc" class="pm-h2">Inflação cheia x núcleos</h2>
+<p class="pm-sub">IPCA e média dos núcleos, em 12 meses</p>
+</div>
+<button type="button" class="{{aj.nucleos.cls}}" onClick="{{aj.nucleos.toggle}}" aria-expanded="{{aj.nucleos.aberto}}" aria-label="O que são núcleos?">?</button>
+</div>
+<template data-if="aj.nucleos.on"><p class="pm-glass-dark pm-explica">{{aj.nucleos.txt}}</p></template>
+<svg viewBox="0 0 760 222" style="width: 100%; height: auto; display: block; overflow: visible" role="img" aria-label="IPCA de 12 meses e média dos núcleos nos últimos 3 anos">
+<template data-for="nuc.ticks" data-as="t">
+<line x1="44" x2="680" y1="{{t.y}}" y2="{{t.y}}" stroke="rgba(255,255,255,.07)" style="stroke-width: 1"></line>
+<text x="36" y="{{t.ty}}" fill="#c2c2c2" style="font-size: 12px; text-anchor: end">{{t.label}}</text>
+</template>
+<line x1="44" x2="680" y1="{{nucMetaY}}" y2="{{nucMetaY}}" stroke="rgba(237,237,237,.45)" style="stroke-width: 1; stroke-dasharray: 4 5"></line>
+<template data-for="nuc.xlabels" data-as="xl"><text x="{{xl.x}}" y="216" fill="#c2c2c2" style="font-size: 12px; text-anchor: middle">{{xl.label}}</text></template>
+<template data-for="nuc.linhas" data-as="ln">
+<path id="{{ln.id}}" class="{{ln.cls}}" pathLength="1" d="{{ln.d}}" fill="none" stroke="{{ln.cor}}" style="stroke-width: {{ln.largura}}; stroke-linecap: round; stroke-linejoin: round; {{ln.dash}}"></path>
+<circle cx="{{ln.lastX}}" cy="{{ln.lastY}}" r="4" fill="{{ln.cor}}" stroke="#0a0a0a" style="stroke-width: 2"></circle>
+<text x="{{ln.labelX}}" y="{{ln.labelY}}" fill="{{ln.cor}}" style="font-size: 12px; font-weight: 500">{{ln.lastTxt}}</text>
+</template>
+</svg>
+<div class="pm-leg">
+<span><span style="width: 16px; height: 0; border-top: 2.5px solid #f0b37a"></span>IPCA 12 meses</span>
+<span><span style="width: 16px; height: 0; border-top: 2.5px dashed #ededed"></span>Média dos núcleos</span>
+<span><span style="width: 16px; height: 0; border-top: 1px dashed rgba(237,237,237,.7)"></span>Meta 3%</span>
+</div>
+<p class="pm-cap">{{nucCaption}}</p>
+</article>
+</template>
+</div>
+
+<template data-if="economiaCardsOk">
+<div class="pm-cab" style="align-items: center">
+<span style="font-size: 13px; color: #c2c2c2; letter-spacing: .02em">Atividade, emprego, contas públicas e câmbio</span>
+<button type="button" class="{{aj.atividade.cls}}" onClick="{{aj.atividade.toggle}}" aria-expanded="{{aj.atividade.aberto}}" aria-label="O que são estes indicadores?">?</button>
+</div>
+<template data-if="aj.atividade.on"><p class="pm-glass-dark pm-explica" style="margin-top: -8px">{{aj.atividade.txt}}</p></template>
+<div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 16px; margin-top: -6px">
+<template data-for="econCards" data-as="k">
+<article class="pm-glass pm-rise" style="border-radius: 24px; padding: 20px; display: flex; flex-direction: column; gap: 10px; min-width: 0; {{k.cardStyle}}">
+<div style="display: flex; justify-content: space-between; align-items: center; gap: 8px">
+<span style="font-size: 13px; color: #c2c2c2; letter-spacing: .02em">{{k.label}}</span>
+<span class="pm-glass" style="width: 30px; height: 30px; flex: 0 0 auto; border-radius: 9999px; display: flex; align-items: center; justify-content: center"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" style="stroke-width: 1.7; stroke-linecap: round; stroke-linejoin: round" aria-hidden="true"><path d="{{k.icon}}"></path></svg></span>
+</div>
+<div style="font-size: 34px; font-weight: 500; letter-spacing: -0.035em; line-height: 1; font-variant-numeric: tabular-nums">{{k.display}}</div>
+<div style="font-size: 13px; color: #c2c2c2; min-height: 40px">{{k.note}}</div>
+<svg viewBox="0 0 200 40" preserveAspectRatio="none" style="width: 100%; height: 40px; display: block; margin-top: auto" aria-hidden="true">
+<path d="{{k.area}}" fill="{{k.color}}" style="opacity: .12"></path>
+<path class="pm-fade" d="{{k.line}}" fill="none" stroke="{{k.color}}" style="stroke-width: 2; vector-effect: non-scaling-stroke; stroke-linecap: round; stroke-linejoin: round"></path>
+</svg>
+</article>
+</template>
+</div>
+</template>
+
+<template data-if="mercadosMundoOk">
+<article class="pm-glass pm-rise pm-card" aria-labelledby="t-mm" style="animation-delay: 300ms">
+<div class="pm-cab">
+<div>
+<h2 id="t-mm" class="pm-h2">Brasil x EUA</h2>
+<p class="pm-sub">Diferencial de juros e referências do mercado internacional</p>
+</div>
+<button type="button" class="{{aj.cambio.cls}}" onClick="{{aj.cambio.toggle}}" aria-expanded="{{aj.cambio.aberto}}" aria-label="O que é o diferencial?">?</button>
+</div>
+<template data-if="aj.cambio.on"><p class="pm-glass-dark pm-explica">{{aj.cambio.txt}}</p></template>
+<div class="pm-linha" style="align-items: center">
+<div style="display: flex; flex-direction: column; flex: 1 1 220px"><span style="font-size: 56px; font-weight: 500; letter-spacing: -0.045em; line-height: 1; color: #8fb0ff" class="pm-num">{{difTxt}}</span><span style="font-size: 13px; color: #c2c2c2; margin-top: 6px">{{difCaption}}</span></div>
+<div style="display: flex; flex-direction: column; flex: 2 1 320px">
+<template data-for="mundoRows" data-as="r">
+<div class="pm-row" style="display: flex; justify-content: space-between; gap: 10px; padding: 8px 4px; border-top: 1px solid rgba(229,229,229,.10)">
+<div><div style="font-size: 14px; font-weight: 500">{{r.nome}}</div><div style="font-size: 12px; color: #c2c2c2">{{r.nota}}</div></div>
+<span class="pm-num" style="font-size: 15px; white-space: nowrap">{{r.valor}}</span>
+</div>
+</template>
+</div>
+</div>
+</article>
+</template>
 </section>
 </template>
 
+
+<!-- ======================================================== AGENDA -->
 <template data-if="isAgenda">
 <section aria-labelledby="t-agenda" style="display: flex; flex-direction: column; gap: 20px">
-<div class="pm-rise">
-<h1 id="t-agenda" style="margin: 0; font-size: 40px; font-weight: 500; letter-spacing: -0.035em; line-height: 1.1">Agenda macro</h1>
+<div class="pm-rise" style="display: flex; flex-wrap: wrap; align-items: flex-end; justify-content: space-between; gap: 16px">
+<div>
+<h1 id="t-agenda" class="pm-h1">Agenda macro</h1>
 <p style="margin: 8px 0 0; font-size: 15px; color: #c2c2c2">{{agendaSub}}</p>
 </div>
-<div style="display: flex; flex-wrap: wrap; gap: 16px">
-<article class="pm-glass pm-rise" aria-labelledby="t-cal" style="flex: 2 1 520px; min-width: 0; box-sizing: border-box; border-radius: 24px; padding: 24px; display: flex; flex-direction: column; gap: 14px; animation-delay: 100ms">
-<div style="display: flex; flex-wrap: wrap; justify-content: space-between; gap: 10px; align-items: center">
-<h2 id="t-cal" style="margin: 0; font-family: Geist, 'DM Sans', sans-serif; font-size: 20px; font-weight: 500">{{agendaMonth}}</h2>
+<button type="button" class="pm-pill" onClick="{{baixarIcs}}"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" style="stroke-width: 1.6; stroke-linecap: round; stroke-linejoin: round" aria-hidden="true"><path d="M12 4v12M6 10l6 6 6-6M4 20h16"></path></svg>{{icsTxt}}</button>
+</div>
+<template data-if="hasAgendaAviso"><div class="pm-glass-dark pm-aviso">{{agendaAviso}}</div></template>
+<div class="pm-linha">
+<article class="pm-glass pm-rise pm-card" aria-labelledby="t-cal" style="flex: 2 1 520px; animation-delay: 100ms">
+<div class="pm-cab" style="align-items: center">
+<div style="display: flex; align-items: center; gap: 8px">
+<button type="button" class="pm-pill" onClick="{{agendaPrev}}" disabled="{{agendaPrevOff}}" aria-label="Mês anterior" style="width: 36px; height: 36px; padding: 0; justify-content: center"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" style="stroke-width: 2; stroke-linecap: round; stroke-linejoin: round" aria-hidden="true"><path d="M15 6l-6 6 6 6"></path></svg></button>
+<h2 id="t-cal" class="pm-h2" style="min-width: 140px; text-align: center">{{agendaMonth}}</h2>
+<button type="button" class="pm-pill" onClick="{{agendaNext}}" disabled="{{agendaNextOff}}" aria-label="Próximo mês" style="width: 36px; height: 36px; padding: 0; justify-content: center"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" style="stroke-width: 2; stroke-linecap: round; stroke-linejoin: round" aria-hidden="true"><path d="M9 6l6 6-6 6"></path></svg></button>
+<template data-if="agendaForaDeHoje"><button type="button" class="pm-pill" onClick="{{agendaHoje}}" style="padding: 6px 12px; font-size: 13px">Hoje</button></template>
+</div>
 <div style="display: flex; flex-wrap: wrap; gap: 12px; font-size: 13px; color: #c2c2c2">
 <span style="display: inline-flex; align-items: center; gap: 6px"><span style="width: 8px; height: 8px; border-radius: 9999px; background: #8fb0ff"></span>Focus</span>
 <span style="display: inline-flex; align-items: center; gap: 6px"><span style="width: 8px; height: 8px; border-radius: 9999px; background: #f0b37a"></span>Copom</span>
 <span style="display: inline-flex; align-items: center; gap: 6px"><span style="width: 8px; height: 8px; border-radius: 9999px; background: #ededed"></span>Ata</span>
-<span style="display: inline-flex; align-items: center; gap: 6px"><span style="width: 8px; height: 8px; border-radius: 9999px; border: 1px solid #c2c2c2"></span>Feriado</span>
+<span style="display: inline-flex; align-items: center; gap: 6px"><span style="width: 8px; height: 8px; border-radius: 9999px; border: 1px solid #c2c2c2"></span>Feriado<template data-if="hasOutros"> e outros</template></span>
 </div>
 </div>
 <div style="display: grid; grid-template-columns: repeat(7, minmax(0, 1fr)); gap: 6px; font-size: 12px; color: #c2c2c2; text-align: center">
@@ -553,8 +902,8 @@
 </div>
 </article>
 
-<article class="pm-glass pm-rise" aria-labelledby="t-dayinfo" style="flex: 1 1 300px; min-width: 0; box-sizing: border-box; border-radius: 24px; padding: 24px; display: flex; flex-direction: column; gap: 12px; animation-delay: 200ms">
-<h2 id="t-dayinfo" style="margin: 0; font-family: Geist, 'DM Sans', sans-serif; font-size: 20px; font-weight: 500">{{dayTitle}}</h2>
+<article class="pm-glass pm-rise pm-card" aria-labelledby="t-dayinfo" style="flex: 1 1 300px; gap: 12px; animation-delay: 200ms">
+<h2 id="t-dayinfo" class="pm-h2">{{dayTitle}}</h2>
 <template data-if="dayEmpty">
 <p style="margin: 0; font-size: 14px; color: #c2c2c2">Nenhum evento macro neste dia.</p>
 </template>
@@ -565,7 +914,7 @@
 </div>
 </template>
 <h3 style="margin: 12px 0 0; font-size: 13px; font-weight: 500; color: #c2c2c2; letter-spacing: .02em">{{nextMonthName}}</h3>
-<template data-for="december" data-as="ev">
+<template data-for="proxMes" data-as="ev">
 <div class="pm-row" style="display: flex; gap: 12px; align-items: center; padding: 6px 4px; border-radius: 12px">
 <span style="width: 56px; flex: 0 0 auto; white-space: nowrap; font-size: 14px; font-weight: 500; font-variant-numeric: tabular-nums">{{ev.day}}</span>
 <span style="{{ev.accent}}"></span>
@@ -577,25 +926,97 @@
 </section>
 </template>
 
+<!-- ======================================================== METODOLOGIA -->
 <template data-if="isMetodo">
 <section aria-labelledby="t-met" style="display: flex; flex-direction: column; gap: 20px">
 <div class="pm-rise">
-<h1 id="t-met" style="margin: 0; font-size: 40px; font-weight: 500; letter-spacing: -0.035em; line-height: 1.1">Metodologia</h1>
+<h1 id="t-met" class="pm-h1">Metodologia</h1>
 <p style="margin: 8px 0 0; font-size: 15px; color: #c2c2c2">De onde vêm os números e como cada um é calculado</p>
 </div>
-<div style="display: flex; flex-wrap: wrap; gap: 16px">
-<article class="pm-glass pm-rise" aria-labelledby="t-src" style="flex: 3 1 520px; min-width: 0; box-sizing: border-box; border-radius: 24px; padding: 24px; display: flex; flex-direction: column; gap: 12px; animation-delay: 100ms">
-<h2 id="t-src" style="margin: 0; font-family: Geist, 'DM Sans', sans-serif; font-size: 20px; font-weight: 500">Fontes dos dados</h2>
+<div class="pm-secao pm-rise">
+<h2 class="pm-h2 pm-h2-secao">Ferramentas</h2>
+<p class="pm-sub">Compare a bolsa com a renda fixa e simule quanto rende o seu dinheiro</p>
+</div>
+<div class="pm-linha">
+<template data-if="comparacaoOk">
+<article class="pm-glass pm-rise pm-card" aria-labelledby="t-comp" style="flex: 2 1 560px; animation-delay: 820ms">
+<div class="pm-cab">
+<div>
+<h2 id="t-comp" class="pm-h2">Bolsa x renda fixa em 10 anos</h2>
+<p class="pm-sub">{{compSub}}</p>
+</div>
+<div class="pm-cab-dir">
+<div class="pm-glass-dark pm-segs" role="group" aria-label="Como comparar">
+<template data-for="compSegs" data-as="sg"><button type="button" class="{{sg.cls}}" onClick="{{sg.pick}}" aria-pressed="{{sg.on}}">{{sg.label}}</button></template>
+</div>
+<button type="button" class="{{aj.comparacao.cls}}" onClick="{{aj.comparacao.toggle}}" aria-expanded="{{aj.comparacao.aberto}}" aria-label="Como ler este gráfico?">?</button>
+</div>
+</div>
+<template data-if="aj.comparacao.on"><p class="pm-glass-dark pm-explica">{{aj.comparacao.txt}}</p></template>
+<svg viewBox="0 0 760 252" style="width: 100%; height: auto; display: block; overflow: visible" role="img" aria-label="{{compAria}}">
+<template data-for="comp.ticks" data-as="t">
+<line x1="52" x2="690" y1="{{t.y}}" y2="{{t.y}}" stroke="rgba(255,255,255,.07)" style="stroke-width: 1"></line>
+<text x="44" y="{{t.ty}}" fill="#c2c2c2" style="font-size: 12px; text-anchor: end">{{t.label}}</text>
+</template>
+<template data-for="comp.xlabels" data-as="xl"><text x="{{xl.x}}" y="246" fill="#c2c2c2" style="font-size: 12px; text-anchor: middle">{{xl.label}}</text></template>
+<template data-for="comp.linhas" data-as="ln">
+<path id="{{ln.id}}" class="{{ln.cls}}" pathLength="1" d="{{ln.d}}" fill="none" stroke="{{ln.cor}}" style="stroke-width: {{ln.largura}}; stroke-linecap: round; stroke-linejoin: round; {{ln.dash}}"></path>
+<circle cx="{{ln.lastX}}" cy="{{ln.lastY}}" r="4" fill="{{ln.cor}}" stroke="#0a0a0a" style="stroke-width: 2"></circle>
+<text x="{{ln.labelX}}" y="{{ln.labelY}}" fill="{{ln.cor}}" style="font-size: 12px; font-weight: 500">{{ln.lastTxt}}</text>
+</template>
+</svg>
+<div class="pm-leg">
+<span><span style="width: 16px; height: 0; border-top: 2.5px solid #8fb0ff"></span>Ibovespa</span>
+<span><span style="width: 16px; height: 0; border-top: 2.5px solid #ededed"></span>CDI</span>
+</div>
+<p class="pm-cap">{{compCaption}}</p>
+</article>
+</template>
+
+<template data-if="calculadoraOk">
+<article class="pm-glass pm-rise pm-card" aria-labelledby="t-calc" style="flex: 1 1 300px; animation-delay: 840ms">
+<div class="pm-cab">
+<div>
+<h2 id="t-calc" class="pm-h2">Quanto rende meu dinheiro</h2>
+<p class="pm-sub">Com as taxas de hoje, já descontado o IR</p>
+</div>
+<button type="button" class="{{aj.calculadora.cls}}" onClick="{{aj.calculadora.toggle}}" aria-expanded="{{aj.calculadora.aberto}}" aria-label="Como a conta é feita?">?</button>
+</div>
+<template data-if="aj.calculadora.on"><p class="pm-glass-dark pm-explica">{{aj.calculadora.txt}}</p></template>
+<div style="display: flex; flex-direction: column; gap: 6px">
+<label for="pm-calc-valor" style="font-size: 13px; color: #c2c2c2">Valor aplicado (R$)</label>
+<div class="pm-glass-dark pm-field"><span style="color: #c2c2c2">R$</span><input id="pm-calc-valor" class="pm-num-input" type="text" inputmode="numeric" value="{{calcValor}}" onInput="{{onCalcValor}}"></div>
+</div>
+<div class="pm-glass-dark pm-segs" role="group" aria-label="Prazo" style="align-self: flex-start">
+<template data-for="calcPrazos" data-as="sg"><button type="button" class="{{sg.cls}}" onClick="{{sg.pick}}" aria-pressed="{{sg.on}}">{{sg.label}}</button></template>
+</div>
+<div aria-live="polite" style="display: flex; flex-direction: column; gap: 12px">
+<template data-for="calcLinhas" data-as="cl">
+<div style="display: flex; flex-direction: column; gap: 4px">
+<div style="display: flex; justify-content: space-between; gap: 8px; font-size: 14px"><span style="font-weight: 500">{{cl.nome}}</span><span class="pm-num" style="font-weight: 500">{{cl.final}}</span></div>
+<div style="height: 8px; border-radius: 9999px; background: rgba(255,255,255,.08)"><div style="{{cl.barStyle}}"></div></div>
+<div style="display: flex; justify-content: space-between; gap: 8px; flex-wrap: wrap; font-size: 12px; color: #c2c2c2"><span>{{cl.nota}}</span><span class="pm-num">{{cl.ganho}}</span></div>
+</div>
+</template>
+</div>
+<p style="margin: 0; font-size: 12px; color: #c2c2c2">{{calcNota}}</p>
+</article>
+</template>
+</div>
+
+<div class="pm-secao">
+<h2 class="pm-h2 pm-h2-secao">Fontes e método</h2>
+</div>
+<div class="pm-linha">
+<article class="pm-glass pm-rise pm-card" aria-labelledby="t-src" style="flex: 3 1 520px; gap: 12px; animation-delay: 100ms">
+<h2 id="t-src" class="pm-h2">Fontes dos dados</h2>
 <div style="overflow-x: auto">
-<table style="width: 100%; min-width: 520px; border-collapse: collapse; font-size: 14px">
-<thead><tr style="color: #c2c2c2; text-align: left; font-size: 13px"><th scope="col" style="padding: 10px; font-weight: 500">Série</th><th scope="col" style="padding: 10px; font-weight: 500">Origem</th><th scope="col" style="padding: 10px; font-weight: 500">Frequência</th><th scope="col" style="padding: 10px; font-weight: 500">Última leitura</th></tr></thead>
+<table style="width: 100%; min-width: 620px; border-collapse: collapse; font-size: 14px">
+<thead><tr style="color: #c2c2c2; text-align: left; font-size: 13px"><th scope="col" style="padding: 10px; font-weight: 500">Série</th><th scope="col" style="padding: 10px; font-weight: 500">Origem</th><th scope="col" style="padding: 10px; font-weight: 500">Frequência</th><th scope="col" style="padding: 10px; font-weight: 500">Última leitura</th><th scope="col" style="padding: 10px; font-weight: 500">Coleta</th></tr></thead>
 <tbody>
-<tr class="pm-row" style="border-top: 1px solid rgba(229,229,229,.12)"><th scope="row" style="padding: 12px 10px; text-align: left; font-weight: 500">Meta Selic</th><td style="padding: 12px 10px">SGS 432</td><td style="padding: 12px 10px">Muda a cada Copom</td><td style="padding: 12px 10px">{{metSelic}}</td></tr>
-<tr class="pm-row" style="border-top: 1px solid rgba(229,229,229,.12)"><th scope="row" style="padding: 12px 10px; text-align: left; font-weight: 500">IPCA em 12 meses</th><td style="padding: 12px 10px">SGS 13522</td><td style="padding: 12px 10px">Mensal</td><td style="padding: 12px 10px">{{metIpca}}</td></tr>
-<tr class="pm-row" style="border-top: 1px solid rgba(229,229,229,.12)"><th scope="row" style="padding: 12px 10px; text-align: left; font-weight: 500">Expectativas de mercado</th><td style="padding: 12px 10px">Boletim Focus</td><td style="padding: 12px 10px">Semanal</td><td style="padding: 12px 10px">{{metFocus}}</td></tr>
-<tr class="pm-row" style="border-top: 1px solid rgba(229,229,229,.12)"><th scope="row" style="padding: 12px 10px; text-align: left; font-weight: 500">Ibovespa</th><td style="padding: 12px 10px">Yahoo Finance via yfinance (^BVSP)</td><td style="padding: 12px 10px">Diária</td><td style="padding: 12px 10px">{{metIbov}}</td></tr>
-<tr class="pm-row" style="border-top: 1px solid rgba(229,229,229,.12)"><th scope="row" style="padding: 12px 10px; text-align: left; font-weight: 500">Índice do medo</th><td style="padding: 12px 10px">S&amp;P/B3 Ibovespa VIX (S&amp;P Dow Jones e B3)</td><td style="padding: 12px 10px">Diária</td><td style="padding: 12px 10px">{{metMedo}}</td></tr>
-<tr class="pm-row" style="border-top: 1px solid rgba(229,229,229,.12)"><th scope="row" style="padding: 12px 10px; text-align: left; font-weight: 500">Atualização</th><td style="padding: 12px 10px">GitHub Actions + coletar.py</td><td style="padding: 12px 10px">Dias úteis, 10h</td><td style="padding: 12px 10px">{{metUpdated}}</td></tr>
+<template data-for="fontesLinhas" data-as="f">
+<tr class="pm-row" style="border-top: 1px solid rgba(229,229,229,.12)"><th scope="row" style="padding: 12px 10px; text-align: left; font-weight: 500">{{f.serie}}</th><td style="padding: 12px 10px"><template data-for="f.origens" data-as="o"><a href="{{o.url}}" target="{{o.alvo}}" rel="noopener">{{o.t}}</a><template data-if="o.sep"> · </template></template></td><td style="padding: 12px 10px">{{f.freq}}</td><td style="padding: 12px 10px">{{f.ultima}}</td><td style="padding: 12px 10px; {{f.stStyle}}">{{f.status}}</td></tr>
+</template>
 </tbody>
 </table>
 </div>
@@ -604,11 +1025,16 @@
 <span style="font-size: 20px; font-weight: 500; letter-spacing: -0.01em">Juro real = (1 + Selic) ÷ (1 + IPCA) − 1</span>
 <span style="font-size: 14px; color: #c2c2c2">{{fisherExample}}</span>
 </div>
-<p style="margin: 0; font-size: 13px; color: #c2c2c2">Para comparar uma série diária (Selic) com uma mensal (IPCA), o painel usa a Selic do último dia de cada mês. O juro real esperado usa as medianas do Focus para o mesmo ano.</p>
+<p class="pm-cap">Para comparar uma série diária (Selic) com uma mensal (IPCA), o painel usa a Selic do último dia de cada mês. O juro real "hoje" (ex-post) usa o IPCA dos últimos 12 meses; o ex-ante usa o IPCA esperado pelo Focus para os próximos 12 meses. O juro real esperado usa as medianas do Focus para o mesmo ano.</p>
+<div class="pm-glass-dark" style="border-radius: 18px; padding: 16px; display: flex; flex-direction: column; gap: 6px">
+<span style="font-size: 13px; color: #c2c2c2">Juro neutro de referência: {{neutroValor}}</span>
+<span style="font-size: 14px; color: #ededed">{{neutroFonte}} <a href="{{neutroUrl}}" target="_blank" rel="noopener">Abrir o relatório</a></span>
+</div>
+<p class="pm-cap">Volatilidade: {{volMetodo}}</p>
 </article>
 
-<article class="pm-glass pm-rise" aria-labelledby="t-diff" style="flex: 2 1 320px; min-width: 0; box-sizing: border-box; border-radius: 24px; padding: 24px; display: flex; flex-direction: column; gap: 4px; animation-delay: 200ms">
-<h2 id="t-diff" style="margin: 0 0 8px; font-family: Geist, 'DM Sans', sans-serif; font-size: 20px; font-weight: 500">O que este painel faz diferente</h2>
+<article class="pm-glass pm-rise pm-card" aria-labelledby="t-diff" style="flex: 2 1 320px; gap: 4px; animation-delay: 200ms">
+<h2 id="t-diff" class="pm-h2" style="margin: 0 0 8px">O que este painel faz diferente</h2>
 <template data-for="diffs" data-as="df">
 <div class="pm-row" style="display: flex; justify-content: space-between; gap: 16px; padding: 10px 4px; border-radius: 12px">
 <span style="font-size: 15px; color: #ededed">{{df.text}}</span>
@@ -617,6 +1043,38 @@
 </template>
 </article>
 </div>
+
+<div class="pm-linha">
+<article class="pm-glass pm-rise pm-card" aria-labelledby="t-glo" style="flex: 3 1 520px; gap: 10px; animation-delay: 260ms">
+<h2 id="t-glo" class="pm-h2">Glossário</h2>
+<div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 10px">
+<template data-for="glossarioLista" data-as="g">
+<div class="pm-glass-dark" style="border-radius: 16px; padding: 12px 14px"><div style="font-size: 14px; font-weight: 500">{{g.titulo}}</div><div style="font-size: 13px; color: #c2c2c2">{{g.texto}}</div><div class="pm-fonte" style="margin-top: 6px">Fonte: <template data-for="g.fontes" data-as="f"><a href="{{f.url}}" target="{{f.alvo}}" rel="noopener">{{f.t}}</a><template data-if="f.sep"> · </template></template></div></div>
+</template>
+</div>
+</article>
+
+<article class="pm-glass pm-rise pm-card" aria-labelledby="t-sobre" style="flex: 2 1 320px; gap: 12px; animation-delay: 300ms">
+<h2 id="t-sobre" class="pm-h2">Sobre o painel</h2>
+<p style="margin: 0; font-size: 14px; color: #ededed">{{sobreTxt}}</p>
+<div class="pm-glass-dark" style="border-radius: 16px; padding: 12px 14px; font-size: 13px; color: #c2c2c2"><div style="color: #ededed; font-weight: 500; margin-bottom: 4px">Como citar</div>{{citacao}}</div>
+<div style="display: flex; flex-wrap: wrap; gap: 8px">
+<a class="pm-pill" href="{{feedUrl}}">Assinar o feed (RSS)</a>
+</div>
+<span style="font-size: 13px; color: #c2c2c2; letter-spacing: .02em; margin-top: 4px">Baixar os dados (CSV, abre no Excel)</span>
+<div style="display: flex; flex-wrap: wrap; gap: 8px">
+<template data-for="downloads" data-as="dl"><button type="button" class="pm-pill" onClick="{{dl.go}}" style="padding: 6px 12px; font-size: 13px"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" style="stroke-width: 1.8; stroke-linecap: round; stroke-linejoin: round" aria-hidden="true"><path d="M12 4v12M6 10l6 6 6-6M4 20h16"></path></svg>{{dl.label}}</button></template>
+</div>
+</article>
+</div>
+<article class="pm-glass pm-rise pm-card" aria-labelledby="t-refs" style="gap: 10px; animation-delay: 340ms">
+<h2 id="t-refs" class="pm-h2">Todas as fontes e referências</h2>
+<p class="pm-cap">Dados oficiais (BCB, IBGE, B3, Tesouro Nacional, FRED), leis e documentos usados nas contas e nos textos do painel.</p>
+<div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 6px 16px">
+<template data-for="referencias" data-as="r"><a class="pm-row" href="{{r.url}}" target="_blank" rel="noopener" style="font-size: 13px; padding: 6px 4px; border-radius: 10px">{{r.t}}</a></template>
+</div>
+</article>
+
 </section>
 </template>
 
@@ -627,8 +1085,13 @@
 </div>
 </template>
 
-<script src="js/manual.js"></script>
 <script src="js/motor.js"></script>
+<script src="js/util.js"></script>
+<script src="js/secoes/visao.js"></script>
+<script src="js/secoes/expectativas.js"></script>
+<script src="js/secoes/economia.js"></script>
+<script src="js/secoes/agenda.js"></script>
+<script src="js/secoes/metodo.js"></script>
 <script src="js/painel.js"></script>
 </body>
 </html>
