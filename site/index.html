@@ -71,9 +71,10 @@
 <span style="color: #c2c2c2">Prévia:</span><span style="font-weight: 500; min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap">{{namePreview}}</span>
 </div>
 <div style="display: flex; flex-direction: column; align-items: center; gap: 12px">
-<button type="submit" class="pm-cta">Salvar e voltar ao painel<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" style="stroke-width: 2; stroke-linecap: round; stroke-linejoin: round" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"></path></svg></button>
+<button type="submit" class="pm-cta"><template data-if="primeiraVez">Entrar no painel</template><template data-if="depoisDaPrimeira">Salvar e voltar ao painel</template><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" style="stroke-width: 2; stroke-linecap: round; stroke-linejoin: round" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"></path></svg></button>
 <div style="display: flex; gap: 8px; flex-wrap: wrap; justify-content: center">
-<button type="button" class="pm-link" onClick="{{cancelName}}">Cancelar</button>
+<template data-if="primeiraVez"><button type="button" class="pm-link" onClick="{{skipName}}">Continuar sem nome</button></template>
+<template data-if="depoisDaPrimeira"><button type="button" class="pm-link" onClick="{{cancelName}}">Cancelar</button></template>
 <template data-if="nameHasSaved"><button type="button" class="pm-link" onClick="{{removeName}}">Remover meu nome</button></template>
 </div>
 </div>

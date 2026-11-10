@@ -84,7 +84,7 @@
         explica: false, ajuda: {},
         comp: 'ibov', histInd: 'IPCA', histAno: 1,
         calcValor: 10000, calcMeses: 24,
-        name: salvo || '', nameDraft: salvo || '', askName: false, nomePendente: salvo === null,
+        name: salvo || '', nameDraft: salvo || '', askName: salvo === null, primeiraVez: salvo === null, nomePendente: false,  // primeira visita abre na saudação
         vistos: P.ler('pm-alertas-vistos', []),
       };
       this.eventos = montarEventos(manual, hoje);
@@ -131,7 +131,7 @@
 
     ligarEventosGlobais() {
       window.addEventListener('hashchange', () => {
-        this.setState({ view: viewDoEndereco(), notifOpen: false, askName: false });
+        this.setState({ view: viewDoEndereco(), notifOpen: false, askName: this.state.primeiraVez });
         if (this.state.view === 'visao') this.animateIn();
       });
       document.addEventListener('keydown', (ev) => {
@@ -150,11 +150,18 @@
       if (ev) ev.preventDefault();
       const nome = this.state.nameDraft.trim().replace(/\s+/g, ' ').slice(0, 30);
       salvarNome(nome);
-      this.setState({ name: nome, nameDraft: nome, askName: false, nomePendente: false });
+      this.setState({ name: nome, nameDraft: nome, askName: false, primeiraVez: false, nomePendente: false });
+      if (this.state.view === 'visao') this.animateIn();
       try { window.scrollTo(0, 0); } catch (e) { /* ok */ }
     }
     removeName() { salvarNome(''); this.setState({ name: '', nameDraft: '', askName: false, nomePendente: false }); }
-    cancelName() { this.setState({ askName: false, nameDraft: this.state.name }); }
+    cancelName() { if (this.state.primeiraVez) { this.skipName(); return; } this.setState({ askName: false, nameDraft: this.state.name }); }
+    skipName() {
+      salvarNome('');
+      this.setState({ name: '', nameDraft: '', askName: false, primeiraVez: false });
+      try { window.scrollTo(0, 0); } catch (e) { /* ok */ }
+      if (this.state.view === 'visao') this.animateIn();
+    }
     dismissNameChip() { salvarNome(''); this.setState({ nomePendente: false }); }
     changeName() {
       this.setState({ askName: true, nameDraft: this.state.name, notifOpen: false });
@@ -243,7 +250,8 @@
         askName: s.askName, showPanel: !s.askName,
         nameDraft: s.nameDraft, onNameInput: (ev) => this.setState({ nameDraft: ev.target.value }),
         namePreview: saudacao + (s.nameDraft.trim() ? ', ' + s.nameDraft.trim().replace(/\s+/g, ' ') : ''),
-        saveName: (ev) => this.saveName(ev), cancelName: () => this.cancelName(), removeName: () => this.removeName(),
+        saveName: (ev) => this.saveName(ev), cancelName: () => this.cancelName(), removeName: () => this.removeName(), skipName: () => this.skipName(),
+        primeiraVez: s.primeiraVez, depoisDaPrimeira: !s.primeiraVez,
         changeName: () => this.changeName(), dismissNameChip: () => this.dismissNameChip(),
         nameHasSaved: !!s.name, nameNoSaved: !s.name,
         nomePendente: s.nomePendente && !s.name,
@@ -309,7 +317,8 @@
       app.innerHTML = '';  // tira a tela de carregamento
       Motor.montar(app, document.getElementById('modelo'), painel);
       painel.ligarEventosGlobais();
-      if (painel.state.view === 'visao') painel.animateIn();
+      if (painel.state.askName) painel.focarNome();
+      else if (painel.state.view === 'visao') painel.animateIn();
     })
     .catch((e) => {
       console.error(e);
