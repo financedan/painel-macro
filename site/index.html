@@ -5,9 +5,9 @@
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Painel Macro Brasil</title>
 <!-- meta:inicio (gerado pelo coletar.py) -->
-<meta name="description" content="Selic 13,75% · IPCA 12 meses 4,58% · juro real 8,77% · Ibovespa 168.498 pontos. Dados do Banco Central, IBGE e B3, atualizados todo dia útil.">
+<meta name="description" content="Selic 13,75% · IPCA 12 meses 4,58% · juro real 8,77% · Ibovespa 172.236 pontos. Dados do Banco Central, IBGE e B3, atualizados todo dia útil.">
 <meta property="og:title" content="Painel Macro Brasil">
-<meta property="og:description" content="Selic 13,75% · IPCA 12 meses 4,58% · juro real 8,77% · Ibovespa 168.498 pontos.">
+<meta property="og:description" content="Selic 13,75% · IPCA 12 meses 4,58% · juro real 8,77% · Ibovespa 172.236 pontos.">
 <meta property="og:image" content="https://financedan.github.io/painel-macro/img/og.png">
 <meta property="og:url" content="https://financedan.github.io/painel-macro/">
 <meta name="twitter:card" content="summary_large_image">
@@ -106,9 +106,6 @@
 </nav>
 
 <div style="display: flex; align-items: center; gap: 8px; position: relative">
-<button type="button" class="{{explicaClass}}" aria-pressed="{{explica}}" onClick="{{toggleExplica}}" title="Mostra uma explicação simples em cada bloco" style="height: 40px; box-sizing: border-box">
-<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" style="stroke-width: 1.6; stroke-linecap: round; stroke-linejoin: round" aria-hidden="true"><path d="M12 21a9 9 0 1 1 0-18 9 9 0 0 1 0 18zM9.5 9a2.5 2.5 0 1 1 3.5 2.3c-.6.3-1 .9-1 1.5V14M12 17.5v.01"></path></svg><span class="pm-explica-label">Modo explicativo</span>
-</button>
 <button type="button" data-sino class="pm-pill" aria-label="{{alertLabel}}" aria-expanded="{{notifOpen}}" aria-controls="pm-alertas" onClick="{{toggleNotif}}" style="width: 40px; height: 40px; padding: 0; justify-content: center; position: relative">
 <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" style="stroke-width: 1.6; stroke-linecap: round; stroke-linejoin: round" aria-hidden="true"><path d="M6 9a6 6 0 1 1 12 0c0 6 2.5 7.5 2.5 7.5h-17S6 15 6 9M10 20a2 2 0 0 0 4 0"></path></svg>
 <template data-if="hasNewAlerts"><span aria-hidden="true" style="position: absolute; top: -3px; right: -3px; min-width: 18px; height: 18px; border-radius: 9999px; background: #ededed; color: #161616; font-size: 11px; font-weight: 600; display: flex; align-items: center; justify-content: center">{{alertCount}}</span></template>
@@ -130,7 +127,7 @@
 </header>
 
 <div style="position: relative; z-index: 2; display: flex; flex-wrap: wrap; gap: 24px; padding: 16px 24px 40px; align-items: flex-start">
-<nav class="pm-dock pm-glass pm-fade" aria-label="Navegação" style="position: relative; z-index: 6; flex: 0 0 auto; width: 56px; box-sizing: border-box; padding: 8px; border-radius: 9999px; display: flex; flex-direction: column; gap: 8px; align-items: center">
+<nav class="pm-dock pm-glass pm-fade" aria-label="Navegação" style="position: relative; z-index: 6; flex: 0 0 auto; width: 56px; box-sizing: border-box; padding: 8px; border-radius: 9999px; display: flex; flex-direction: column; gap: 8px; align-items: center; margin-top: 88px">
 <template data-for="nav" data-as="n">
 <a href="{{n.href}}" class="{{n.dockClass}}" onClick="{{n.go}}" aria-label="{{n.label}}" aria-current="{{n.current}}">
 <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" style="stroke-width: 1.6; stroke-linecap: round; stroke-linejoin: round" aria-hidden="true"><path d="{{n.icon}}"></path></svg>
@@ -162,24 +159,9 @@
 </div>
 </div>
 
-<template data-if="hasNovidades">
-<button type="button" data-sino class="pm-glass-dark pm-fade" onClick="{{toggleNotif}}" style="align-self: flex-start; border: 1px solid rgba(229,229,229,.14); border-radius: 9999px; padding: 8px 14px; color: #ededed; font-size: 14px; cursor: pointer; display: inline-flex; align-items: center; gap: 8px"><span style="width: 8px; height: 8px; border-radius: 9999px; background: #8fb0ff"></span>{{novidadesChip}} · ver</button>
-</template>
-<template data-if="nomePendente">
-<div class="pm-glass-dark pm-fade" style="align-self: flex-start; border-radius: 9999px; padding: 6px 8px 6px 16px; display: flex; flex-wrap: wrap; align-items: center; gap: 8px; font-size: 14px">
-<span style="color: #c2c2c2">Quer uma saudação com o seu nome?</span>
-<button type="button" class="pm-pill" onClick="{{changeName}}" style="padding: 6px 12px; font-size: 13px">Definir nome</button>
-<button type="button" class="pm-link" onClick="{{dismissNameChip}}" style="font-size: 13px">Agora não</button>
-</div>
-</template>
 
-<div class="pm-cab" style="align-items: center">
-<span style="font-size: 13px; color: #c2c2c2; letter-spacing: .02em">Os números do dia</span>
-<button type="button" class="{{aj.kpis.cls}}" onClick="{{aj.kpis.toggle}}" aria-expanded="{{aj.kpis.aberto}}" aria-label="O que são estes números?">?</button>
-</div>
-<template data-if="aj.kpis.on"><p class="pm-glass-dark pm-explica" style="margin-top: -8px">{{aj.kpis.txt}} {{aj.exante.txt}}<span class="pm-fonte-inline"> Fonte: <template data-for="aj.kpis.fontes" data-as="f"><a href="{{f.url}}" target="{{f.alvo}}" rel="noopener">{{f.t}}</a><template data-if="f.sep"> · </template></template>.</span><span class="pm-fonte-inline"> Fonte: <template data-for="aj.exante.fontes" data-as="f"><a href="{{f.url}}" target="{{f.alvo}}" rel="noopener">{{f.t}}</a><template data-if="f.sep"> · </template></template>.</span></p></template>
 
-<div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 16px; margin-top: -6px">
+<div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 16px">
 <template data-for="kpis" data-as="k">
 <article class="pm-glass pm-rise" style="border-radius: 24px; padding: 20px; display: flex; flex-direction: column; gap: 10px; min-width: 0; {{k.cardStyle}}">
 <div style="display: flex; justify-content: space-between; align-items: center; gap: 8px">
@@ -200,7 +182,6 @@
 </article>
 </template>
 </div>
-<p class="pm-fonte" style="margin-top: -8px">Fonte: <template data-for="fx.kpis" data-as="f"><a href="{{f.url}}" target="{{f.alvo}}" rel="noopener">{{f.t}}</a><template data-if="f.sep"> · </template></template></p>
 
 <div class="pm-linha">
 <template data-if="barrasOk">
@@ -215,7 +196,7 @@
 <button type="button" class="{{aj.juroReal.cls}}" onClick="{{aj.juroReal.toggle}}" aria-expanded="{{aj.juroReal.aberto}}" aria-label="O que é juro real?">?</button>
 </div>
 </div>
-<template data-if="aj.juroReal.on"><p class="pm-glass-dark pm-explica">{{aj.juroReal.txt}} {{aj.neutro.txt}}<span class="pm-fonte-inline"> Fonte: <template data-for="aj.juroReal.fontes" data-as="f"><a href="{{f.url}}" target="{{f.alvo}}" rel="noopener">{{f.t}}</a><template data-if="f.sep"> · </template></template>.</span><span class="pm-fonte-inline"> Fonte: <template data-for="aj.neutro.fontes" data-as="f"><a href="{{f.url}}" target="{{f.alvo}}" rel="noopener">{{f.t}}</a><template data-if="f.sep"> · </template></template>.</span></p></template>
+<template data-if="aj.juroReal.on"><p class="pm-glass-dark pm-explica">{{aj.juroReal.txt}} {{aj.neutro.txt}}</p></template>
 <div class="pm-leg">
 <span><span style="width: 12px; height: 12px; border-radius: 4px; background: rgba(237,237,237,.32); border: 1px solid rgba(255,255,255,.4)"></span>Juro real no ano</span>
 <span><span style="width: 12px; height: 12px; border-radius: 4px; background: #8fb0ff"></span>Hoje (* ano em curso)</span>
@@ -240,7 +221,6 @@
 <line x1="56" x2="736" y1="{{neutroY}}" y2="{{neutroY}}" stroke="rgba(240,179,122,.9)" style="stroke-width: 1.5; stroke-dasharray: 6 6"></line>
 </svg>
 <p class="pm-cap">{{barsCaption}}</p>
-<p class="pm-fonte">Fonte: <template data-for="fx.barras" data-as="f"><a href="{{f.url}}" target="{{f.alvo}}" rel="noopener">{{f.t}}</a><template data-if="f.sep"> · </template></template></p>
 </article>
 </template>
 
@@ -253,7 +233,7 @@
 <button type="button" class="{{aj.copom.cls}}" onClick="{{aj.copom.toggle}}" aria-expanded="{{aj.copom.aberto}}" aria-label="O que é o Copom?">?</button>
 </div>
 </div>
-<template data-if="aj.copom.on"><p class="pm-glass-dark pm-explica">{{aj.copom.txt}}<span class="pm-fonte-inline"> Fonte: <template data-for="aj.copom.fontes" data-as="f"><a href="{{f.url}}" target="{{f.alvo}}" rel="noopener">{{f.t}}</a><template data-if="f.sep"> · </template></template>.</span></p></template>
+<template data-if="aj.copom.on"><p class="pm-glass-dark pm-explica">{{aj.copom.txt}}</p></template>
 <div>
 <div style="display: flex; align-items: baseline; gap: 10px"><span style="font-size: 64px; font-weight: 500; letter-spacing: -0.045em; line-height: 1; font-variant-numeric: tabular-nums">{{copomDays}}</span><span style="font-size: 18px; color: #c2c2c2">{{copomWord}}</span></div>
 <p style="margin: 6px 0 0; font-size: 14px; color: #c2c2c2">{{copomWhen}}</p>
@@ -266,11 +246,6 @@
 <div style="display: flex; flex-direction: column"><span style="font-size: 24px; font-weight: 500; letter-spacing: -0.03em; color: #8fb0ff">{{copomFocusTxt}}</span><span style="font-size: 12px; color: #c2c2c2">{{copomFocusLabel}}</span></div>
 </div>
 <p class="pm-cap">{{copomPricing}}</p>
-<template data-if="hasReunioes">
-<div style="display: flex; gap: 6px; flex-wrap: wrap">
-<template data-for="reunioesSeguintes" data-as="r"><span class="pm-glass" style="border-radius: 12px; padding: 6px 10px; font-size: 12px; display: flex; flex-direction: column; line-height: 1.3"><span style="color: #c2c2c2">{{r.nome}}</span><span class="pm-num" style="font-weight: 500">{{r.valor}}</span></span></template>
-</div>
-</template>
 </div>
 <div style="display: flex; flex-direction: column; gap: 8px">
 <span style="font-size: 13px; color: #c2c2c2; letter-spacing: .02em">Próximos eventos</span>
@@ -282,7 +257,6 @@
 </div>
 </template>
 </div>
-<p class="pm-fonte">Fonte: <template data-for="fx.copom" data-as="f"><a href="{{f.url}}" target="{{f.alvo}}" rel="noopener">{{f.t}}</a><template data-if="f.sep"> · </template></template></p>
 </article>
 </template>
 </div>
@@ -304,7 +278,7 @@
 <button type="button" class="{{aj.meta.cls}}" onClick="{{aj.meta.toggle}}" aria-expanded="{{aj.meta.aberto}}" aria-label="Como funciona a meta?">?</button>
 </div>
 </div>
-<template data-if="aj.meta.on"><p class="pm-glass-dark pm-explica">{{aj.meta.txt}}<span class="pm-fonte-inline"> Fonte: <template data-for="aj.meta.fontes" data-as="f"><a href="{{f.url}}" target="{{f.alvo}}" rel="noopener">{{f.t}}</a><template data-if="f.sep"> · </template></template>.</span></p></template>
+<template data-if="aj.meta.on"><p class="pm-glass-dark pm-explica">{{aj.meta.txt}}</p></template>
 <svg viewBox="0 0 760 262" style="width: 100%; height: auto; display: block; overflow: visible" role="img" aria-label="Gráfico de linha do IPCA em 12 meses com a banda da meta de inflação">
 <path d="{{infl.band}}" fill="rgba(237,237,237,.10)"></path>
 <path d="{{infl.center}}" fill="none" stroke="rgba(237,237,237,.45)" style="stroke-width: 1; stroke-dasharray: 4 5"></path>
@@ -328,9 +302,7 @@
 <span style="{{metaContadorStyle}}">{{metaContador}}</span>
 <span style="font-size: 13px; color: #c2c2c2; flex: 1 1 240px">{{metaContadorCaption}}</span>
 </div>
-<template data-if="hasInflMes"><p class="pm-cap" style="color: #ededed">{{inflMes}}</p></template>
 <p class="pm-cap">{{inflCaption}}</p>
-<p class="pm-fonte">Fonte: <template data-for="fx.inflacao" data-as="f"><a href="{{f.url}}" target="{{f.alvo}}" rel="noopener">{{f.t}}</a><template data-if="f.sep"> · </template></template></p>
 </article>
 </template>
 
@@ -343,7 +315,7 @@
 </div>
 <button type="button" class="{{aj.ancoragem.cls}}" onClick="{{aj.ancoragem.toggle}}" aria-expanded="{{aj.ancoragem.aberto}}" aria-label="O que é ancoragem?">?</button>
 </div>
-<template data-if="aj.ancoragem.on"><p class="pm-glass-dark pm-explica">{{aj.ancoragem.txt}}<span class="pm-fonte-inline"> Fonte: <template data-for="aj.ancoragem.fontes" data-as="f"><a href="{{f.url}}" target="{{f.alvo}}" rel="noopener">{{f.t}}</a><template data-if="f.sep"> · </template></template>.</span></p></template>
+<template data-if="aj.ancoragem.on"><p class="pm-glass-dark pm-explica">{{aj.ancoragem.txt}}</p></template>
 <template data-for="anchors" data-as="an">
 <div style="display: flex; flex-direction: column; gap: 8px">
 <div style="display: flex; justify-content: space-between; font-size: 14px"><span style="color: #c2c2c2">{{an.label}}</span><span style="font-weight: 500; font-variant-numeric: tabular-nums">{{an.valueTxt}}</span></div>
@@ -356,7 +328,6 @@
 </template>
 <div style="display: flex; justify-content: space-between; font-size: 12px; color: #c2c2c2"><span>0%</span><span>Meta 3%</span><span>6%</span></div>
 <p class="pm-cap">{{ancCaption}}</p>
-<p class="pm-fonte">Fonte: <template data-for="fx.ancoragem" data-as="f"><a href="{{f.url}}" target="{{f.alvo}}" rel="noopener">{{f.t}}</a><template data-if="f.sep"> · </template></template></p>
 </article>
 </template>
 </div>
@@ -374,7 +345,7 @@
 <button type="button" class="{{aj.ibov.cls}}" onClick="{{aj.ibov.toggle}}" aria-expanded="{{aj.ibov.aberto}}" aria-label="O que é o Ibovespa?">?</button>
 </div>
 </div>
-<template data-if="aj.ibov.on"><p class="pm-glass-dark pm-explica">{{aj.ibov.txt}}<span class="pm-fonte-inline"> Fonte: <template data-for="aj.ibov.fontes" data-as="f"><a href="{{f.url}}" target="{{f.alvo}}" rel="noopener">{{f.t}}</a><template data-if="f.sep"> · </template></template>.</span></p></template>
+<template data-if="aj.ibov.on"><p class="pm-glass-dark pm-explica">{{aj.ibov.txt}}</p></template>
 <div class="pm-leg">
 <span><span style="width: 12px; height: 12px; border-radius: 4px; background: rgba(237,237,237,.32); border: 1px solid rgba(255,255,255,.4)"></span>Anos anteriores</span>
 <span><span style="width: 12px; height: 12px; border-radius: 4px; background: #8fb0ff"></span>{{ibovNowLegend}}</span>
@@ -394,7 +365,6 @@
 </template>
 </svg>
 <p class="pm-cap">{{ibovCaption}}</p>
-<p class="pm-fonte">Fonte: <template data-for="fx.ibovAnos" data-as="f"><a href="{{f.url}}" target="{{f.alvo}}" rel="noopener">{{f.t}}</a><template data-if="f.sep"> · </template></template></p>
 </article>
 </template>
 
@@ -421,76 +391,6 @@
 </template>
 </div>
 <p class="pm-cap">{{ibovWeekCaption}}</p>
-<p class="pm-fonte">Fonte: <template data-for="fx.pregoes" data-as="f"><a href="{{f.url}}" target="{{f.alvo}}" rel="noopener">{{f.t}}</a><template data-if="f.sep"> · </template></template></p>
-</article>
-</template>
-</div>
-
-<div class="pm-linha">
-<template data-if="comparacaoOk">
-<article class="pm-glass pm-rise pm-card" aria-labelledby="t-comp" style="flex: 2 1 560px; animation-delay: 820ms">
-<div class="pm-cab">
-<div>
-<h2 id="t-comp" class="pm-h2">Bolsa x renda fixa em 10 anos</h2>
-<p class="pm-sub">{{compSub}}</p>
-</div>
-<div class="pm-cab-dir">
-<div class="pm-glass-dark pm-segs" role="group" aria-label="Como comparar">
-<template data-for="compSegs" data-as="sg"><button type="button" class="{{sg.cls}}" onClick="{{sg.pick}}" aria-pressed="{{sg.on}}">{{sg.label}}</button></template>
-</div>
-<button type="button" class="{{aj.comparacao.cls}}" onClick="{{aj.comparacao.toggle}}" aria-expanded="{{aj.comparacao.aberto}}" aria-label="Como ler este gráfico?">?</button>
-</div>
-</div>
-<template data-if="aj.comparacao.on"><p class="pm-glass-dark pm-explica">{{aj.comparacao.txt}}<span class="pm-fonte-inline"> Fonte: <template data-for="aj.comparacao.fontes" data-as="f"><a href="{{f.url}}" target="{{f.alvo}}" rel="noopener">{{f.t}}</a><template data-if="f.sep"> · </template></template>.</span></p></template>
-<svg viewBox="0 0 760 252" style="width: 100%; height: auto; display: block; overflow: visible" role="img" aria-label="{{compAria}}">
-<template data-for="comp.ticks" data-as="t">
-<line x1="52" x2="690" y1="{{t.y}}" y2="{{t.y}}" stroke="rgba(255,255,255,.07)" style="stroke-width: 1"></line>
-<text x="44" y="{{t.ty}}" fill="#c2c2c2" style="font-size: 12px; text-anchor: end">{{t.label}}</text>
-</template>
-<template data-for="comp.xlabels" data-as="xl"><text x="{{xl.x}}" y="246" fill="#c2c2c2" style="font-size: 12px; text-anchor: middle">{{xl.label}}</text></template>
-<template data-for="comp.linhas" data-as="ln">
-<path id="{{ln.id}}" class="{{ln.cls}}" pathLength="1" d="{{ln.d}}" fill="none" stroke="{{ln.cor}}" style="stroke-width: {{ln.largura}}; stroke-linecap: round; stroke-linejoin: round; {{ln.dash}}"></path>
-<circle cx="{{ln.lastX}}" cy="{{ln.lastY}}" r="4" fill="{{ln.cor}}" stroke="#0a0a0a" style="stroke-width: 2"></circle>
-<text x="{{ln.labelX}}" y="{{ln.labelY}}" fill="{{ln.cor}}" style="font-size: 12px; font-weight: 500">{{ln.lastTxt}}</text>
-</template>
-</svg>
-<div class="pm-leg">
-<span><span style="width: 16px; height: 0; border-top: 2.5px solid #8fb0ff"></span>Ibovespa</span>
-<span><span style="width: 16px; height: 0; border-top: 2.5px solid #ededed"></span>CDI</span>
-</div>
-<p class="pm-cap">{{compCaption}}</p>
-<p class="pm-fonte">Fonte: <template data-for="fx.comparacao" data-as="f"><a href="{{f.url}}" target="{{f.alvo}}" rel="noopener">{{f.t}}</a><template data-if="f.sep"> · </template></template></p>
-</article>
-</template>
-
-<template data-if="calculadoraOk">
-<article class="pm-glass pm-rise pm-card" aria-labelledby="t-calc" style="flex: 1 1 300px; animation-delay: 840ms">
-<div class="pm-cab">
-<div>
-<h2 id="t-calc" class="pm-h2">Quanto rende meu dinheiro</h2>
-<p class="pm-sub">Com as taxas de hoje, já descontado o IR</p>
-</div>
-<button type="button" class="{{aj.calculadora.cls}}" onClick="{{aj.calculadora.toggle}}" aria-expanded="{{aj.calculadora.aberto}}" aria-label="Como a conta é feita?">?</button>
-</div>
-<template data-if="aj.calculadora.on"><p class="pm-glass-dark pm-explica">{{aj.calculadora.txt}}<span class="pm-fonte-inline"> Fonte: <template data-for="aj.calculadora.fontes" data-as="f"><a href="{{f.url}}" target="{{f.alvo}}" rel="noopener">{{f.t}}</a><template data-if="f.sep"> · </template></template>.</span></p></template>
-<div style="display: flex; flex-direction: column; gap: 6px">
-<label for="pm-calc-valor" style="font-size: 13px; color: #c2c2c2">Valor aplicado (R$)</label>
-<div class="pm-glass-dark pm-field"><span style="color: #c2c2c2">R$</span><input id="pm-calc-valor" class="pm-num-input" type="text" inputmode="numeric" value="{{calcValor}}" onInput="{{onCalcValor}}"></div>
-</div>
-<div class="pm-glass-dark pm-segs" role="group" aria-label="Prazo" style="align-self: flex-start">
-<template data-for="calcPrazos" data-as="sg"><button type="button" class="{{sg.cls}}" onClick="{{sg.pick}}" aria-pressed="{{sg.on}}">{{sg.label}}</button></template>
-</div>
-<div aria-live="polite" style="display: flex; flex-direction: column; gap: 12px">
-<template data-for="calcLinhas" data-as="cl">
-<div style="display: flex; flex-direction: column; gap: 4px">
-<div style="display: flex; justify-content: space-between; gap: 8px; font-size: 14px"><span style="font-weight: 500">{{cl.nome}}</span><span class="pm-num" style="font-weight: 500">{{cl.final}}</span></div>
-<div style="height: 8px; border-radius: 9999px; background: rgba(255,255,255,.08)"><div style="{{cl.barStyle}}"></div></div>
-<div style="display: flex; justify-content: space-between; gap: 8px; flex-wrap: wrap; font-size: 12px; color: #c2c2c2"><span>{{cl.nota}}</span><span class="pm-num">{{cl.ganho}}</span></div>
-</div>
-</template>
-</div>
-<p style="margin: 0; font-size: 12px; color: #c2c2c2">{{calcNota}}</p>
-<p class="pm-fonte">Fonte: <template data-for="fx.calculadora" data-as="f"><a href="{{f.url}}" target="{{f.alvo}}" rel="noopener">{{f.t}}</a><template data-if="f.sep"> · </template></template></p>
 </article>
 </template>
 </div>
@@ -505,7 +405,7 @@
 </div>
 <div class="pm-cab-dir"><span style="{{medoPillStyle}}">{{medoZone}}</span><button type="button" class="{{aj.medo.cls}}" onClick="{{aj.medo.toggle}}" aria-expanded="{{aj.medo.aberto}}" aria-label="O que é volatilidade?">?</button></div>
 </div>
-<template data-if="aj.medo.on"><p class="pm-glass-dark pm-explica">{{aj.medo.txt}}<span class="pm-fonte-inline"> Fonte: <template data-for="aj.medo.fontes" data-as="f"><a href="{{f.url}}" target="{{f.alvo}}" rel="noopener">{{f.t}}</a><template data-if="f.sep"> · </template></template>.</span></p></template>
+<template data-if="aj.medo.on"><p class="pm-glass-dark pm-explica">{{aj.medo.txt}}</p></template>
 <svg viewBox="0 0 280 186" style="width: 100%; max-width: 320px; height: auto; display: block; margin: 0 auto; overflow: visible" role="img" aria-label="{{medoAria}}">
 <path d="{{medoArcCalm}}" fill="none" stroke="rgba(237,237,237,.30)" style="stroke-width: 14; stroke-linecap: butt"></path>
 <path d="{{medoArcWarn}}" fill="none" stroke="rgba(240,179,122,.55)" style="stroke-width: 14; stroke-linecap: butt"></path>
@@ -529,7 +429,6 @@
 </template>
 </svg>
 <p class="pm-cap">{{medoComment}}</p>
-<p class="pm-fonte">Fonte: <template data-for="fx.medo" data-as="f"><a href="{{f.url}}" target="{{f.alvo}}" rel="noopener">{{f.t}}</a><template data-if="f.sep"> · </template></template></p>
 </article>
 </template>
 
@@ -542,7 +441,7 @@
 </div>
 <div class="pm-cab-dir"><button type="button" class="pm-pill" onClick="{{resetSim}}" style="padding: 6px 12px; font-size: 13px">Dados atuais</button><button type="button" class="{{aj.simulador.cls}}" onClick="{{aj.simulador.toggle}}" aria-expanded="{{aj.simulador.aberto}}" aria-label="Como funciona?">?</button></div>
 </div>
-<template data-if="aj.simulador.on"><p class="pm-glass-dark pm-explica">{{aj.simulador.txt}}<span class="pm-fonte-inline"> Fonte: <template data-for="aj.simulador.fontes" data-as="f"><a href="{{f.url}}" target="{{f.alvo}}" rel="noopener">{{f.t}}</a><template data-if="f.sep"> · </template></template>.</span></p></template>
+<template data-if="aj.simulador.on"><p class="pm-glass-dark pm-explica">{{aj.simulador.txt}}</p></template>
 <div style="display: flex; flex-direction: column; gap: 6px">
 <div style="display: flex; justify-content: space-between; font-size: 14px"><label for="pm-sim-selic" style="color: #c2c2c2">Selic</label><span style="font-variant-numeric: tabular-nums">{{simSelicTxt}}</span></div>
 <input id="pm-sim-selic" class="pm-range" type="range" min="2" max="16" step="0.25" value="{{simSelic}}" aria-valuetext="{{simSelicTxt}}" onChange="{{onSelic}}">
@@ -564,7 +463,6 @@
 <p class="pm-cap">{{simDesc}}</p>
 <p style="margin: 0; font-size: 12px; color: #c2c2c2">Subtração simples daria {{simSimpleTxt}}, um erro de {{simErrTxt}}</p>
 </div>
-<p class="pm-fonte">Fonte: <template data-for="fx.simulador" data-as="f"><a href="{{f.url}}" target="{{f.alvo}}" rel="noopener">{{f.t}}</a><template data-if="f.sep"> · </template></template></p>
 </article>
 </template>
 
@@ -574,7 +472,7 @@
 <h2 id="t-world" class="pm-h2">Brasil no mundo</h2>
 <button type="button" class="{{aj.mundo.cls}}" onClick="{{aj.mundo.toggle}}" aria-expanded="{{aj.mundo.aberto}}" aria-label="Por que comparar?">?</button>
 </div>
-<template data-if="aj.mundo.on"><p class="pm-glass-dark pm-explica">{{aj.mundo.txt}}<span class="pm-fonte-inline"> Fonte: <template data-for="aj.mundo.fontes" data-as="f"><a href="{{f.url}}" target="{{f.alvo}}" rel="noopener">{{f.t}}</a><template data-if="f.sep"> · </template></template>.</span></p></template>
+<template data-if="aj.mundo.on"><p class="pm-glass-dark pm-explica">{{aj.mundo.txt}}</p></template>
 <div style="display: flex; align-items: baseline; gap: 10px"><span style="font-size: 64px; font-weight: 500; letter-spacing: -0.045em; line-height: 1">{{mundoPos}}</span><span style="font-size: 16px; color: #c2c2c2">{{mundoTitulo}}</span></div>
 <div style="display: flex; flex-direction: column; gap: 10px">
 <template data-for="mundoLinhas" data-as="ml">
@@ -585,8 +483,6 @@
 </template>
 </div>
 <p class="pm-cap">{{mundoCaption}}</p>
-<template data-if="hasMundoDif"><p style="margin: 0; font-size: 12px; color: #c2c2c2">{{mundoDif}}</p></template>
-<p class="pm-fonte">Fonte: <template data-for="fx.mundo" data-as="f"><a href="{{f.url}}" target="{{f.alvo}}" rel="noopener">{{f.t}}</a><template data-if="f.sep"> · </template></template></p>
 </article>
 </template>
 
@@ -605,7 +501,6 @@
 <template data-if="leituraAuto"><p class="pm-glass-dark" style="margin: 0; border-radius: 16px; padding: 14px; font-size: 14px; line-height: 1.6; color: #ededed">{{leituraResumo}}</p></template>
 <template data-if="leituraVazia"><p class="pm-glass-dark" style="margin: 0; border-radius: 16px; padding: 14px; font-size: 14px; color: #c2c2c2">A leitura desta semana sai depois do próximo Boletim Focus.</p></template>
 <div style="font-size: 12px; color: #c2c2c2">{{leituraRef}}</div>
-<p class="pm-fonte">Fonte: <template data-for="fx.leitura" data-as="f"><a href="{{f.url}}" target="{{f.alvo}}" rel="noopener">{{f.t}}</a><template data-if="f.sep"> · </template></template></p>
 </article>
 </template>
 </div>
@@ -629,7 +524,7 @@
 <button type="button" class="{{aj.focus.cls}}" onClick="{{aj.focus.toggle}}" aria-expanded="{{aj.focus.aberto}}" aria-label="O que é o Focus?">?</button>
 </div>
 </div>
-<template data-if="aj.focus.on"><p class="pm-glass-dark pm-explica">{{aj.focus.txt}}<span class="pm-fonte-inline"> Fonte: <template data-for="aj.focus.fontes" data-as="f"><a href="{{f.url}}" target="{{f.alvo}}" rel="noopener">{{f.t}}</a><template data-if="f.sep"> · </template></template>.</span></p></template>
+<template data-if="aj.focus.on"><p class="pm-glass-dark pm-explica">{{aj.focus.txt}}</p></template>
 <div style="overflow-x: auto">
 <table style="width: 100%; min-width: 560px; border-collapse: collapse; font-variant-numeric: tabular-nums">
 <thead>
@@ -651,7 +546,6 @@
 </table>
 </div>
 <p style="margin: 0; font-size: 12px; color: #c2c2c2">Abaixo de cada mediana: a menor e a maior resposta, e quantas instituições responderam. Faixa larga = mercado dividido.</p>
-<p class="pm-fonte">Fonte: <template data-for="fx.focusTabela" data-as="f"><a href="{{f.url}}" target="{{f.alvo}}" rel="noopener">{{f.t}}</a><template data-if="f.sep"> · </template></template></p>
 </article>
 
 <div class="pm-linha">
@@ -664,7 +558,7 @@
 </div>
 <button type="button" class="{{aj.exante.cls}}" onClick="{{aj.exante.toggle}}" aria-expanded="{{aj.exante.aberto}}" aria-label="Ex-ante e ex-post">?</button>
 </div>
-<template data-if="aj.exante.on"><p class="pm-glass-dark pm-explica">{{aj.exante.txt}}<span class="pm-fonte-inline"> Fonte: <template data-for="aj.exante.fontes" data-as="f"><a href="{{f.url}}" target="{{f.alvo}}" rel="noopener">{{f.t}}</a><template data-if="f.sep"> · </template></template>.</span></p></template>
+<template data-if="aj.exante.on"><p class="pm-glass-dark pm-explica">{{aj.exante.txt}}</p></template>
 <svg viewBox="0 0 760 300" style="width: 100%; height: auto; display: block; overflow: visible" role="img" aria-label="Selic e IPCA esperados pelo Focus de hoje até {{focusLastYear}}, com o juro real entre as linhas">
 <template data-for="traj.ticks" data-as="t">
 <line x1="80" x2="690" y1="{{t.y}}" y2="{{t.y}}" stroke="rgba(255,255,255,.07)" style="stroke-width: 1"></line>
@@ -688,7 +582,6 @@
 <span><span style="width: 14px; height: 10px; border-radius: 3px; background: rgba(143,176,255,.35)"></span>Juro real</span>
 </div>
 <p class="pm-cap">{{trajCaption}}</p>
-<p class="pm-fonte">Fonte: <template data-for="fx.trajetoria" data-as="f"><a href="{{f.url}}" target="{{f.alvo}}" rel="noopener">{{f.t}}</a><template data-if="f.sep"> · </template></template></p>
 </article>
 </template>
 
@@ -701,7 +594,6 @@
 <span style="font-size: 12px; color: #c2c2c2">{{m.read}}</span>
 </div>
 </template>
-<p class="pm-fonte">Fonte: <template data-for="fx.mudancas" data-as="f"><a href="{{f.url}}" target="{{f.alvo}}" rel="noopener">{{f.t}}</a><template data-if="f.sep"> · </template></template></p>
 </article>
 </template>
 </div>
@@ -716,7 +608,7 @@
 </div>
 <button type="button" class="{{aj.historico.cls}}" onClick="{{aj.historico.toggle}}" aria-expanded="{{aj.historico.aberto}}" aria-label="Como ler?">?</button>
 </div>
-<template data-if="aj.historico.on"><p class="pm-glass-dark pm-explica">{{aj.historico.txt}}<span class="pm-fonte-inline"> Fonte: <template data-for="aj.historico.fontes" data-as="f"><a href="{{f.url}}" target="{{f.alvo}}" rel="noopener">{{f.t}}</a><template data-if="f.sep"> · </template></template>.</span></p></template>
+<template data-if="aj.historico.on"><p class="pm-glass-dark pm-explica">{{aj.historico.txt}}</p></template>
 <div style="display: flex; flex-wrap: wrap; gap: 8px">
 <div class="pm-glass-dark pm-segs" role="group" aria-label="Indicador"><template data-for="histInds" data-as="sg"><button type="button" class="{{sg.cls}}" onClick="{{sg.pick}}" aria-pressed="{{sg.on}}">{{sg.label}}</button></template></div>
 <div class="pm-glass-dark pm-segs" role="group" aria-label="Ano"><template data-for="histAnos" data-as="sg"><button type="button" class="{{sg.cls}}" onClick="{{sg.pick}}" aria-pressed="{{sg.on}}">{{sg.label}}</button></template></div>
@@ -735,7 +627,6 @@
 </template>
 </svg>
 <p class="pm-cap">{{histCaption}}</p>
-<p class="pm-fonte">Fonte: <template data-for="fx.historico" data-as="f"><a href="{{f.url}}" target="{{f.alvo}}" rel="noopener">{{f.t}}</a><template data-if="f.sep"> · </template></template></p>
 </article>
 </template>
 
@@ -748,7 +639,7 @@
 </div>
 <button type="button" class="{{aj.reunioes.cls}}" onClick="{{aj.reunioes.toggle}}" aria-expanded="{{aj.reunioes.aberto}}" aria-label="Como ler?">?</button>
 </div>
-<template data-if="aj.reunioes.on"><p class="pm-glass-dark pm-explica">{{aj.reunioes.txt}}<span class="pm-fonte-inline"> Fonte: <template data-for="aj.reunioes.fontes" data-as="f"><a href="{{f.url}}" target="{{f.alvo}}" rel="noopener">{{f.t}}</a><template data-if="f.sep"> · </template></template>.</span></p></template>
+<template data-if="aj.reunioes.on"><p class="pm-glass-dark pm-explica">{{aj.reunioes.txt}}</p></template>
 <template data-for="reunioesLista" data-as="r">
 <div style="display: flex; flex-direction: column; gap: 6px">
 <div style="display: flex; justify-content: space-between; gap: 8px; font-size: 14px"><span>{{r.nome}}</span><span class="pm-num" style="font-weight: 500">{{r.valor}}</span></div>
@@ -761,7 +652,6 @@
 </div>
 </template>
 <div style="display: flex; justify-content: space-between; font-size: 12px; color: #c2c2c2"><template data-for="reunioesEscala" data-as="e"><span>{{e.t}}</span></template></div>
-<p class="pm-fonte">Fonte: <template data-for="fx.reunioes" data-as="f"><a href="{{f.url}}" target="{{f.alvo}}" rel="noopener">{{f.t}}</a><template data-if="f.sep"> · </template></template></p>
 </article>
 </template>
 </div>
@@ -775,7 +665,7 @@
 </div>
 <button type="button" class="{{aj.tesouro.cls}}" onClick="{{aj.tesouro.toggle}}" aria-expanded="{{aj.tesouro.aberto}}" aria-label="Como ler?">?</button>
 </div>
-<template data-if="aj.tesouro.on"><p class="pm-glass-dark pm-explica">{{aj.tesouro.txt}}<span class="pm-fonte-inline"> Fonte: <template data-for="aj.tesouro.fontes" data-as="f"><a href="{{f.url}}" target="{{f.alvo}}" rel="noopener">{{f.t}}</a><template data-if="f.sep"> · </template></template>.</span></p></template>
+<template data-if="aj.tesouro.on"><p class="pm-glass-dark pm-explica">{{aj.tesouro.txt}}</p></template>
 <div style="display: flex; gap: 24px; flex-wrap: wrap">
 <div style="display: flex; flex-direction: column"><span style="font-size: 34px; font-weight: 500; letter-spacing: -0.035em; color: #8fb0ff" class="pm-num">{{tesReal}}</span><span style="font-size: 13px; color: #c2c2c2">juro real de mercado, ao ano</span></div>
 <div style="display: flex; flex-direction: column"><span style="font-size: 34px; font-weight: 500; letter-spacing: -0.035em; color: #f0b37a" class="pm-num">{{tesImplicita}}</span><span style="font-size: 13px; color: #c2c2c2">inflação implícita, ao ano</span></div>
@@ -797,7 +687,6 @@
 <span><span style="width: 16px; height: 0; border-top: 2.5px solid #f0b37a"></span>Inflação implícita</span>
 </div>
 <p class="pm-cap">{{tesCaption}}</p>
-<p class="pm-fonte">Fonte: <template data-for="fx.tesouro" data-as="f"><a href="{{f.url}}" target="{{f.alvo}}" rel="noopener">{{f.t}}</a><template data-if="f.sep"> · </template></template></p>
 </article>
 </template>
 
@@ -818,18 +707,11 @@
 </div>
 </template>
 </div>
-<p class="pm-fonte">Fonte: <template data-for="fx.perguntas" data-as="f"><a href="{{f.url}}" target="{{f.alvo}}" rel="noopener">{{f.t}}</a><template data-if="f.sep"> · </template></template></p>
 </article>
 </template>
-</section>
-</template>
-
-<!-- ======================================================== ECONOMIA -->
-<template data-if="isEconomia">
-<section aria-labelledby="t-eco" style="display: flex; flex-direction: column; gap: 20px">
-<div class="pm-rise">
-<h1 id="t-eco" class="pm-h1">Economia</h1>
-<p style="margin: 8px 0 0; font-size: 15px; color: #c2c2c2">Juros na história, inflação em detalhe, atividade, emprego, contas públicas e o mundo</p>
+<div class="pm-secao pm-rise">
+<h2 class="pm-h2 pm-h2-secao">Contexto econômico</h2>
+<p class="pm-sub">Juros na história, inflação em detalhe, atividade, emprego, contas públicas e o mundo</p>
 </div>
 
 <template data-if="selicLinhaOk">
@@ -842,7 +724,7 @@
 </div>
 <button type="button" class="{{aj.selicLinha.cls}}" onClick="{{aj.selicLinha.toggle}}" aria-expanded="{{aj.selicLinha.aberto}}" aria-label="Como ler?">?</button>
 </div>
-<template data-if="aj.selicLinha.on"><p class="pm-glass-dark pm-explica">{{aj.selicLinha.txt}}<span class="pm-fonte-inline"> Fonte: <template data-for="aj.selicLinha.fontes" data-as="f"><a href="{{f.url}}" target="{{f.alvo}}" rel="noopener">{{f.t}}</a><template data-if="f.sep"> · </template></template>.</span></p></template>
+<template data-if="aj.selicLinha.on"><p class="pm-glass-dark pm-explica">{{aj.selicLinha.txt}}</p></template>
 <svg viewBox="0 0 760 262" style="width: 100%; height: auto; display: block; overflow: visible" role="img" aria-label="{{selicAria}}">
 <template data-for="selicTicks" data-as="t">
 <line x1="48" x2="700" y1="{{t.y}}" y2="{{t.y}}" stroke="rgba(255,255,255,.07)" style="stroke-width: 1"></line>
@@ -853,7 +735,6 @@
 <template data-for="selicMarcas" data-as="m"><circle class="pm-fade" cx="{{m.x}}" cy="{{m.y}}" r="3.5" fill="{{m.fill}}" style="animation-delay: 1.2s"></circle></template>
 <text x="{{selicLastX}}" y="{{selicLastLabelY}}" fill="#ededed" style="font-size: 13px; font-weight: 500">{{selicLastTxt}}</text>
 </svg>
-<p class="pm-fonte">Fonte: <template data-for="fx.selicLinha" data-as="f"><a href="{{f.url}}" target="{{f.alvo}}" rel="noopener">{{f.t}}</a><template data-if="f.sep"> · </template></template></p>
 </article>
 <article class="pm-glass pm-rise pm-card" aria-labelledby="t-ciclo" style="flex: 1 1 300px; gap: 12px; animation-delay: 160ms">
 <h2 id="t-ciclo" class="pm-h2">{{cicloTitulo}}</h2>
@@ -880,7 +761,7 @@
 </div>
 <button type="button" class="{{aj.grupos.cls}}" onClick="{{aj.grupos.toggle}}" aria-expanded="{{aj.grupos.aberto}}" aria-label="Como ler?">?</button>
 </div>
-<template data-if="aj.grupos.on"><p class="pm-glass-dark pm-explica">{{aj.grupos.txt}}<span class="pm-fonte-inline"> Fonte: <template data-for="aj.grupos.fontes" data-as="f"><a href="{{f.url}}" target="{{f.alvo}}" rel="noopener">{{f.t}}</a><template data-if="f.sep"> · </template></template>.</span></p></template>
+<template data-if="aj.grupos.on"><p class="pm-glass-dark pm-explica">{{aj.grupos.txt}}</p></template>
 <template data-for="gruposLista" data-as="g">
 <div style="display: flex; flex-direction: column; gap: 4px">
 <div style="display: flex; justify-content: space-between; gap: 8px; font-size: 14px"><span>{{g.nome}} <span style="font-size: 12px; color: #c2c2c2">· {{g.peso}}</span></span><span class="pm-num" style="font-weight: 500">{{g.doze}}</span></div>
@@ -889,7 +770,6 @@
 </div>
 </template>
 <p class="pm-cap">{{gruposCaption}}</p>
-<p class="pm-fonte">Fonte: <template data-for="fx.grupos" data-as="f"><a href="{{f.url}}" target="{{f.alvo}}" rel="noopener">{{f.t}}</a><template data-if="f.sep"> · </template></template></p>
 </article>
 </template>
 
@@ -902,7 +782,7 @@
 </div>
 <button type="button" class="{{aj.nucleos.cls}}" onClick="{{aj.nucleos.toggle}}" aria-expanded="{{aj.nucleos.aberto}}" aria-label="O que são núcleos?">?</button>
 </div>
-<template data-if="aj.nucleos.on"><p class="pm-glass-dark pm-explica">{{aj.nucleos.txt}}<span class="pm-fonte-inline"> Fonte: <template data-for="aj.nucleos.fontes" data-as="f"><a href="{{f.url}}" target="{{f.alvo}}" rel="noopener">{{f.t}}</a><template data-if="f.sep"> · </template></template>.</span></p></template>
+<template data-if="aj.nucleos.on"><p class="pm-glass-dark pm-explica">{{aj.nucleos.txt}}</p></template>
 <svg viewBox="0 0 760 222" style="width: 100%; height: auto; display: block; overflow: visible" role="img" aria-label="IPCA de 12 meses e média dos núcleos nos últimos 3 anos">
 <template data-for="nuc.ticks" data-as="t">
 <line x1="44" x2="680" y1="{{t.y}}" y2="{{t.y}}" stroke="rgba(255,255,255,.07)" style="stroke-width: 1"></line>
@@ -922,7 +802,6 @@
 <span><span style="width: 16px; height: 0; border-top: 1px dashed rgba(237,237,237,.7)"></span>Meta 3%</span>
 </div>
 <p class="pm-cap">{{nucCaption}}</p>
-<p class="pm-fonte">Fonte: <template data-for="fx.nucleos" data-as="f"><a href="{{f.url}}" target="{{f.alvo}}" rel="noopener">{{f.t}}</a><template data-if="f.sep"> · </template></template></p>
 </article>
 </template>
 </div>
@@ -932,7 +811,7 @@
 <span style="font-size: 13px; color: #c2c2c2; letter-spacing: .02em">Atividade, emprego, contas públicas e câmbio</span>
 <button type="button" class="{{aj.atividade.cls}}" onClick="{{aj.atividade.toggle}}" aria-expanded="{{aj.atividade.aberto}}" aria-label="O que são estes indicadores?">?</button>
 </div>
-<template data-if="aj.atividade.on"><p class="pm-glass-dark pm-explica" style="margin-top: -8px">{{aj.atividade.txt}}<span class="pm-fonte-inline"> Fonte: <template data-for="aj.atividade.fontes" data-as="f"><a href="{{f.url}}" target="{{f.alvo}}" rel="noopener">{{f.t}}</a><template data-if="f.sep"> · </template></template>.</span></p></template>
+<template data-if="aj.atividade.on"><p class="pm-glass-dark pm-explica" style="margin-top: -8px">{{aj.atividade.txt}}</p></template>
 <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 16px; margin-top: -6px">
 <template data-for="econCards" data-as="k">
 <article class="pm-glass pm-rise" style="border-radius: 24px; padding: 20px; display: flex; flex-direction: column; gap: 10px; min-width: 0; {{k.cardStyle}}">
@@ -949,7 +828,6 @@
 </article>
 </template>
 </div>
-<p class="pm-fonte" style="margin-top: -8px">Fonte: <template data-for="fx.economia" data-as="f"><a href="{{f.url}}" target="{{f.alvo}}" rel="noopener">{{f.t}}</a><template data-if="f.sep"> · </template></template></p>
 </template>
 
 <template data-if="mercadosMundoOk">
@@ -961,7 +839,7 @@
 </div>
 <button type="button" class="{{aj.cambio.cls}}" onClick="{{aj.cambio.toggle}}" aria-expanded="{{aj.cambio.aberto}}" aria-label="O que é o diferencial?">?</button>
 </div>
-<template data-if="aj.cambio.on"><p class="pm-glass-dark pm-explica">{{aj.cambio.txt}}<span class="pm-fonte-inline"> Fonte: <template data-for="aj.cambio.fontes" data-as="f"><a href="{{f.url}}" target="{{f.alvo}}" rel="noopener">{{f.t}}</a><template data-if="f.sep"> · </template></template>.</span></p></template>
+<template data-if="aj.cambio.on"><p class="pm-glass-dark pm-explica">{{aj.cambio.txt}}</p></template>
 <div class="pm-linha" style="align-items: center">
 <div style="display: flex; flex-direction: column; flex: 1 1 220px"><span style="font-size: 56px; font-weight: 500; letter-spacing: -0.045em; line-height: 1; color: #8fb0ff" class="pm-num">{{difTxt}}</span><span style="font-size: 13px; color: #c2c2c2; margin-top: 6px">{{difCaption}}</span></div>
 <div style="display: flex; flex-direction: column; flex: 2 1 320px">
@@ -973,11 +851,11 @@
 </template>
 </div>
 </div>
-<p class="pm-fonte">Fonte: <template data-for="fx.mercadosMundo" data-as="f"><a href="{{f.url}}" target="{{f.alvo}}" rel="noopener">{{f.t}}</a><template data-if="f.sep"> · </template></template></p>
 </article>
 </template>
 </section>
 </template>
+
 
 <!-- ======================================================== AGENDA -->
 <template data-if="isAgenda">
@@ -1043,7 +921,6 @@
 <span style="font-size: 14px">{{ev.title}}</span>
 </div>
 </template>
-<p class="pm-fonte">Fonte: <template data-for="fx.agenda" data-as="f"><a href="{{f.url}}" target="{{f.alvo}}" rel="noopener">{{f.t}}</a><template data-if="f.sep"> · </template></template></p>
 </article>
 </div>
 </section>
@@ -1055,6 +932,80 @@
 <div class="pm-rise">
 <h1 id="t-met" class="pm-h1">Metodologia</h1>
 <p style="margin: 8px 0 0; font-size: 15px; color: #c2c2c2">De onde vêm os números e como cada um é calculado</p>
+</div>
+<div class="pm-secao pm-rise">
+<h2 class="pm-h2 pm-h2-secao">Ferramentas</h2>
+<p class="pm-sub">Compare a bolsa com a renda fixa e simule quanto rende o seu dinheiro</p>
+</div>
+<div class="pm-linha">
+<template data-if="comparacaoOk">
+<article class="pm-glass pm-rise pm-card" aria-labelledby="t-comp" style="flex: 2 1 560px; animation-delay: 820ms">
+<div class="pm-cab">
+<div>
+<h2 id="t-comp" class="pm-h2">Bolsa x renda fixa em 10 anos</h2>
+<p class="pm-sub">{{compSub}}</p>
+</div>
+<div class="pm-cab-dir">
+<div class="pm-glass-dark pm-segs" role="group" aria-label="Como comparar">
+<template data-for="compSegs" data-as="sg"><button type="button" class="{{sg.cls}}" onClick="{{sg.pick}}" aria-pressed="{{sg.on}}">{{sg.label}}</button></template>
+</div>
+<button type="button" class="{{aj.comparacao.cls}}" onClick="{{aj.comparacao.toggle}}" aria-expanded="{{aj.comparacao.aberto}}" aria-label="Como ler este gráfico?">?</button>
+</div>
+</div>
+<template data-if="aj.comparacao.on"><p class="pm-glass-dark pm-explica">{{aj.comparacao.txt}}</p></template>
+<svg viewBox="0 0 760 252" style="width: 100%; height: auto; display: block; overflow: visible" role="img" aria-label="{{compAria}}">
+<template data-for="comp.ticks" data-as="t">
+<line x1="52" x2="690" y1="{{t.y}}" y2="{{t.y}}" stroke="rgba(255,255,255,.07)" style="stroke-width: 1"></line>
+<text x="44" y="{{t.ty}}" fill="#c2c2c2" style="font-size: 12px; text-anchor: end">{{t.label}}</text>
+</template>
+<template data-for="comp.xlabels" data-as="xl"><text x="{{xl.x}}" y="246" fill="#c2c2c2" style="font-size: 12px; text-anchor: middle">{{xl.label}}</text></template>
+<template data-for="comp.linhas" data-as="ln">
+<path id="{{ln.id}}" class="{{ln.cls}}" pathLength="1" d="{{ln.d}}" fill="none" stroke="{{ln.cor}}" style="stroke-width: {{ln.largura}}; stroke-linecap: round; stroke-linejoin: round; {{ln.dash}}"></path>
+<circle cx="{{ln.lastX}}" cy="{{ln.lastY}}" r="4" fill="{{ln.cor}}" stroke="#0a0a0a" style="stroke-width: 2"></circle>
+<text x="{{ln.labelX}}" y="{{ln.labelY}}" fill="{{ln.cor}}" style="font-size: 12px; font-weight: 500">{{ln.lastTxt}}</text>
+</template>
+</svg>
+<div class="pm-leg">
+<span><span style="width: 16px; height: 0; border-top: 2.5px solid #8fb0ff"></span>Ibovespa</span>
+<span><span style="width: 16px; height: 0; border-top: 2.5px solid #ededed"></span>CDI</span>
+</div>
+<p class="pm-cap">{{compCaption}}</p>
+</article>
+</template>
+
+<template data-if="calculadoraOk">
+<article class="pm-glass pm-rise pm-card" aria-labelledby="t-calc" style="flex: 1 1 300px; animation-delay: 840ms">
+<div class="pm-cab">
+<div>
+<h2 id="t-calc" class="pm-h2">Quanto rende meu dinheiro</h2>
+<p class="pm-sub">Com as taxas de hoje, já descontado o IR</p>
+</div>
+<button type="button" class="{{aj.calculadora.cls}}" onClick="{{aj.calculadora.toggle}}" aria-expanded="{{aj.calculadora.aberto}}" aria-label="Como a conta é feita?">?</button>
+</div>
+<template data-if="aj.calculadora.on"><p class="pm-glass-dark pm-explica">{{aj.calculadora.txt}}</p></template>
+<div style="display: flex; flex-direction: column; gap: 6px">
+<label for="pm-calc-valor" style="font-size: 13px; color: #c2c2c2">Valor aplicado (R$)</label>
+<div class="pm-glass-dark pm-field"><span style="color: #c2c2c2">R$</span><input id="pm-calc-valor" class="pm-num-input" type="text" inputmode="numeric" value="{{calcValor}}" onInput="{{onCalcValor}}"></div>
+</div>
+<div class="pm-glass-dark pm-segs" role="group" aria-label="Prazo" style="align-self: flex-start">
+<template data-for="calcPrazos" data-as="sg"><button type="button" class="{{sg.cls}}" onClick="{{sg.pick}}" aria-pressed="{{sg.on}}">{{sg.label}}</button></template>
+</div>
+<div aria-live="polite" style="display: flex; flex-direction: column; gap: 12px">
+<template data-for="calcLinhas" data-as="cl">
+<div style="display: flex; flex-direction: column; gap: 4px">
+<div style="display: flex; justify-content: space-between; gap: 8px; font-size: 14px"><span style="font-weight: 500">{{cl.nome}}</span><span class="pm-num" style="font-weight: 500">{{cl.final}}</span></div>
+<div style="height: 8px; border-radius: 9999px; background: rgba(255,255,255,.08)"><div style="{{cl.barStyle}}"></div></div>
+<div style="display: flex; justify-content: space-between; gap: 8px; flex-wrap: wrap; font-size: 12px; color: #c2c2c2"><span>{{cl.nota}}</span><span class="pm-num">{{cl.ganho}}</span></div>
+</div>
+</template>
+</div>
+<p style="margin: 0; font-size: 12px; color: #c2c2c2">{{calcNota}}</p>
+</article>
+</template>
+</div>
+
+<div class="pm-secao">
+<h2 class="pm-h2 pm-h2-secao">Fontes e método</h2>
 </div>
 <div class="pm-linha">
 <article class="pm-glass pm-rise pm-card" aria-labelledby="t-src" style="flex: 3 1 520px; gap: 12px; animation-delay: 100ms">

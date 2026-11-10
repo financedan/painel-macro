@@ -50,7 +50,7 @@
     const ultimaDecisao = c.decisoes.length ? c.decisoes[c.decisoes.length - 1].data : null;
     if (!P._avisouCopom && (!ultimaDecisao || P.difDias(ultimaDecisao, c.hoje) < 60)) P._avisouCopom = true, console.warn('manual.json: o calendário do Copom termina em menos de 60 dias. Acrescente as próximas reuniões.');
     return {
-      subtitle: 'IPCA até ' + P.mesLongo(c.ipcaMes) + ' · Focus com coleta até ' + P.ddmm(c.coleta) + ' · Ibovespa até ' + P.ddmm(c.ibovData)
+      subtitle: 'Juros, inflação e expectativas no Brasil · IPCA até ' + P.mesLongo(c.ipcaMes) + ' · Focus com coleta até ' + P.ddmm(c.coleta) + ' · Ibovespa até ' + P.ddmm(c.ibovData)
         + ' · atualizado em ' + c.atualizado.ddmm + ' às ' + c.atualizado.hora + ' (Brasília)',
       copomShort: copomShort,
     };
@@ -116,16 +116,15 @@
         : (m.tipo === 'corte' ? 'Cortada' : 'Elevada') + ' em ' + P.ddmm(m.decisao) + ' (era ' + P.pct(m.anterior) + ')');
     const ult = B.ultimos_dias.slice(-6);
     const ibovSemana = (ult[ult.length - 1].valor / ult[0].valor - 1) * 100;
-    const ipca12e = c.F.ipca_12m ? c.F.ipca_12m.mediana : null;
-    const selic12 = selicEsperada12m(c);
-    const exante = P.fisher(selic12, ipca12e);
     const defs = [
       { label: 'Selic (meta)', v: selic, note: selicNota, arr: sel12, color: OSSO, icon: P.icones.percent },
       { label: 'IPCA em 12 meses', v: ipca, note: P.maiuscula(c.ipcaMesNome) + ' · ' + faixaMeta(ipca), arr: ip12.map((x) => x.valor), color: AMBAR, icon: P.icones.trend },
       { label: 'Juro real hoje', v: c.realNow, note: P.fmt(Math.abs(c.realNow - neutro), 1) + ' p.p. ' + (c.realNow >= neutro ? 'acima' : 'abaixo') + ' do juro neutro de referência (' + P.pct(neutro, 0) + ')', arr: real12, color: AZUL, icon: P.icones.gauge },
-      exante != null
-        ? { label: 'Juro real ex-ante', v: exante, note: 'Método do BC: Selic esperada para 12 meses (' + P.pct(selic12) + ') e inflação esperada (' + P.pct(ipca12e) + '), ambas do Focus', foot: 'Ex-post ' + P.pct(c.realNow) + ' · ex-ante ' + P.pct(exante), icon: P.icones.clock }
-        : { label: 'Juro real em ' + anos[1], v: P.fisher(Sf[1].mediana, I[1].mediana), note: 'Focus: Selic ' + P.pct(Sf[1].mediana) + ' e IPCA ' + P.pct(I[1].mediana), foot: 'Hoje ' + P.pct(c.realNow), icon: P.icones.clock },
+      (() => {
+        const esp = P.fisher(Sf[1].mediana, I[1].mediana);
+        const antesEsp = c.antes(Sf[1]) != null && c.antes(I[1]) != null ? P.fisher(c.antes(Sf[1]), c.antes(I[1])) : null;
+        return { label: 'Juro real esperado ' + anos[1], v: esp, note: 'Focus: Selic ' + P.pct(Sf[1].mediana) + ' e IPCA ' + P.pct(I[1].mediana) + ' em ' + anos[1] + (antesEsp != null ? ' (era ' + P.pct(antesEsp, 1) + ')' : ''), foot: 'Hoje ' + P.pct(c.realNow) + ' → ' + anos[1] + ' ' + P.pct(esp), icon: P.icones.target };
+      })(),
       { label: 'Focus · IPCA ' + anos[0], v: I[0].mediana,
         note: I[0].variacao == null ? 'Mediana do mercado' : (I[0].variacao === 0 ? '= estável na semana' : P.seta(I[0].variacao) + P.pp(I[0].variacao) + ' na semana (era ' + P.pct(c.antes(I[0])) + ')'),
         foot: 'Meta 3% · teto 4,5%', icon: P.icones.eye },
@@ -531,7 +530,7 @@
   // ---------- rodapé
   S.rodape = (c) => ({
     footer: 'Painel criado por ' + c.M.autor.nomeCompleto + '. Fontes: Banco Central do Brasil (SGS, Boletim Focus com coleta até ' + P.ddmmaaaa(c.coleta) + ' e Relatório de Política Monetária), IBGE (SIDRA), B3 (Ibovespa até '
-      + P.ddmmaaaa(c.ibovData) + ' e calendário de negociação), Tesouro Nacional (Tesouro Transparente), FRED/Federal Reserve de St. Louis (EUA e petróleo) e Moneyou via Agência Brasil (ranking mundial). Cada bloco mostra a sua fonte com link. Atualização automática em dias úteis; última em ' + c.atualizado.ddmmaaaa + ' às ' + c.atualizado.hora + ' (Brasília).',
+      + P.ddmmaaaa(c.ibovData) + ' e calendário de negociação), Tesouro Nacional (Tesouro Transparente), FRED/Federal Reserve de St. Louis (EUA e petróleo) e Moneyou via Agência Brasil (ranking mundial). Fontes, documentos e método de cada indicador na aba Metodologia. Atualização automática em dias úteis; última em ' + c.atualizado.ddmmaaaa + ' às ' + c.atualizado.hora + ' (Brasília).',
   });
 
   // ---------- fonte de cada bloco (linha "Fonte:" no rodapé de cada card)

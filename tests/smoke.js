@@ -49,7 +49,9 @@ const checar = (cond, msg) => { console.log((cond ? '  ok   ' : '  FALHOU ') + m
   await p.waitForSelector('#t-overview');
   checar(await p.isVisible('#t-overview'), 'abre direto no painel, sem tela de nome obrigatória');
   checar((await p.$$('article.pm-glass')).length >= 14, 'visão geral tem os blocos principais');
-  checar(!(await p.isVisible('nav.pm-dock')), 'no computador há só uma navegação (a do topo)');
+  checar(await p.isVisible('nav.pm-topnav') && await p.isVisible('nav.pm-dock'), 'no computador: abas no topo e barra lateral (layout original)');
+  checar((await p.$$('nav.pm-topnav a')).length === 4, 'quatro abas: Visão geral, Expectativas, Agenda e Metodologia');
+  checar(!(await p.$('#t-comp')) && !(await p.$('#t-calc')), 'visão geral sem os blocos que foram para outras abas');
 
   // alertas: abre, fecha com Esc e com clique fora; selo some depois de visto
   await p.click('button[aria-label^="Alertas"][aria-controls]'); await espera(p);
@@ -64,13 +66,13 @@ const checar = (cond, msg) => { console.log((cond ? '  ok   ' : '  FALHOU ') + m
   checar((await p.$$('button[aria-controls="pm-alertas"] span')).length === 0, 'selo de alertas some depois de vistos');
 
   // modo explicativo
-  const antes = (await p.$$('.pm-explica')).length;
-  await p.click('button[aria-pressed]:has-text("Modo explicativo")'); await espera(p);
-  checar((await p.$$('.pm-explica')).length > antes + 5, 'modo explicativo mostra as explicações');
-  await p.click('button[aria-pressed]:has-text("Modo explicativo")');
+  checar(!(await p.$('button[aria-pressed]:has-text("Modo explicativo")')), 'sem botão Modo explicativo no topo');
+  await p.click('.pm-help >> nth=0'); await espera(p);
+  checar((await p.$$('.pm-explica')).length === 1, 'o ? de um bloco mostra só a explicação dele');
+  await p.click('.pm-help >> nth=0'); await espera(p);
 
   // nome: definir, cancelar, remover
-  await p.click('text=Definir nome');
+  await p.click('.pm-avatar');
   await p.fill('#pm-nome', 'Ana Souza');
   await p.click('text=Salvar e voltar ao painel');
   checar((await p.textContent('#t-overview')).includes('Ana Souza'), 'saudação usa o nome salvo');
@@ -85,28 +87,33 @@ const checar = (cond, msg) => { console.log((cond ? '  ok   ' : '  FALHOU ') + m
   checar(!/NaN|undefined|null/.test(corpo), 'nenhum NaN/undefined/null na visão geral');
   checar(/último corte em 16\/09/.test(corpo), 'data do último corte da Selic é 16/09 (corrigida)');
 
-  // calculadora
+  // calculadora (fica na Metodologia)
+  await p.click('nav.pm-topnav a[href="#metodologia"]'); await espera(p);
   await p.fill('#pm-calc-valor', '5000'); await espera(p);
   checar((await p.textContent('#t-calc >> xpath=ancestor::article')).includes('R$ 5.'), 'calculadora recalcula com o valor digitado');
+  await p.click('nav.pm-topnav a[href="#visao"]'); await espera(p);
 
   // navegação por endereço e botão Voltar
-  // toda informação tem fonte: cada card de dados precisa de uma linha "Fonte:" com link
-  const SEM_DADOS = ['t-cal', 't-ciclo', 't-src', 't-diff', 't-glo', 't-sobre', 't-refs'];
-  const semFonte = async () => p.$$eval('main article[aria-labelledby]', (arts, excecoes) => arts
-    .filter((a) => !excecoes.includes(a.getAttribute('aria-labelledby')) && !a.querySelector('.pm-fonte a[href]'))
-    .map((a) => a.getAttribute('aria-labelledby')), SEM_DADOS);
-  let faltando = await semFonte();
-  checar(faltando.length === 0, 'todo card da visão geral tem fonte com link' + (faltando.length ? ': falta em ' + faltando.join(', ') : ''));
-  for (const v of ['expectativas', 'economia', 'agenda', 'metodologia']) {
+  // fontes ficam na Metodologia e no rodapé, não dentro dos blocos
+  checar((await p.$$('main article .pm-fonte')).length === 0, 'blocos sem linha de fonte (fontes na Metodologia e no rodapé)');
+  checar(/Metodologia/.test(await p.textContent('footer')), 'rodapé aponta a Metodologia para as fontes');
+  for (const v of ['expectativas', 'agenda', 'metodologia']) {
     await p.click('nav.pm-topnav a[href="#' + v + '"]');
     await p.waitForTimeout(300);
     checar(p.url().endsWith('#' + v), 'endereço muda para #' + v);
     const txt = await p.textContent('main');
     checar(!/NaN|undefined|null/.test(txt), 'nenhum NaN/undefined/null em #' + v);
-    faltando = await semFonte();
-    checar(faltando.length === 0, 'todo card de #' + v + ' tem fonte com link' + (faltando.length ? ': falta em ' + faltando.join(', ') : ''));
   }
+  await p.click('nav.pm-topnav a[href="#expectativas"]'); await espera(p);
+  checar(!!(await p.$('#t-sl')) && !!(await p.$('#t-grp')) && !!(await p.$('#t-mm')), 'conteúdo da antiga aba Economia está em Expectativas');
+  await p.click('nav.pm-topnav a[href="#metodologia"]'); await espera(p);
+  checar(!!(await p.$('#t-comp')) && !!(await p.$('#t-calc')), 'bolsa x CDI e calculadora estão na Metodologia');
+  checar((await p.$$('article[aria-labelledby="t-refs"] a[href^="http"]')).length >= 20, 'Metodologia lista todas as fontes com link');
+  await p.goto(base + '#economia'); await espera(p);
+  checar(await p.isVisible('#t-focus'), 'link antigo #economia abre Expectativas');
   checar(!/yahoo|yfinance/i.test(await p.content()), 'nenhuma referência ao Yahoo no site');
+  await p.click('nav.pm-topnav a[href="#agenda"]'); await espera(p);
+  await p.click('nav.pm-topnav a[href="#metodologia"]'); await espera(p);
   await p.goBack(); await p.waitForTimeout(300);
   checar(await p.isVisible('#t-agenda'), 'Voltar do navegador volta para a aba anterior');
 
@@ -138,7 +145,8 @@ const checar = (cond, msg) => { console.log((cond ? '  ok   ' : '  FALHOU ') + m
     }
   });
   await p.goto(base, { waitUntil: 'networkidle' });
-  checar(await p.isVisible('text=desde a sua última visita'), 'avisa as novidades desde a visita anterior');
+  await p.click('button[aria-controls="pm-alertas"]'); await espera(p);
+  checar(await p.isVisible('text=Desde a sua visita'), 'alertas mostram as novidades desde a visita anterior');
   await ctx.close();
 
   console.log('Celular');
@@ -166,7 +174,9 @@ const checar = (cond, msg) => { console.log((cond ? '  ok   ' : '  FALHOU ') + m
   ({ ctx, p } = await nova());
   await p.goto('http://localhost:' + srv2.address().port + '/', { waitUntil: 'networkidle' });
   checar(await p.isVisible('#t-overview'), 'painel abre mesmo sem algumas fontes');
-  checar(!(await p.isVisible('#t-comp')), 'bloco sem dados some, sem quebrar o resto');
+  await p.goto('http://localhost:' + srv2.address().port + '/#metodologia'); await p.waitForSelector('#t-met');
+  checar(!(await p.isVisible('#t-comp')) && await p.isVisible('#t-src'), 'bloco sem dados some, sem quebrar o resto');
+  await p.goto('http://localhost:' + srv2.address().port + '/'); await p.waitForSelector('#t-overview');
   checar(await p.isVisible('text=Não foi possível atualizar na última coleta'), 'avisa a fonte que falhou');
   await ctx.close();
   srv2.close();

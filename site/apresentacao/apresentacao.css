@@ -72,7 +72,7 @@ a { color: var(--osso); }
 .cursor { position: absolute; width: 40px; height: 40px; pointer-events: none; filter: drop-shadow(0 6px 14px rgba(0,0,0,.45)); }
 .clique { position: absolute; width: 90px; height: 90px; margin: -45px 0 0 -45px; border-radius: 9999px; border: 3px solid rgba(255,255,255,.9); pointer-events: none; }
 
-.legenda { position: absolute; left: 64px; bottom: 56px; display: inline-flex; align-items: center; gap: 16px; padding: 18px 30px; border-radius: 9999px; font-size: 30px; color: var(--osso); }
+.legenda { position: absolute; left: 64px; bottom: 92px; display: inline-flex; align-items: center; gap: 16px; padding: 18px 30px; border-radius: 9999px; font-size: 30px; color: var(--osso); }
 .legenda .ic { width: 30px; height: 30px; flex: 0 0 auto; }
 
 /* hotspots (só na versão interativa) */
@@ -101,3 +101,43 @@ a { color: var(--osso); }
 .nota { font-size: 12px; color: var(--cinza); }
 @media (max-width: 760px) { .seg span { display: none; } .btn .lbl { display: none; } .nota { display: none; } }
 @media (prefers-reduced-motion: reduce) { .btn { transition: none; } }
+
+/* ---------- camada de estímulo (mesmos tokens do painel) */
+/* faixa de cotações, como num terminal: dados reais do painel correndo no rodapé */
+.ticker { position: absolute; left: 0; right: 0; bottom: 0; height: 58px; display: flex; align-items: stretch; background: rgba(10,10,10,.72); -webkit-backdrop-filter: blur(22px) saturate(140%); backdrop-filter: blur(22px) saturate(140%); border-top: 1px solid var(--borda); overflow: hidden; }
+.ticker .cap { flex: 0 0 auto; display: flex; align-items: center; gap: 12px; padding: 0 26px; font-size: 19px; font-weight: 500; letter-spacing: .1em; color: #161616; background: var(--osso); text-transform: uppercase; z-index: 2; }
+.ticker .cap .num { font-variant-numeric: tabular-nums; opacity: .6; }
+.ticker .janela-t { position: relative; flex: 1; overflow: hidden; -webkit-mask-image: linear-gradient(90deg, transparent 0, #000 60px, #000 calc(100% - 80px), transparent 100%); mask-image: linear-gradient(90deg, transparent 0, #000 60px, #000 calc(100% - 80px), transparent 100%); }
+.ticker .fita { position: absolute; left: 0; top: 0; bottom: 0; display: flex; align-items: center; white-space: nowrap; will-change: transform; }
+.ticker .copia { display: flex; align-items: center; }
+.ticker .q { display: inline-flex; align-items: baseline; gap: 12px; padding: 0 34px; font-size: 21px; border-right: 1px solid rgba(229,229,229,.14); }
+.ticker .q .r { font-size: 16px; letter-spacing: .1em; color: var(--cinza); text-transform: uppercase; }
+.ticker .q .v { font-weight: 500; font-variant-numeric: tabular-nums; }
+.ticker .q .d { font-size: 17px; color: var(--cinza); font-variant-numeric: tabular-nums; }
+
+/* número de impacto: o valor grande no centro antes do cartão */
+.slam-veu { position: absolute; inset: 0; background: radial-gradient(ellipse at center, rgba(10,10,10,.55), rgba(10,10,10,.82)); }
+.slam { position: absolute; left: 50%; top: 47%; display: flex; flex-direction: column; align-items: center; gap: 18px; text-align: center; }
+.slam .numero { font-size: 260px; letter-spacing: -0.05em; }
+.slam .olho { font-size: 26px; }
+.slam .sub { font-size: 28px; color: var(--cinza); max-width: 1300px; }
+.flash { position: absolute; inset: 0; background: #ffffff; }
+
+/* varredura de vidro entre cenas */
+.varredura { position: absolute; top: -10%; height: 120%; width: 520px; transform-origin: center; background: linear-gradient(90deg, rgba(212,212,212,0) 0%, rgba(212,212,212,.16) 45%, rgba(255,255,255,.26) 50%, rgba(212,212,212,.16) 55%, rgba(212,212,212,0) 100%); -webkit-backdrop-filter: blur(26px) saturate(150%); backdrop-filter: blur(26px) saturate(150%); border-left: 1px solid rgba(229,229,229,.18); border-right: 1px solid rgba(229,229,229,.18); }
+
+/* mini gráficos dentro dos cartões (como as barras do painel) */
+.mini { display: flex; flex-direction: column; gap: 10px; margin-top: 4px; }
+.mini-linha { display: flex; justify-content: space-between; font-size: 21px; color: var(--osso); font-variant-numeric: tabular-nums; }
+.mini-linha.br { color: var(--azul); font-weight: 500; }
+.mini-trilho { position: relative; height: 12px; border-radius: 9999px; background: rgba(255,255,255,.10); overflow: hidden; }
+.mini-trilho i { position: absolute; left: 0; top: 0; bottom: 0; width: 0; border-radius: 9999px; background: rgba(237,237,237,.45); }
+.mini-trilho i.az { background: var(--azul); }
+.mini-trilho i.am { background: var(--ambar); }
+.mini-rot { display: flex; justify-content: space-between; font-size: 17px; color: var(--cinza); font-variant-numeric: tabular-nums; }
+.medidor { position: relative; height: 16px; border-radius: 9999px; background: rgba(255,255,255,.08); margin-top: 8px; }
+.medidor .banda { position: absolute; top: 0; bottom: 0; border-radius: 9999px; background: rgba(237,237,237,.18); }
+.medidor .linha-v { position: absolute; top: -6px; bottom: -6px; width: 2px; margin-left: -1px; background: rgba(237,237,237,.75); }
+.medidor .marca-v { position: absolute; top: 50%; width: 26px; height: 26px; margin: -13px 0 0 -13px; border-radius: 9999px; border: 4px solid rgba(10,10,10,.6); box-sizing: border-box; }
+.de-para { display: flex; align-items: center; gap: 16px; font-size: 30px; font-variant-numeric: tabular-nums; color: var(--cinza); }
+.de-para b { color: var(--azul); font-weight: 500; }

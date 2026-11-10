@@ -117,13 +117,31 @@ captura e voltam à velocidade normal no vídeo).
 | 1:10–1:20,8 | Três janelas reais flutuando (Economia, Agenda, Metodologia) sobre o pôr do sol desfocado | **"Os dados estão disponíveis."** → **"Explore os indicadores, compare períodos e tire suas próprias conclusões."** |
 | 1:20,8–1:25 | Fundo desfocado | Ícone + "Painel Macro Brasil" · `financedan.github.io/painel-macro` · "Fontes: Banco Central · IBGE · B3 · Tesouro Nacional · FRED · Dados de 06/11/2026". Na versão interativa: botões **Abrir o painel** e **Ver as fontes** |
 
+### Camada de estímulo (versão 2)
+
+Mesmo roteiro, mesmos tempos e mesmas funções, com mais estímulo visual, sempre com os componentes do painel:
+- **Faixa de cotações** no rodapé (0:13–1:10), estilo terminal, com 13 indicadores reais do painel
+  (Selic, IPCA, juro real, Focus, Ibovespa, dólar, IBC-Br, desocupação, dívida, Tesouro IPCA+, inflação
+  implícita, Fed funds) e o capítulo atual fixo à esquerda.
+- **Números de impacto** de 1 s antes de cada indicador: 8,77%, 4,58%, +0,75 p.p., −19,4% e 98%.
+- **Cartões animados:** o número conta até o valor e cada um traz um mini gráfico (ranking de 5 países,
+  termômetro da meta, de/para do Focus, distância da máxima, percentil da volatilidade).
+- **Varredura de vidro** entre as cenas e um zoom de entrada em cada tomada.
+- **Destaques em sequência** nos 6 cartões e nas 5 abas; zoom rápido em cada clique do cursor;
+  contagem dos 12 blocos durante a rolagem.
+- O encerramento ficou igual, com um clarão discreto na entrada da marca.
+
 ### Som
 
-Trilha original sintetizada para o vídeo (`video/ferramentas/trilha.py`), cerca de −21 LUFS:
-- uma base de acordes discreta (pad em lá menor), com um pulso grave a partir do painel;
-- pequenos "bips de dados" nos indicadores;
-- um respiro de ruído antes de cada capítulo;
-- cliques suaves nos mesmos instantes dos cliques do cursor.
+Trilha original sintetizada para o vídeo (`video/ferramentas/trilha.py`), 120 bpm, cerca de −17 LUFS:
+- **0:00–0:10:** pad e arpejo crescendo, com toques nos números e uma subida até o painel.
+- **0:10–1:10:** batida (bumbo, chimbal, palmas a partir dos indicadores) e baixo em colcheias.
+- **Sincronias:**
+  - impactos nos capítulos e nos números de impacto;
+  - "swoosh" acompanhando cada varredura;
+  - cliques nos mesmos instantes do cursor.
+- **1:10–1:21:** a batida sai para os textos finais respirarem.
+- **1:20,9:** impacto na marca e acorde final.
 
 Nenhum sample ou música de terceiros.
 

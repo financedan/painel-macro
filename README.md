@@ -11,7 +11,7 @@ Os dados se atualizam sozinhos todo dia útil, às 19h de Brasília.
 ## Apresentação
 
 - **Versão interativa:** [`/apresentacao/`](https://financedan.github.io/painel-macro/apresentacao/), com capítulos clicáveis, atalhos que abrem cada bloco no painel e trilha.
-- **Vídeo (1 min 25 s, 1920×1080, com capítulos):** [`video/saida/painel-macro-brasil.mp4`](video/saida/painel-macro-brasil.mp4).
+- **Vídeo (1 min 25 s, 1920×1080, com capítulos):** gerado em `video/saida/` (o MP4 fica fora do repositório por ser grande).
 - Roteiro, indicadores escolhidos e como refazer: [`video/ROTEIRO.md`](video/ROTEIRO.md).
 
 As duas versões usam frames reais do painel e os mesmos dados da captura.
@@ -20,13 +20,12 @@ As duas versões usam frames reais do painel e os mesmos dados da captura.
 
 | Aba | Conteúdo |
 |---|---|
-| Visão geral | Selic, IPCA, juro real (ex-post e ex-ante), Copom com a Selic esperada por reunião, inflação contra a meta (com contador da meta contínua), ancoragem, Ibovespa, bolsa x CDI em 10 anos, calculadora de rendimento, volatilidade, simulador, Brasil no mundo, leitura da semana |
-| Expectativas | Boletim Focus com a faixa de respostas, trajetória do juro real, histórico semanal, Selic reunião a reunião, juro real de mercado e inflação implícita (Tesouro Direto), perguntas com a resposta do painel |
-| Economia | Selic e cada decisão do Copom desde 2017, IPCA por grupo, núcleos, dólar, IBC-Br, desemprego, dívida bruta, IGP-M, diferencial de juros Brasil x EUA |
+| Visão geral | Selic, IPCA, juro real, juro real esperado, Focus, Ibovespa; juro real por ano, próximo Copom, inflação contra a meta (com contador da meta contínua), ancoragem, Ibovespa por ano, últimos pregões, volatilidade, simulador, Brasil no mundo, leitura da semana |
+| Expectativas | Boletim Focus com a faixa de respostas, trajetória do juro real (com o ex-ante), histórico semanal, Selic por reunião, Tesouro IPCA+ e inflação implícita, perguntas; e o contexto econômico: Selic desde 2017, IPCA por grupo, núcleos, dólar, IBC-Br, desocupação, dívida, IGP-M, Brasil x EUA |
 | Agenda | Copom, atas, Focus e feriados, com navegação entre meses e exportação para a sua agenda (.ics) |
-| Metodologia | Fontes com o status da última coleta, fórmulas, juro neutro, glossário, como citar e download dos dados em CSV |
+| Metodologia | Ferramentas (bolsa x CDI em 10 anos e calculadora de rendimento), fontes com o status da última coleta e links, fórmulas, juro neutro, glossário, como citar e download dos dados em CSV |
 
-Cada bloco tem um botão **?** com uma explicação simples. O **Modo explicativo** (no topo) abre todas de uma vez.
+Cada bloco tem um botão **?** com uma explicação simples. As fontes de cada indicador ficam na aba Metodologia e no rodapé.
 
 ## Como funciona
 
@@ -69,8 +68,8 @@ Depois abra http://localhost:8000. Abrir o `index.html` com dois cliques não fu
 
 ## Fontes
 
-**Toda informação do painel tem fonte com link**: cada bloco mostra a linha "Fonte:" e a aba Metodologia lista
-todas as referências. Os testes falham se um bloco ficar sem fonte ou se um dado manual não tiver link.
+**Toda informação do painel tem fonte com link**: a aba Metodologia lista todas as referências e o rodapé resume
+as fontes. Os testes falham se um dado manual não tiver link.
 
 | Informação | Fonte |
 |---|---|

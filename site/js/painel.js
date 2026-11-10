@@ -18,11 +18,10 @@
   const VIEWS = [
     { id: 'visao', label: 'Visão geral', icon: P.icones.home },
     { id: 'expectativas', label: 'Expectativas', icon: P.icones.target },
-    { id: 'economia', label: 'Economia', icon: P.icones.pulse },
     { id: 'agenda', label: 'Agenda', icon: P.icones.calendar },
     { id: 'metodologia', label: 'Metodologia', icon: P.icones.book },
   ];
-  const viewDoEndereco = () => { const h = location.hash.replace('#', ''); return VIEWS.some((v) => v.id === h) ? h : 'visao'; };
+  const viewDoEndereco = () => { const h = location.hash.replace('#', '') === 'economia' ? 'expectativas' : location.hash.replace('#', ''); return VIEWS.some((v) => v.id === h) ? h : 'visao'; };
 
   const NOMES_FONTES = {
     selic_e_ipca: 'Selic e IPCA', inflacao_mensal: 'IPCA do mês e núcleos', grupos_ipca: 'IPCA por grupo', focus: 'Boletim Focus',
@@ -82,7 +81,7 @@
         notifOpen: false,
         agendaMes: 0, day: hoje.getDate(),
         checks: P.ler('pm-checks-' + F.coleta_ate, [false, false, false, false, false]),
-        explica: P.ler('pm-explica', false), ajuda: {},
+        explica: false, ajuda: {},
         comp: 'ibov', histInd: 'IPCA', histAno: 1,
         calcValor: 10000, calcMeses: 24,
         name: salvo || '', nameDraft: salvo || '', askName: false, nomePendente: salvo === null,

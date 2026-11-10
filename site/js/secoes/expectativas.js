@@ -46,6 +46,8 @@
     const ticks = [];
     for (let t = 0; t <= topo; t += 4) ticks.push({ y: Y(t).toFixed(1), ty: (Y(t) + 4).toFixed(1), label: t + '%' });
     const realFim = P.fisher(tS[3], tI[3]);
+    const selic12 = P.selicEsperada12m ? P.selicEsperada12m(c) : null, ipca12e = c.F.ipca_12m ? c.F.ipca_12m.mediana : null;
+    const exante = P.fisher(selic12, ipca12e);
     return {
       traj: {
         selic: P.caminho(sel), ipca: P.caminho(ip), area: P.caminho(sel.concat(ip.slice().reverse())) + ' Z', ticks,
@@ -55,7 +57,8 @@
         })),
       },
       trajCaption: 'O juro real esperado vai de ' + P.pct(c.realNow, 1) + ' hoje para ' + P.pct(realFim, 1) + ' no fim de ' + c.anos[2]
-        + (realFim > c.neutro ? ', ainda acima' : ', abaixo') + ' do juro neutro de referência (' + P.pct(c.neutro, 0) + '). "Hoje" usa a Selic atual e o IPCA de 12 meses até ' + c.ipcaMesNome + '.',
+        + (realFim > c.neutro ? ', ainda acima' : ', abaixo') + ' do juro neutro de referência (' + P.pct(c.neutro, 0) + '). "Hoje" usa a Selic atual e o IPCA de 12 meses até ' + c.ipcaMesNome + '.'
+        + (exante != null ? ' Pelo método do BC (Selic e inflação esperadas para os próximos 12 meses), o juro real ex-ante é ' + P.pct(exante) + '.' : ''),
     };
   };
 
