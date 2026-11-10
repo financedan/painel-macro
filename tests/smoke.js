@@ -35,19 +35,43 @@ const checar = (cond, msg) => { console.log((cond ? '  ok   ' : '  FALHOU ') + m
   const b = await chromium.launch();
   const erros = [];
   const espera = (p) => p.waitForTimeout(200);  // o painel redesenha no próximo quadro
-  const nova = async (opc = {}) => {
+  // visitante que já passou pela saudação (a primeira visita é testada à parte)
+  const nova = async (opc = {}, primeiraVisita = false) => {
     const ctx = await b.newContext({ timezoneId: 'America/Sao_Paulo', acceptDownloads: true, viewport: { width: 1440, height: 900 }, ...opc });
+    if (!primeiraVisita) await ctx.addInitScript(() => { if (localStorage.getItem('pm-nome') === null) localStorage.setItem('pm-nome', ''); });
     const p = await ctx.newPage();
     p.on('pageerror', (e) => erros.push(e.message));
     p.on('console', (m) => { if (m.type() === 'error') erros.push(m.text()); });
     return { ctx, p };
   };
 
+  console.log('Primeira visita');
+  let { ctx, p } = await nova({}, true);
+  await p.goto(base + '#metodologia', { waitUntil: 'networkidle' });
+  await p.waitForSelector('#t-welcome');
+  checar(await p.isVisible('#t-welcome') && !(await p.$('#t-overview')) && !(await p.$('#t-met')), 'primeira visita abre na saudação, antes do painel');
+  checar(await p.evaluate(() => document.activeElement && document.activeElement.id === 'pm-nome'), 'campo do nome já vem selecionado');
+  await p.fill('#pm-nome', 'Bia');
+  await p.click('button:has-text("Entrar no painel")'); await p.waitForSelector('#t-met');
+  checar(await p.isVisible('#t-met'), 'depois da saudação abre a aba do link (#metodologia)');
+  await p.click('nav.pm-topnav a[href="#visao"]'); await p.waitForSelector('#t-overview');
+  checar((await p.textContent('#t-overview')).includes('Bia'), 'saudação usa o nome digitado');
+  await p.reload({ waitUntil: 'networkidle' }); await p.waitForSelector('#t-overview');
+  checar(!(await p.$('#t-welcome')), 'na volta não pergunta o nome de novo');
+  await ctx.close();
+  ({ ctx, p } = await nova({}, true));
+  await p.goto(base, { waitUntil: 'networkidle' }); await p.waitForSelector('#t-welcome');
+  await p.click('button:has-text("Continuar sem nome")'); await p.waitForSelector('#t-overview');
+  checar(await p.isVisible('#t-overview'), '"Continuar sem nome" entra no painel');
+  await p.reload({ waitUntil: 'networkidle' }); await p.waitForSelector('#t-overview');
+  checar(!(await p.$('#t-welcome')), 'quem pulou não vê a pergunta de novo');
+  await ctx.close();
+
   console.log('Desktop');
-  let { ctx, p } = await nova();
+  ({ ctx, p } = await nova());
   await p.goto(base, { waitUntil: 'networkidle' });
   await p.waitForSelector('#t-overview');
-  checar(await p.isVisible('#t-overview'), 'abre direto no painel, sem tela de nome obrigatória');
+  checar(await p.isVisible('#t-overview'), 'visitante que já passou pela saudação abre direto no painel');
   checar((await p.$$('article.pm-glass')).length >= 14, 'visão geral tem os blocos principais');
   checar(await p.isVisible('nav.pm-topnav') && await p.isVisible('nav.pm-dock'), 'no computador: abas no topo e barra lateral (layout original)');
   checar((await p.$$('nav.pm-topnav a')).length === 4, 'quatro abas: Visão geral, Expectativas, Agenda e Metodologia');
