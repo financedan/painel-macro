@@ -112,6 +112,12 @@ mostra um resumo automático do Focus.
 1. **Settings → Pages → Build and deployment → Source: GitHub Actions.**
 2. Pronto: o workflow `Publicar site` publica a pasta `site/` a cada mudança na `main` e depois de cada coleta.
 
+### Chave do FRED (EUA e petróleo)
+
+O robô usa a API oficial do FRED com a chave grátis salva no segredo `FRED_API_KEY`
+(**Settings → Secrets and variables → Actions**; a chave sai em fredaccount.stlouisfed.org → API Keys).
+Sem a chave, ele tenta o download de gráfico do site do FRED, que costuma não responder a robôs.
+
 ### Avisos no Telegram (opcional)
 
 Crie os segredos `TELEGRAM_TOKEN` (do @BotFather) e `TELEGRAM_CHAT` em **Settings → Secrets and variables → Actions**.

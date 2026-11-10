@@ -32,6 +32,8 @@ jobs:
       - name: Coletar os dados
         id: coleta
         continue-on-error: true   # salva o que deu certo mesmo se uma fonte falhar
+        env:
+          FRED_API_KEY: ${{ secrets.FRED_API_KEY }}   # chave grátis da API do FRED (Settings > Secrets > Actions)
         run: python coletar.py
 
       - name: Salvar no GitHub

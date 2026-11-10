@@ -24,6 +24,7 @@ import csv
 import io
 import json
 import math
+import os
 import re
 import sys
 import time
@@ -547,7 +548,8 @@ def coletar_economia():
 
 
 # ---------------------------------------------------------------- EUA e petróleo (fonte: FRED, Federal Reserve de St. Louis)
-FRED_CSV = "https://fred.stlouisfed.org/graph/fredgraph.csv"
+FRED_API = "https://api.stlouisfed.org/fred/series/observations"   # API oficial (precisa da chave FRED_API_KEY)
+FRED_CSV = "https://fred.stlouisfed.org/graph/fredgraph.csv"        # reserva: download de gráfico do site
 SERIES_FRED = {
     "fed_funds": ("DFF", "Fed funds efetiva (Federal Reserve)"),
     "tbill3m": ("DGS3MO", "Título do Tesouro americano de 3 meses (U.S. Treasury)"),
@@ -556,13 +558,39 @@ SERIES_FRED = {
 }
 
 
+def serie_fred_api(codigo, inicio, chave):
+    """Busca a série na API oficial do FRED. A chave nunca aparece nas mensagens de erro."""
+    params = {"series_id": codigo, "observation_start": inicio.isoformat(), "file_type": "json", "api_key": chave}
+    ultimo = ""
+    for tentativa in range(3):
+        try:
+            r = requests.get(FRED_API, params=params, headers=CABECALHO, timeout=60)
+            if r.status_code == 200:
+                return [(date.fromisoformat(o["date"]), float(o["value"]))
+                        for o in r.json().get("observations", []) if o.get("value") not in (None, "", ".")]
+            ultimo = f"HTTP {r.status_code}"
+        except Exception as erro:
+            ultimo = type(erro).__name__
+        print(f"  API do FRED, tentativa {tentativa + 1} falhou ({codigo}): {ultimo}")
+        if tentativa < 2:
+            time.sleep(2 ** (tentativa + 1))
+    raise RuntimeError(f"A API do FRED não respondeu para {codigo} ({ultimo}).")
+
+
 def serie_fred(codigo, inicio):
-    texto = baixar(FRED_CSV, {"id": codigo, "cosd": inicio.isoformat()}, como="texto")
+    chave = os.environ.get("FRED_API_KEY", "").strip()
     pares = []
-    for linha in texto.strip().splitlines()[1:]:
-        dia, _, valor = linha.partition(",")
-        if valor and valor != ".":
-            pares.append((date.fromisoformat(dia), float(valor)))
+    if chave:
+        try:
+            pares = serie_fred_api(codigo, inicio, chave)
+        except RuntimeError as erro:
+            print(f"  {erro} Tentando o download do site do FRED.")
+    if not pares:
+        texto = baixar(FRED_CSV, {"id": codigo, "cosd": inicio.isoformat()}, como="texto")
+        for linha in texto.strip().splitlines()[1:]:
+            dia, _, valor = linha.partition(",")
+            if valor and valor != ".":
+                pares.append((date.fromisoformat(dia), float(valor)))
     if not pares:
         raise RuntimeError(f"O FRED não devolveu dados de {codigo}.")
     return pares
