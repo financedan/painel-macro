@@ -128,8 +128,17 @@
 
     ligarEventosGlobais() {
       window.addEventListener('hashchange', () => {
-        this.setState({ view: viewDoEndereco(), notifOpen: false, askName: this.state.primeiraVez });
-        if (this.state.view === 'visao') this.animateIn();
+        const trocar = () => {
+          this.setState({ view: viewDoEndereco(), notifOpen: false, askName: this.state.primeiraVez });
+          if (this.state.view === 'visao') this.animateIn();
+          try { window.scrollTo(0, 0); } catch (e) { /* ok */ }
+        };
+        // a aba atual se desfaz num borrão e só então a nova entra
+        const main = document.querySelector('main.pm-main');
+        if (!main || viewDoEndereco() === this.state.view) { trocar(); return; }
+        clearTimeout(this._saida);
+        main.classList.add('js-saindo');
+        this._saida = setTimeout(() => { main.classList.remove('js-saindo'); trocar(); }, 240);
       });
       document.addEventListener('keydown', (ev) => {
         if (ev.key !== 'Escape') return;

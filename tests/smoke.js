@@ -34,7 +34,7 @@ const checar = (cond, msg) => { console.log((cond ? '  ok   ' : '  FALHOU ') + m
   const base = 'http://localhost:' + srv.address().port + '/';
   const b = await chromium.launch();
   const erros = [];
-  const espera = (p) => p.waitForTimeout(200);  // o painel redesenha no próximo quadro
+  const espera = (p) => p.waitForTimeout(450);  // a aba antiga se desfaz (240 ms) e o painel redesenha
   // visitante que já passou pela saudação (a primeira visita é testada à parte)
   const nova = async (opc = {}, primeiraVisita = false) => {
     const ctx = await b.newContext({ timezoneId: 'America/Sao_Paulo', acceptDownloads: true, viewport: { width: 1440, height: 900 }, ...opc });
@@ -129,7 +129,7 @@ const checar = (cond, msg) => { console.log((cond ? '  ok   ' : '  FALHOU ') + m
   checar(/Metodologia/.test(await p.textContent('footer')), 'rodapé aponta a Metodologia para as fontes');
   for (const v of ['expectativas', 'agenda', 'metodologia']) {
     await p.click('nav.pm-topnav a[href="#' + v + '"]');
-    await p.waitForTimeout(300);
+    await p.waitForTimeout(500);
     checar(p.url().endsWith('#' + v), 'endereço muda para #' + v);
     const txt = await p.textContent('main');
     checar(!/NaN|undefined|null/.test(txt), 'nenhum NaN/undefined/null em #' + v);
@@ -144,7 +144,7 @@ const checar = (cond, msg) => { console.log((cond ? '  ok   ' : '  FALHOU ') + m
   checar(!/yahoo|yfinance/i.test(await p.content()), 'nenhuma referência ao Yahoo no site');
   await p.click('nav.pm-topnav a[href="#agenda"]'); await espera(p);
   await p.click('nav.pm-topnav a[href="#metodologia"]'); await espera(p);
-  await p.goBack(); await p.waitForTimeout(300);
+  await p.goBack(); await p.waitForTimeout(500);
   checar(await p.isVisible('#t-agenda'), 'Voltar do navegador volta para a aba anterior');
 
   // agenda: navegar meses e baixar .ics
