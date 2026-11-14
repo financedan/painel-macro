@@ -203,6 +203,7 @@
 <span><span style="width: 12px; height: 12px; border-radius: 4px; background: #8fb0ff"></span>Hoje (* ano em curso)</span>
 <span><span style="width: 16px; height: 0; border-top: 2px dashed rgba(240,179,122,.9)"></span>Juro neutro de referência ({{neutroTxt}})</span>
 </div>
+<div class="pm-rola">
 <svg viewBox="0 0 760 292" style="width: 100%; height: auto; display: block; overflow: visible" role="img" aria-label="Gráfico de barras do juro real ao fim de cada ano, de {{barsFrom}} a {{barsTo}}">
 <template data-for="barTicks" data-as="t">
 <line x1="56" x2="736" y1="{{t.y}}" y2="{{t.y}}" stroke="rgba(255,255,255,.08)" style="stroke-width: 1"></line>
@@ -221,6 +222,8 @@
 </template>
 <line x1="56" x2="736" y1="{{neutroY}}" y2="{{neutroY}}" stroke="rgba(240,179,122,.9)" style="stroke-width: 1.5; stroke-dasharray: 6 6"></line>
 </svg>
+</div>
+<div class="pm-rola-dica" aria-hidden="true">Arraste para o lado ↔</div>
 <p class="pm-cap">{{barsCaption}}</p>
 </article>
 </template>
@@ -280,6 +283,7 @@
 </div>
 </div>
 <template data-if="aj.meta.on"><p class="pm-glass-dark pm-explica">{{aj.meta.txt}}</p></template>
+<div class="pm-rola">
 <svg viewBox="0 0 760 262" style="width: 100%; height: auto; display: block; overflow: visible" role="img" aria-label="Gráfico de linha do IPCA em 12 meses com a banda da meta de inflação">
 <path d="{{infl.band}}" fill="rgba(237,237,237,.10)"></path>
 <path d="{{infl.center}}" fill="none" stroke="rgba(237,237,237,.45)" style="stroke-width: 1; stroke-dasharray: 4 5"></path>
@@ -294,6 +298,8 @@
 <circle class="pm-fade" cx="{{infl.lastX}}" cy="{{infl.lastY}}" r="5" fill="#f0b37a" stroke="#0a0a0a" style="stroke-width: 2; animation-delay: 1.4s"></circle>
 <text class="pm-fade" x="{{infl.labelX}}" y="{{infl.labelY}}" fill="#ededed" style="font-size: 13px; font-weight: 500; animation-delay: 1.5s">{{infl.lastTxt}}</text>
 </svg>
+</div>
+<div class="pm-rola-dica" aria-hidden="true">Arraste para o lado ↔</div>
 <div class="pm-leg">
 <span><span style="width: 16px; height: 0; border-top: 2.5px solid #f0b37a"></span>IPCA 12 meses</span>
 <span><span style="width: 16px; height: 0; border-top: 1px dashed rgba(237,237,237,.7)"></span>Centro da meta</span>
@@ -351,6 +357,7 @@
 <span><span style="width: 12px; height: 12px; border-radius: 4px; background: rgba(237,237,237,.32); border: 1px solid rgba(255,255,255,.4)"></span>Anos anteriores</span>
 <span><span style="width: 12px; height: 12px; border-radius: 4px; background: #8fb0ff"></span>{{ibovNowLegend}}</span>
 </div>
+<div class="pm-rola">
 <svg viewBox="0 0 760 292" style="width: 100%; height: auto; display: block; overflow: visible" role="img" aria-label="Gráfico de barras do retorno anual do Ibovespa de {{ibovFrom}} a {{ibovTo}}">
 <template data-for="ibovTicks" data-as="t">
 <line x1="56" x2="736" y1="{{t.y}}" y2="{{t.y}}" stroke="rgba(255,255,255,.08)" style="stroke-width: 1"></line>
@@ -365,6 +372,8 @@
 </g>
 </template>
 </svg>
+</div>
+<div class="pm-rola-dica" aria-hidden="true">Arraste para o lado ↔</div>
 <p class="pm-cap">{{ibovCaption}}</p>
 </article>
 </template>
@@ -550,7 +559,7 @@
 </div>
 </div>
 <template data-if="aj.focus.on"><p class="pm-glass-dark pm-explica">{{aj.focus.txt}}</p></template>
-<div style="overflow-x: auto">
+<div class="pm-rola-tabela" style="overflow-x: auto">
 <table style="width: 100%; min-width: 560px; border-collapse: collapse; font-variant-numeric: tabular-nums">
 <thead>
 <tr style="font-size: 13px; color: #c2c2c2; text-align: left">
@@ -570,6 +579,7 @@
 </tbody>
 </table>
 </div>
+<div class="pm-rola-dica" aria-hidden="true">Arraste para o lado ↔</div>
 <p style="margin: 0; font-size: 12px; color: #c2c2c2">Abaixo de cada mediana: a menor e a maior resposta, e quantas instituições responderam. Faixa larga = mercado dividido.</p>
 </article>
 
@@ -584,6 +594,7 @@
 <button type="button" class="{{aj.exante.cls}}" onClick="{{aj.exante.toggle}}" aria-expanded="{{aj.exante.aberto}}" aria-label="Ex-ante e ex-post">?</button>
 </div>
 <template data-if="aj.exante.on"><p class="pm-glass-dark pm-explica">{{aj.exante.txt}}</p></template>
+<div class="pm-rola">
 <svg viewBox="0 0 760 300" style="width: 100%; height: auto; display: block; overflow: visible" role="img" aria-label="Selic e IPCA esperados pelo Focus de hoje até {{focusLastYear}}, com o juro real entre as linhas">
 <template data-for="traj.ticks" data-as="t">
 <line x1="80" x2="690" y1="{{t.y}}" y2="{{t.y}}" stroke="rgba(255,255,255,.07)" style="stroke-width: 1"></line>
@@ -601,6 +612,8 @@
 <text x="{{p.x}}" y="292" fill="#c2c2c2" style="font-size: 12px; text-anchor: middle">{{p.label}}</text>
 </template>
 </svg>
+</div>
+<div class="pm-rola-dica" aria-hidden="true">Arraste para o lado ↔</div>
 <div class="pm-leg">
 <span><span style="width: 16px; height: 0; border-top: 2.5px solid #ededed"></span>Selic</span>
 <span><span style="width: 16px; height: 0; border-top: 2.5px solid #f0b37a"></span>IPCA</span>
@@ -638,6 +651,7 @@
 <div class="pm-glass-dark pm-segs" role="group" aria-label="Indicador"><template data-for="histInds" data-as="sg"><button type="button" class="{{sg.cls}}" onClick="{{sg.pick}}" aria-pressed="{{sg.on}}">{{sg.label}}</button></template></div>
 <div class="pm-glass-dark pm-segs" role="group" aria-label="Ano"><template data-for="histAnos" data-as="sg"><button type="button" class="{{sg.cls}}" onClick="{{sg.pick}}" aria-pressed="{{sg.on}}">{{sg.label}}</button></template></div>
 </div>
+<div class="pm-rola">
 <svg viewBox="0 0 760 222" style="width: 100%; height: auto; display: block; overflow: visible" role="img" aria-label="{{histAria}}">
 <template data-for="hist.ticks" data-as="t">
 <line x1="64" x2="680" y1="{{t.y}}" y2="{{t.y}}" stroke="rgba(255,255,255,.07)" style="stroke-width: 1"></line>
@@ -651,6 +665,8 @@
 <text x="{{ln.labelX}}" y="{{ln.labelY}}" fill="#ededed" style="font-size: 13px; font-weight: 500">{{ln.lastTxt}}</text>
 </template>
 </svg>
+</div>
+<div class="pm-rola-dica" aria-hidden="true">Arraste para o lado ↔</div>
 <p class="pm-cap">{{histCaption}}</p>
 </article>
 </template>
@@ -695,6 +711,7 @@
 <div style="display: flex; flex-direction: column"><span style="font-size: 34px; font-weight: 500; letter-spacing: -0.035em; color: #8fb0ff" class="pm-num pm-conta">{{tesReal}}</span><span style="font-size: 13px; color: #c2c2c2">juro real de mercado, ao ano</span></div>
 <div style="display: flex; flex-direction: column"><span style="font-size: 34px; font-weight: 500; letter-spacing: -0.035em; color: #f0b37a" class="pm-num pm-conta">{{tesImplicita}}</span><span style="font-size: 13px; color: #c2c2c2">inflação implícita, ao ano</span></div>
 </div>
+<div class="pm-rola pm-rola-larga">
 <svg viewBox="0 0 1180 222" style="width: 100%; height: auto; display: block; overflow: visible" role="img" aria-label="{{tesAria}}">
 <template data-for="tes.ticks" data-as="t">
 <line x1="48" x2="1100" y1="{{t.y}}" y2="{{t.y}}" stroke="rgba(255,255,255,.07)" style="stroke-width: 1"></line>
@@ -707,6 +724,8 @@
 <text x="{{ln.labelX}}" y="{{ln.labelY}}" fill="{{ln.cor}}" style="font-size: 12px; font-weight: 500">{{ln.lastTxt}}</text>
 </template>
 </svg>
+</div>
+<div class="pm-rola-dica" aria-hidden="true">Arraste para o lado ↔</div>
 <div class="pm-leg">
 <span><span style="width: 16px; height: 0; border-top: 2.5px solid #8fb0ff"></span>Juro real (Tesouro IPCA+)</span>
 <span><span style="width: 16px; height: 0; border-top: 2.5px solid #f0b37a"></span>Inflação implícita</span>
@@ -750,6 +769,7 @@
 <button type="button" class="{{aj.selicLinha.cls}}" onClick="{{aj.selicLinha.toggle}}" aria-expanded="{{aj.selicLinha.aberto}}" aria-label="Como ler?">?</button>
 </div>
 <template data-if="aj.selicLinha.on"><p class="pm-glass-dark pm-explica">{{aj.selicLinha.txt}}</p></template>
+<div class="pm-rola">
 <svg viewBox="0 0 760 262" style="width: 100%; height: auto; display: block; overflow: visible" role="img" aria-label="{{selicAria}}">
 <template data-for="selicTicks" data-as="t">
 <line x1="48" x2="700" y1="{{t.y}}" y2="{{t.y}}" stroke="rgba(255,255,255,.07)" style="stroke-width: 1"></line>
@@ -760,6 +780,8 @@
 <template data-for="selicMarcas" data-as="m"><circle class="pm-fade" cx="{{m.x}}" cy="{{m.y}}" r="3.5" fill="{{m.fill}}" style="animation-delay: 1.2s"></circle></template>
 <text x="{{selicLastX}}" y="{{selicLastLabelY}}" fill="#ededed" style="font-size: 13px; font-weight: 500">{{selicLastTxt}}</text>
 </svg>
+</div>
+<div class="pm-rola-dica" aria-hidden="true">Arraste para o lado ↔</div>
 </article>
 <article class="pm-glass pm-rise pm-card" aria-labelledby="t-ciclo" style="flex: 1 1 300px; gap: 12px; animation-delay: 160ms">
 <h2 id="t-ciclo" class="pm-h2">{{cicloTitulo}}</h2>
@@ -808,6 +830,7 @@
 <button type="button" class="{{aj.nucleos.cls}}" onClick="{{aj.nucleos.toggle}}" aria-expanded="{{aj.nucleos.aberto}}" aria-label="O que são núcleos?">?</button>
 </div>
 <template data-if="aj.nucleos.on"><p class="pm-glass-dark pm-explica">{{aj.nucleos.txt}}</p></template>
+<div class="pm-rola">
 <svg viewBox="0 0 760 222" style="width: 100%; height: auto; display: block; overflow: visible" role="img" aria-label="IPCA de 12 meses e média dos núcleos nos últimos 3 anos">
 <template data-for="nuc.ticks" data-as="t">
 <line x1="44" x2="680" y1="{{t.y}}" y2="{{t.y}}" stroke="rgba(255,255,255,.07)" style="stroke-width: 1"></line>
@@ -821,6 +844,8 @@
 <text x="{{ln.labelX}}" y="{{ln.labelY}}" fill="{{ln.cor}}" style="font-size: 12px; font-weight: 500">{{ln.lastTxt}}</text>
 </template>
 </svg>
+</div>
+<div class="pm-rola-dica" aria-hidden="true">Arraste para o lado ↔</div>
 <div class="pm-leg">
 <span><span style="width: 16px; height: 0; border-top: 2.5px solid #f0b37a"></span>IPCA 12 meses</span>
 <span><span style="width: 16px; height: 0; border-top: 2.5px dashed #ededed"></span>Média dos núcleos</span>
@@ -914,7 +939,7 @@
 <div class="pm-linha">
 <article class="pm-glass pm-rise pm-card" aria-labelledby="t-src" style="flex: 3 1 520px; gap: 12px; animation-delay: 100ms">
 <h2 id="t-src" class="pm-h2">Fontes dos dados</h2>
-<div style="overflow-x: auto">
+<div class="pm-rola-tabela" style="overflow-x: auto">
 <table style="width: 100%; min-width: 620px; border-collapse: collapse; font-size: 14px">
 <thead><tr style="color: #c2c2c2; text-align: left; font-size: 13px"><th scope="col" style="padding: 10px; font-weight: 500">Série</th><th scope="col" style="padding: 10px; font-weight: 500">Origem</th><th scope="col" style="padding: 10px; font-weight: 500">Frequência</th><th scope="col" style="padding: 10px; font-weight: 500">Última leitura</th><th scope="col" style="padding: 10px; font-weight: 500">Coleta</th></tr></thead>
 <tbody>
@@ -924,6 +949,7 @@
 </tbody>
 </table>
 </div>
+<div class="pm-rola-dica" aria-hidden="true">Arraste para o lado ↔</div>
 <div class="pm-glass-dark" style="border-radius: 18px; padding: 16px; display: flex; flex-direction: column; gap: 6px">
 <span style="font-size: 13px; color: #c2c2c2">Juro real pela fórmula de Fisher</span>
 <span style="font-size: 20px; font-weight: 500; letter-spacing: -0.01em">Juro real = (1 + Selic) ÷ (1 + IPCA) − 1</span>

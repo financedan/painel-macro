@@ -113,6 +113,7 @@ main article.pm-glass{background-image:radial-gradient(520px circle at var(--mx,
 .pm-root .pm-lift:hover,.pm-root .pm-cta:hover,.pm-root .pm-avatar:hover{transform:none!important}
 }
 /* Navegação: no computador, botões do topo + barra lateral (layout original); no celular, só a barra fixa no rodapé */
+.pm-rola-dica{display:none}
 @media (max-width:760px){
 .pm-topnav{display:none!important}
 .pm-dock{display:flex!important;position:fixed!important;left:50%;bottom:12px;transform:translateX(-50%);flex-direction:row!important;width:auto!important;margin-top:0!important;z-index:30!important;box-shadow:0 12px 32px rgba(0,0,0,.35);background-color:rgba(24,22,21,.82)!important}
@@ -120,6 +121,15 @@ main article.pm-glass{background-image:radial-gradient(520px circle at var(--mx,
 .pm-main{padding-bottom:88px}
 .pm-explica-label{display:none}
 .pm-h1{font-size:32px!important}
+/* celular: gráficos largos rolam para o lado (começando no dado mais recente) em vez de encolher até ficarem ilegíveis */
+.pm-rola{overflow-x:auto;overflow-y:hidden;direction:rtl;-webkit-overflow-scrolling:touch;padding:8px 0;scrollbar-width:thin}
+.pm-rola>svg{direction:ltr;width:620px!important;max-width:none}
+.pm-rola-larga>svg{width:940px!important}
+.pm-rola-dica{display:block;font-size:12px;color:#c2c2c2;text-align:right;margin-top:-6px}
+/* celular: o detalhe e o "?" do cabeçalho quebram de linha em vez de sair do cartão */
+.pm-root .pm-cab-dir{flex:1 1 100%;min-width:0;flex-wrap:wrap}
+.pm-root .pm-cab-dir>span,.pm-root .pm-chip{white-space:normal;min-width:0;flex:1 1 0}
+.pm-root .pm-cab-dir>.pm-pill{flex:0 0 auto}
 }
 
 

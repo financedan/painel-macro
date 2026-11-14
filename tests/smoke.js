@@ -186,6 +186,18 @@ const checar = (cond, msg) => { console.log((cond ? '  ok   ' : '  FALHOU ') + m
   checar(await p.isVisible('nav.pm-dock') && !(await p.isVisible('nav.pm-topnav')), 'no celular há só a barra do rodapé');
   const [sw, iw] = await p.evaluate(() => [document.documentElement.scrollWidth, window.innerWidth]);
   checar(sw <= iw, 'sem rolagem horizontal no celular');
+  // gráficos largos não encolhem até ficarem ilegíveis: rolam para o lado, começando no dado mais recente
+  const rolas = await p.$$eval('.pm-rola', (rs) => rs.map((r) => [r.querySelector('svg').getBoundingClientRect().width, r.scrollWidth - r.clientWidth, r.scrollLeft]));
+  checar(rolas.length >= 3 && rolas.every((r) => r[0] >= 560 && r[1] > 100 && r[2] === 0), 'gráficos legíveis no celular (rolam para o lado, a partir do dado mais recente)');
+  const fora = await p.evaluate(() => {
+    let n = 0;
+    document.querySelectorAll('main article').forEach((a) => {
+      const ra = a.getBoundingClientRect();
+      a.querySelectorAll('*').forEach((e) => { if (e.closest('.pm-rola,.pm-rola-tabela,svg')) return; const r = e.getBoundingClientRect(); if (r.width && r.right > ra.right + 1) n++; });
+    });
+    return n;
+  });
+  checar(fora === 0, 'nada sai para fora dos cartões no celular');
   await ctx.close();
 
   console.log('Menos movimento');
