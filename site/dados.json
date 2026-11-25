@@ -1,8 +1,8 @@
 {
-  "atualizado_em": "2026-11-24T19:52-03:00",
+  "atualizado_em": "2026-11-25T19:49-03:00",
   "selic": {
     "valor": 13.75,
-    "data": "2026-11-24",
+    "data": "2026-11-25",
     "desde": "2026-09-17",
     "decisao": "2026-09-16",
     "anterior": 14.0,
@@ -4541,9 +4541,9 @@
   },
   "ibovespa": {
     "fonte": "B3",
-    "fechamento": 164089.81,
-    "data": "2026-11-24",
-    "var_ano": 1.84,
+    "fechamento": 166684.61,
+    "data": "2026-11-25",
+    "var_ano": 3.45,
     "maxima_12m": {
       "valor": 209066.9,
       "data": "2026-10-09"
@@ -4616,15 +4616,11 @@
       },
       {
         "ano": 2026,
-        "fechamento": 164089.81,
-        "retorno": 1.84
+        "fechamento": 166684.61,
+        "retorno": 3.45
       }
     ],
     "ultimos_dias": [
-      {
-        "data": "2026-10-09",
-        "valor": 209066.9
-      },
       {
         "data": "2026-10-13",
         "valor": 206887.52
@@ -4740,16 +4736,16 @@
       {
         "data": "2026-11-24",
         "valor": 164089.81
+      },
+      {
+        "data": "2026-11-25",
+        "valor": 166684.61
       }
     ],
     "volatilidade": {
       "janela": 21,
-      "atual": 53.74,
+      "atual": 54.26,
       "historico": [
-        {
-          "data": "2026-06-03",
-          "valor": 17.47
-        },
         {
           "data": "2026-06-05",
           "valor": 17.16
@@ -5225,18 +5221,22 @@
         {
           "data": "2026-11-24",
           "valor": 53.74
+        },
+        {
+          "data": "2026-11-25",
+          "valor": 54.26
         }
       ],
       "mediana_desde_2000": 21.88,
-      "p90_desde_2000": 36.58,
+      "p90_desde_2000": 36.6,
       "percentil_atual": 98.0,
       "maxima_desde_2000": 129.3
     }
   },
   "economia": {
     "dolar": {
-      "valor": 5.8573,
-      "data": "2026-11-24",
+      "valor": 5.8825,
+      "data": "2026-11-25",
       "historico": [
         {
           "mes": "2024-12",
@@ -5332,7 +5332,7 @@
         },
         {
           "mes": "2026-11",
-          "valor": 5.8573
+          "valor": 5.8825
         }
       ]
     },
@@ -5748,19 +5748,14 @@
   },
   "tesouro": {
     "atual": {
-      "data": "2026-11-18",
-      "real": 7.74,
-      "prefixado": 15.28,
-      "implicita": 7.0,
+      "data": "2026-11-19",
+      "real": 7.82,
+      "prefixado": 15.43,
+      "implicita": 7.06,
       "venc_ipca": "2032-08-15",
       "venc_pre": "2032-01-01"
     },
     "historico": [
-      {
-        "data": "2023-11-17",
-        "real": 5.52,
-        "implicita": 4.99
-      },
       {
         "data": "2023-11-24",
         "real": 5.54,
@@ -6542,9 +6537,9 @@
         "implicita": 7.05
       },
       {
-        "data": "2026-11-18",
-        "real": 7.74,
-        "implicita": 7.0
+        "data": "2026-11-19",
+        "real": 7.82,
+        "implicita": 7.06
       }
     ]
   },
@@ -6555,35 +6550,32 @@
   "fontes": {
     "selic_e_ipca": {
       "ok": true,
-      "atualizado_em": "2026-11-24T19:52-03:00"
+      "atualizado_em": "2026-11-25T19:49-03:00"
     },
     "inflacao_mensal": {
       "ok": true,
-      "atualizado_em": "2026-11-24T19:52-03:00"
+      "atualizado_em": "2026-11-25T19:49-03:00"
     },
     "grupos_ipca": {
       "ok": true,
-      "atualizado_em": "2026-11-24T19:52-03:00"
+      "atualizado_em": "2026-11-25T19:49-03:00"
     },
     "focus": {
       "ok": true,
-      "atualizado_em": "2026-11-24T19:52-03:00"
+      "atualizado_em": "2026-11-25T19:49-03:00"
     },
     "ibovespa": {
       "ok": true,
-      "atualizado_em": "2026-11-24T19:52-03:00"
+      "atualizado_em": "2026-11-25T19:49-03:00"
     },
     "economia": {
       "ok": true,
-      "atualizado_em": "2026-11-24T19:52-03:00"
+      "atualizado_em": "2026-11-25T19:49-03:00"
     },
     "tesouro": {
-      "ok": false,
-      "atualizado_em": "2026-11-19T19:43-03:00",
-      "erro": "Não consegui baixar https://www.tesourotransparente.gov.br/ckan/dataset/df56aa42-484a-4a59-8184-7676580c81e3/resource/796d2059-14e9-44e3-80c9-2d9e30b405c1/download/PrecoTaxaTesouroDireto.csv"
+      "ok": true,
+      "atualizado_em": "2026-11-25T19:49-03:00"
     }
   },
-  "erros": [
-    "tesouro: Não consegui baixar https://www.tesourotransparente.gov.br/ckan/dataset/df56aa42-484a-4a59-8184-7676580c81e3/resource/796d2059-14e9-44e3-80c9-2d9e30b405c1/download/PrecoTaxaTesouroDireto.csv"
-  ]
+  "erros": []
 }
