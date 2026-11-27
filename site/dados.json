@@ -1,8 +1,8 @@
 {
-  "atualizado_em": "2026-11-26T19:50-03:00",
+  "atualizado_em": "2026-11-27T19:51-03:00",
   "selic": {
     "valor": 13.75,
-    "data": "2026-11-26",
+    "data": "2026-11-27",
     "desde": "2026-09-17",
     "decisao": "2026-09-16",
     "anterior": 14.0,
@@ -4541,9 +4541,9 @@
   },
   "ibovespa": {
     "fonte": "B3",
-    "fechamento": 176799.84,
-    "data": "2026-11-26",
-    "var_ano": 9.73,
+    "fechamento": 176573.35,
+    "data": "2026-11-27",
+    "var_ano": 9.59,
     "maxima_12m": {
       "valor": 209066.9,
       "data": "2026-10-09"
@@ -4616,15 +4616,11 @@
       },
       {
         "ano": 2026,
-        "fechamento": 176799.84,
-        "retorno": 9.73
+        "fechamento": 176573.35,
+        "retorno": 9.59
       }
     ],
     "ultimos_dias": [
-      {
-        "data": "2026-10-14",
-        "valor": 206505.98
-      },
       {
         "data": "2026-10-15",
         "valor": 204324.26
@@ -4740,16 +4736,16 @@
       {
         "data": "2026-11-26",
         "valor": 176799.84
+      },
+      {
+        "data": "2026-11-27",
+        "valor": 176573.35
       }
     ],
     "volatilidade": {
       "janela": 21,
-      "atual": 28.71,
+      "atual": 28.66,
       "historico": [
-        {
-          "data": "2026-06-08",
-          "valor": 15.7
-        },
         {
           "data": "2026-06-09",
           "valor": 15.85
@@ -5225,6 +5221,10 @@
         {
           "data": "2026-11-26",
           "valor": 28.71
+        },
+        {
+          "data": "2026-11-27",
+          "valor": 28.66
         }
       ],
       "mediana_desde_2000": 21.88,
@@ -5235,8 +5235,8 @@
   },
   "economia": {
     "dolar": {
-      "valor": 5.8825,
-      "data": "2026-11-25",
+      "valor": 5.543,
+      "data": "2026-11-27",
       "historico": [
         {
           "mes": "2024-12",
@@ -5332,7 +5332,7 @@
         },
         {
           "mes": "2026-11",
-          "valor": 5.8825
+          "valor": 5.543
         }
       ]
     },
@@ -5440,10 +5440,6 @@
     "desemprego": {
       "historico": [
         {
-          "mes": "2024-10",
-          "valor": 6.2
-        },
-        {
           "mes": "2024-11",
           "valor": 6.1
         },
@@ -5534,6 +5530,10 @@
         {
           "mes": "2026-09",
           "valor": 5.2
+        },
+        {
+          "mes": "2026-10",
+          "valor": 5.1
         }
       ]
     },
@@ -5640,10 +5640,6 @@
     "igpm": {
       "historico": [
         {
-          "mes": "2024-11",
-          "valor": 6.33
-        },
-        {
           "mes": "2024-12",
           "valor": 6.54
         },
@@ -5734,11 +5730,15 @@
         {
           "mes": "2026-10",
           "valor": 5.25
+        },
+        {
+          "mes": "2026-11",
+          "valor": 6.26
         }
       ],
       "mes": {
-        "mes": "2026-10",
-        "valor": 1.47
+        "mes": "2026-11",
+        "valor": 1.24
       }
     },
     "tr_mes": {
@@ -6550,27 +6550,27 @@
   "fontes": {
     "selic_e_ipca": {
       "ok": true,
-      "atualizado_em": "2026-11-26T19:50-03:00"
+      "atualizado_em": "2026-11-27T19:51-03:00"
     },
     "inflacao_mensal": {
       "ok": true,
-      "atualizado_em": "2026-11-26T19:50-03:00"
+      "atualizado_em": "2026-11-27T19:51-03:00"
     },
     "grupos_ipca": {
       "ok": true,
-      "atualizado_em": "2026-11-26T19:50-03:00"
+      "atualizado_em": "2026-11-27T19:51-03:00"
     },
     "focus": {
       "ok": true,
-      "atualizado_em": "2026-11-26T19:50-03:00"
+      "atualizado_em": "2026-11-27T19:51-03:00"
     },
     "ibovespa": {
       "ok": true,
-      "atualizado_em": "2026-11-26T19:50-03:00"
+      "atualizado_em": "2026-11-27T19:51-03:00"
     },
     "economia": {
       "ok": true,
-      "atualizado_em": "2026-11-26T19:50-03:00"
+      "atualizado_em": "2026-11-27T19:51-03:00"
     },
     "tesouro": {
       "ok": false,
